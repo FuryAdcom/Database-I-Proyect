@@ -1,0 +1,11 @@
+Esta base de datos tiene creado:
+
+-Todas las tablas (A excepcion de las mucho a mucho)
+-Los campo unique creados.
+-La unica clave foranea creada es la recursiva de LUGAR
+
+Falta por ahora:
+
+-Claves foraneas
+-Los campos check
+-Las entidades mucho a muchos ya que no estamos seguros todavia.
