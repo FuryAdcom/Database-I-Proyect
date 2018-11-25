@@ -26,8 +26,8 @@ SET default_with_oids = false;
 -- Name: Aeropuerto; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Aeropuerto" (
-    "Cod" character(20) NOT NULL,
+CREATE TABLE public.Aeropuerto (
+    "Cod" varchar(20) NOT NULL,
     "Cantidad_Terminales" real NOT NULL,
     "Pistas" integer NOT NULL,
     "Capacidad" integer NOT NULL,
@@ -35,306 +35,306 @@ CREATE TABLE public."Aeropuerto" (
 );
 
 
-ALTER TABLE public."Aeropuerto" OWNER TO postgres;
+ALTER TABLE public.Aeropuerto OWNER TO postgres;
 
 --
 -- TOC entry 226 (class 1259 OID 24933)
 -- Name: Contabilidad; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Contabilidad" (
-    "Codigo" character(20) NOT NULL,
-    "Descripcion" character(50) NOT NULL,
+CREATE TABLE public.Contabilidad (
+    "Codigo" varchar(20) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL,
     "Salario" real NOT NULL,
     "Dias_Trabajados" date NOT NULL
 );
 
 
-ALTER TABLE public."Contabilidad" OWNER TO postgres;
+ALTER TABLE public.Contabilidad OWNER TO postgres;
 
 --
 -- TOC entry 219 (class 1259 OID 24893)
 -- Name: Envio; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Envio" (
-    "Codigo" character(50) NOT NULL,
+CREATE TABLE public.Envio (
+    "Codigo" varchar(50) NOT NULL,
     "Monto" real NOT NULL
 );
 
 
-ALTER TABLE public."Envio" OWNER TO postgres;
+ALTER TABLE public.Envio OWNER TO postgres;
 
 --
 -- TOC entry 221 (class 1259 OID 24903)
 -- Name: Estado; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Estado" (
-    "COD" character(50) NOT NULL,
-    "Descripcion" character(50) NOT NULL
+CREATE TABLE public.Estado (
+    "COD" varchar(50) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Estado" OWNER TO postgres;
+ALTER TABLE public.Estado OWNER TO postgres;
 
 --
 -- TOC entry 205 (class 1259 OID 24813)
 -- Name: Falla; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Falla" (
-    "Cod" character(20) NOT NULL,
-    "Descripcion" character(20) NOT NULL
+CREATE TABLE public.Falla (
+    "Cod" varchar(20) NOT NULL,
+    "Descripcion" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Falla" OWNER TO postgres;
+ALTER TABLE public.Falla OWNER TO postgres;
 
 --
 -- TOC entry 214 (class 1259 OID 24864)
 -- Name: Horario; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Horario" (
-    "Codigo" character(20) NOT NULL,
+CREATE TABLE public.Horario (
+    "Codigo" varchar(20) NOT NULL,
     "Fecha" date NOT NULL,
     "Hora" timestamp(6) with time zone NOT NULL,
-    "Descripcion" character(50) NOT NULL
+    "Descripcion" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Horario" OWNER TO postgres;
+ALTER TABLE public.Horario OWNER TO postgres;
 
 --
 -- TOC entry 203 (class 1259 OID 24798)
 -- Name: Lugar; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Lugar" (
-    "Codigo" character(20) NOT NULL,
-    "Nombre" character(20),
-    "Tipo" character(50)
+CREATE TABLE public.Lugar (
+    "Codigo" varchar(20) NOT NULL,
+    "Nombre" varchar(20),
+    "Tipo" varchar(50)
 );
 
 
-ALTER TABLE public."Lugar" OWNER TO postgres;
+ALTER TABLE public.Lugar OWNER TO postgres;
 
 --
 -- TOC entry 199 (class 1259 OID 24778)
 -- Name: Marca; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Marca" (
-    "Codigo" character(20) NOT NULL,
-    "Descripcion" character(50) NOT NULL
+CREATE TABLE public.Marca (
+    "Codigo" varchar(20) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Marca" OWNER TO postgres;
+ALTER TABLE public.Marca OWNER TO postgres;
 
 --
 -- TOC entry 200 (class 1259 OID 24783)
 -- Name: Modelo; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Modelo" (
-    "Codigo" character(20) NOT NULL,
-    "Descripcion" character(50) NOT NULL
+CREATE TABLE public.Modelo (
+    "Codigo" varchar(20) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Modelo" OWNER TO postgres;
+ALTER TABLE public.Modelo OWNER TO postgres;
 
 --
 -- TOC entry 208 (class 1259 OID 24828)
 -- Name: Oficina; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Oficina" (
-    "Codigo" character(20) NOT NULL,
-    "Nombre" character(20) NOT NULL,
+CREATE TABLE public.Oficina (
+    "Codigo" varchar(20) NOT NULL,
+    "Nombre" varchar(20) NOT NULL,
     "Tamaño_deposito" real NOT NULL,
     "Cantidad_vehiculos" integer NOT NULL,
     "Cantidad_empleados" integer NOT NULL,
-    "Empleado_cargo" character(20) NOT NULL
+    "Empleado_cargo" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Oficina" OWNER TO postgres;
+ALTER TABLE public.Oficina OWNER TO postgres;
 
 --
 -- TOC entry 222 (class 1259 OID 24908)
 -- Name: Pago; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Pago" (
-    "Numero_unico" character(20) NOT NULL,
+CREATE TABLE public.Pago (
+    "Numero_unico" varchar(20) NOT NULL,
     "Monto_total" real NOT NULL,
     "Fecha" date NOT NULL,
-    "Tipo" character(20) NOT NULL,
-    "Codigo_TIPO_PAGO" character(20) NOT NULL
+    "Tipo" varchar(20) NOT NULL,
+    "Codigo_TIPO_PAGO" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Pago" OWNER TO postgres;
+ALTER TABLE public.Pago OWNER TO postgres;
 
 --
 -- TOC entry 220 (class 1259 OID 24898)
 -- Name: Paquete; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Paquete" (
-    "Numero_guia" character(50) NOT NULL,
-    "Oficina_origen" character(50) NOT NULL,
-    "Oficicina_destino" character(50) NOT NULL,
-    "Destinatario" character(50) NOT NULL,
+CREATE TABLE public.Paquete (
+    "Numero_guia" varchar(50) NOT NULL,
+    "Oficina_origen" varchar(50) NOT NULL,
+    "Oficicina_destino" varchar(50) NOT NULL,
+    "Destinatario" varchar(50) NOT NULL,
     "Peso" real NOT NULL,
-    "Clasificacion" character(50) NOT NULL,
-    "Tipo" character(50) NOT NULL,
-    "Telefono_Contacto" character(20) NOT NULL
+    "Clasificacion" varchar(50) NOT NULL,
+    "Tipo" varchar(50) NOT NULL,
+    "Telefono_Contacto" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Paquete" OWNER TO postgres;
+ALTER TABLE public.Paquete OWNER TO postgres;
 
 --
 -- TOC entry 206 (class 1259 OID 24818)
 -- Name: Persona_Contacto; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Persona_Contacto" (
+CREATE TABLE public.Persona_Contacto (
     "CI" integer NOT NULL,
-    "Nombre" character(20) NOT NULL
+    "Nombre" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Persona_Contacto" OWNER TO postgres;
+ALTER TABLE public.Persona_Contacto OWNER TO postgres;
 
 --
 -- TOC entry 216 (class 1259 OID 24874)
 -- Name: Privilegio; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Privilegio" (
-    "Codigo" character(20) NOT NULL,
+CREATE TABLE public.Privilegio (
+    "Codigo" varchar(20) NOT NULL,
     "Tipo" boolean NOT NULL
 );
 
 
-ALTER TABLE public."Privilegio" OWNER TO postgres;
+ALTER TABLE public.Privilegio OWNER TO postgres;
 
 --
 -- TOC entry 202 (class 1259 OID 24793)
 -- Name: Puerto; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Puerto" (
-    "Cod" character(20) NOT NULL,
+CREATE TABLE public.Puerto (
+    "Cod" varchar(20) NOT NULL,
     "Cantidad_Puertos" integer NOT NULL,
     "Area_Techada" real NOT NULL,
     "Muelles" integer NOT NULL,
     "Longitud" real NOT NULL,
     "Ancho" real NOT NULL,
     "Calado" real NOT NULL,
-    "Uso" character(20) NOT NULL
+    "Uso" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Puerto" OWNER TO postgres;
+ALTER TABLE public.Puerto OWNER TO postgres;
 
 --
 -- TOC entry 213 (class 1259 OID 24857)
 -- Name: Rol_Administrador; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Rol_Administrador" (
+CREATE TABLE public.Rol_Administrador (
     "Cedula" integer NOT NULL,
-    "Nombre" character(20) NOT NULL,
-    "Apellido" character(20) NOT NULL,
-    "Correo_Personal" character(50) NOT NULL,
+    "Nombre" varchar(20) NOT NULL,
+    "Apellido" varchar(20) NOT NULL,
+    "Correo_Personal" varchar(50) NOT NULL,
     "Fecha_nacimiento" date NOT NULL,
-    "Estado_civil" character(15) NOT NULL,
+    "Estado_civil" varchar(15) NOT NULL,
     "Acceso_Cont" boolean NOT NULL
 );
 
 
-ALTER TABLE public."Rol_Administrador" OWNER TO postgres;
+ALTER TABLE public.Rol_Administrador OWNER TO postgres;
 
 --
 -- TOC entry 212 (class 1259 OID 24850)
 -- Name: Rol_Cliente; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Rol_Cliente" (
+CREATE TABLE public.Rol_Cliente (
     "Cedula" integer NOT NULL,
-    "Nombre" character(20) NOT NULL,
-    "Apellido" character(20) NOT NULL,
-    "Correo_Personal" character(50) NOT NULL,
+    "Nombre" varchar(20) NOT NULL,
+    "Apellido" varchar(20) NOT NULL,
+    "Correo_Personal" varchar(50) NOT NULL,
     "Fecha_nacimiento" date NOT NULL,
-    "Estado_civil" character(15) NOT NULL,
-    "Empresa" character(50),
+    "Estado_civil" varchar(15) NOT NULL,
+    "Empresa" varchar(50),
     "L_VIP" boolean,
     "Frecuente" boolean
 );
 
 
-ALTER TABLE public."Rol_Cliente" OWNER TO postgres;
+ALTER TABLE public.Rol_Cliente OWNER TO postgres;
 
 --
 -- TOC entry 211 (class 1259 OID 24843)
 -- Name: Rol_Empleado; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Rol_Empleado" (
+CREATE TABLE public.Rol_Empleado (
     "Cedula" integer NOT NULL,
-    "Nombre" character(20) NOT NULL,
-    "Apellido" character(20) NOT NULL,
-    "Correo_Personal" character(50) NOT NULL,
+    "Nombre" varchar(20) NOT NULL,
+    "Apellido" varchar(20) NOT NULL,
+    "Correo_Personal" varchar(50) NOT NULL,
     "Fecha_nacimiento" date NOT NULL,
-    "Estado_civil" character(15) NOT NULL,
-    "Nivel_academico" character(50) NOT NULL,
-    "Profesion" character(20) NOT NULL,
+    "Estado_civil" varchar(15) NOT NULL,
+    "Nivel_academico" varchar(50) NOT NULL,
+    "Profesion" varchar(20) NOT NULL,
     "Num_Hijos" integer
 );
 
 
-ALTER TABLE public."Rol_Empleado" OWNER TO postgres;
+ALTER TABLE public.Rol_Empleado OWNER TO postgres;
 
 --
 -- TOC entry 218 (class 1259 OID 24888)
 -- Name: Ruta; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Ruta" (
-    "Codigo_Ruta" character(50) NOT NULL,
-    "Descripcion" character(50) NOT NULL
+CREATE TABLE public.Ruta (
+    "Codigo_Ruta" varchar(50) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Ruta" OWNER TO postgres;
+ALTER TABLE public.Ruta OWNER TO postgres;
 
 --
 -- TOC entry 210 (class 1259 OID 24838)
 -- Name: Servicio; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Servicio" (
-    "Codigo" character(20) NOT NULL,
-    "Descripcion" character(50) NOT NULL
+CREATE TABLE public.Servicio (
+    "Codigo" varchar(20) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Servicio" OWNER TO postgres;
+ALTER TABLE public.Servicio OWNER TO postgres;
 
 --
 -- TOC entry 204 (class 1259 OID 24808)
 -- Name: Taller; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Taller" (
-    "Cod" character(20) NOT NULL,
-    "Flota_Revision" character(20),
+CREATE TABLE public.Taller (
+    "Cod" varchar(20) NOT NULL,
+    "Flota_Revision" varchar(20),
     "Fecha_Entrada" date,
     "Fecha_salida_prevista" date,
     "Fecha_salida_real" date,
@@ -342,105 +342,105 @@ CREATE TABLE public."Taller" (
 );
 
 
-ALTER TABLE public."Taller" OWNER TO postgres;
+ALTER TABLE public.Taller OWNER TO postgres;
 
 --
 -- TOC entry 207 (class 1259 OID 24823)
 -- Name: Telefono; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Telefono" (
+CREATE TABLE public.Telefono (
     "Numero" integer NOT NULL,
     "Tipo" integer NOT NULL
 );
 
 
-ALTER TABLE public."Telefono" OWNER TO postgres;
+ALTER TABLE public.Telefono OWNER TO postgres;
 
 --
 -- TOC entry 225 (class 1259 OID 24926)
 -- Name: Tipo_Pago_Cheque; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Tipo_Pago_Cheque" (
-    "Codigo" character(20) NOT NULL,
+CREATE TABLE public.Tipo_Pago_Cheque (
+    "Codigo" varchar(20) NOT NULL,
     "Monto" real NOT NULL,
     "Numero_Cheque" integer NOT NULL,
-    "Institucion_financiera" character(20) NOT NULL
+    "Institucion_financiera" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Tipo_Pago_Cheque" OWNER TO postgres;
+ALTER TABLE public.Tipo_Pago_Cheque OWNER TO postgres;
 
 --
 -- TOC entry 224 (class 1259 OID 24921)
 -- Name: Tipo_pago_Credit_Card; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Tipo_pago_Credit_Card" (
-    "Codigo" character(20) NOT NULL,
+CREATE TABLE public.Tipo_pago_Credit_Card (
+    "Codigo" varchar(20) NOT NULL,
     "Monto" real NOT NULL,
-    "Tipo_tarjeta" character(20) NOT NULL,
-    "Banco" character(20) NOT NULL,
+    "Tipo_tarjeta" varchar(20) NOT NULL,
+    "Banco" varchar(20) NOT NULL,
     "Numero_Tarjeta" integer NOT NULL
 );
 
 
-ALTER TABLE public."Tipo_pago_Credit_Card" OWNER TO postgres;
+ALTER TABLE public.Tipo_pago_Credit_Card OWNER TO postgres;
 
 --
 -- TOC entry 223 (class 1259 OID 24916)
 -- Name: Tipo_pago_efectivo; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Tipo_pago_efectivo" (
-    "Codigo" character(20) NOT NULL,
+CREATE TABLE public.Tipo_pago_efectivo (
+    "Codigo" varchar(20) NOT NULL,
     "Monto" real NOT NULL,
     "Total_Billetes" real NOT NULL
 );
 
 
-ALTER TABLE public."Tipo_pago_efectivo" OWNER TO postgres;
+ALTER TABLE public.Tipo_pago_efectivo OWNER TO postgres;
 
 --
 -- TOC entry 217 (class 1259 OID 24879)
 -- Name: Usuario; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Usuario" (
-    "Clave" character(50) NOT NULL,
-    "Nombre" character(50) NOT NULL,
-    "Correo" character(50) NOT NULL,
-    "Contraseña" character(50) NOT NULL
+CREATE TABLE public.Usuario (
+    "Clave" varchar(50) NOT NULL,
+    "Nombre" varchar(50) NOT NULL,
+    "Correo" varchar(50) NOT NULL,
+    "Contraseña" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Usuario" OWNER TO postgres;
+ALTER TABLE public.Usuario OWNER TO postgres;
 
 --
 -- TOC entry 215 (class 1259 OID 24869)
 -- Name: Vacacion; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Vacacion" (
-    "Cod" character(20) NOT NULL,
-    "Descripcion" character(50) NOT NULL
+CREATE TABLE public.Vacacion (
+    "Cod" varchar(20) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL
 );
 
 
-ALTER TABLE public."Vacacion" OWNER TO postgres;
+ALTER TABLE public.Vacacion OWNER TO postgres;
 
 --
 -- TOC entry 198 (class 1259 OID 24771)
 -- Name: Vehiculo_Aereo; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Vehiculo_Aereo" (
-    "Placa" character(15) NOT NULL,
-    "Clasificacion" character(9) NOT NULL,
+CREATE TABLE public.Vehiculo_Aereo (
+    "Placa" varchar(15) NOT NULL,
+    "Clasificacion" varchar(9) NOT NULL,
     "Peso" real,
     "Capacidad" real NOT NULL,
-    "Serial_Motor" character(20) NOT NULL,
+    "Serial_Motor" varchar(20) NOT NULL,
     "Altura" real NOT NULL,
     "Velocidad_Maxima" integer,
     "Capacidad_Combustible" real NOT NULL,
@@ -450,66 +450,66 @@ CREATE TABLE public."Vehiculo_Aereo" (
     "Peso_Vacio" real NOT NULL,
     "Peso_Max_Despegue" real NOT NULL,
     "Carrera_Despegue" real NOT NULL,
-    "Motores" character(20) NOT NULL
+    "Motores" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Vehiculo_Aereo" OWNER TO postgres;
+ALTER TABLE public.Vehiculo_Aereo OWNER TO postgres;
 
 --
 -- TOC entry 197 (class 1259 OID 24762)
 -- Name: Vehiculo_Maritimo; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Vehiculo_Maritimo" (
-    "Placa" character(15) NOT NULL,
-    "Clasificacion" character(9) NOT NULL,
+CREATE TABLE public.Vehiculo_Maritimo (
+    "Placa" varchar(15) NOT NULL,
+    "Clasificacion" varchar(9) NOT NULL,
     "Peso" real,
     "Capacidad" real NOT NULL,
-    "Serial_Motor" character(20) NOT NULL,
+    "Serial_Motor" varchar(20) NOT NULL,
     "Altura" real NOT NULL,
     "Velocidad_Maxima" integer,
     "Capacidad_Combustible" real NOT NULL,
-    "Nombre" character(20) NOT NULL
+    "Nombre" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Vehiculo_Maritimo" OWNER TO postgres;
+ALTER TABLE public.Vehiculo_Maritimo OWNER TO postgres;
 
 --
 -- TOC entry 196 (class 1259 OID 24752)
 -- Name: Vehículo_Terrestre; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Vehículo_Terrestre" (
-    "Placa" character(15) NOT NULL,
-    "Clasificacion" character(9) NOT NULL,
+CREATE TABLE public.Vehiculo_Terrestre (
+    "Placa" varchar(15) NOT NULL,
+    "Clasificacion" varchar(9) NOT NULL,
     "Peso" real,
     "Capacidad" real NOT NULL,
-    "Serial_Motor" character(20) NOT NULL,
+    "Serial_Motor" varchar(20) NOT NULL,
     "Altura" real NOT NULL,
     "Velocidad_Maxima" integer,
     "Capacidad_Combustible" real NOT NULL,
-    "Serial_Carroceria" character(20) NOT NULL
+    "Serial_Carroceria" varchar(20) NOT NULL
 );
 
 
-ALTER TABLE public."Vehículo_Terrestre" OWNER TO postgres;
+ALTER TABLE public.Vehiculo_Terrestre OWNER TO postgres;
 
 --
 -- TOC entry 209 (class 1259 OID 24833)
 -- Name: Zona; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."Zona" (
-    "Codigo" character(20) NOT NULL,
-    "Nombre" character(20) NOT NULL,
-    "Descripcion" character(50) NOT NULL,
+CREATE TABLE public.Zona (
+    "Codigo" varchar(20) NOT NULL,
+    "Nombre" varchar(20) NOT NULL,
+    "Descripcion" varchar(50) NOT NULL,
     "Division_area" integer NOT NULL
 );
 
 
-ALTER TABLE public."Zona" OWNER TO postgres;
+ALTER TABLE public.Zona OWNER TO postgres;
 
 --
 -- TOC entry 3016 (class 0 OID 24788)
@@ -517,6 +517,7 @@ ALTER TABLE public."Zona" OWNER TO postgres;
 -- Data for Name: Aeropuerto; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+/*
 COPY public."Aeropuerto" ("Cod", "Cantidad_Terminales", "Pistas", "Capacidad", "Hangares") FROM stdin;
 \.
 
@@ -819,15 +820,15 @@ COPY public."Vehículo_Terrestre" ("Placa", "Clasificacion", "Peso", "Capacidad"
 
 COPY public."Zona" ("Codigo", "Nombre", "Descripcion", "Division_area") FROM stdin;
 \.
-
+*/
 
 --
 -- TOC entry 2824 (class 2606 OID 24792)
 -- Name: Aeropuerto Aeropuerto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Aeropuerto"
-    ADD CONSTRAINT "Aeropuerto_pkey" PRIMARY KEY ("Cod");
+ALTER TABLE ONLY public.Aeropuerto
+    ADD CONSTRAINT Aeropuerto_pkey PRIMARY KEY ("Cod");
 
 
 --
@@ -835,8 +836,8 @@ ALTER TABLE ONLY public."Aeropuerto"
 -- Name: Contabilidad Contabilidad_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Contabilidad"
-    ADD CONSTRAINT "Contabilidad_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Contabilidad
+    ADD CONSTRAINT Contabilidad_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -844,8 +845,8 @@ ALTER TABLE ONLY public."Contabilidad"
 -- Name: Envio Envio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Envio"
-    ADD CONSTRAINT "Envio_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Envio
+    ADD CONSTRAINT Envio_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -853,8 +854,8 @@ ALTER TABLE ONLY public."Envio"
 -- Name: Estado Estado_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Estado"
-    ADD CONSTRAINT "Estado_pkey" PRIMARY KEY ("COD");
+ALTER TABLE ONLY public.Estado
+    ADD CONSTRAINT Estado_pkey PRIMARY KEY ("COD");
 
 
 --
@@ -862,8 +863,8 @@ ALTER TABLE ONLY public."Estado"
 -- Name: Falla Falla_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Falla"
-    ADD CONSTRAINT "Falla_pkey" PRIMARY KEY ("Cod");
+ALTER TABLE ONLY public.Falla
+    ADD CONSTRAINT Falla_pkey PRIMARY KEY ("Cod");
 
 
 --
@@ -871,8 +872,8 @@ ALTER TABLE ONLY public."Falla"
 -- Name: Horario Horario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Horario"
-    ADD CONSTRAINT "Horario_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Horario
+    ADD CONSTRAINT Horario_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -880,8 +881,8 @@ ALTER TABLE ONLY public."Horario"
 -- Name: Lugar Lugar_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Lugar"
-    ADD CONSTRAINT "Lugar_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Lugar
+    ADD CONSTRAINT Lugar_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -889,8 +890,8 @@ ALTER TABLE ONLY public."Lugar"
 -- Name: Marca Marca_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Marca"
-    ADD CONSTRAINT "Marca_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Marca
+    ADD CONSTRAINT Marca_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -898,8 +899,8 @@ ALTER TABLE ONLY public."Marca"
 -- Name: Modelo Modelo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Modelo"
-    ADD CONSTRAINT "Modelo_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Modelo
+    ADD CONSTRAINT Modelo_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -907,8 +908,8 @@ ALTER TABLE ONLY public."Modelo"
 -- Name: Oficina Oficina_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Oficina"
-    ADD CONSTRAINT "Oficina_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Oficina
+    ADD CONSTRAINT Oficina_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -916,8 +917,8 @@ ALTER TABLE ONLY public."Oficina"
 -- Name: Pago Pago_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Pago"
-    ADD CONSTRAINT "Pago_pkey" PRIMARY KEY ("Numero_unico");
+ALTER TABLE ONLY public.Pago
+    ADD CONSTRAINT Pago_pkey PRIMARY KEY ("Numero_unico");
 
 
 --
@@ -925,8 +926,8 @@ ALTER TABLE ONLY public."Pago"
 -- Name: Paquete Paquete_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Paquete"
-    ADD CONSTRAINT "Paquete_pkey" PRIMARY KEY ("Numero_guia");
+ALTER TABLE ONLY public.Paquete
+    ADD CONSTRAINT Paquete_pkey PRIMARY KEY ("Numero_guia");
 
 
 --
@@ -934,8 +935,8 @@ ALTER TABLE ONLY public."Paquete"
 -- Name: Persona_Contacto Persona_Contacto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Persona_Contacto"
-    ADD CONSTRAINT "Persona_Contacto_pkey" PRIMARY KEY ("CI");
+ALTER TABLE ONLY public.Persona_Contacto
+    ADD CONSTRAINT Persona_Contacto_pkey PRIMARY KEY ("CI");
 
 
 --
@@ -943,8 +944,8 @@ ALTER TABLE ONLY public."Persona_Contacto"
 -- Name: Privilegio Privilegio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Privilegio"
-    ADD CONSTRAINT "Privilegio_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Privilegio
+    ADD CONSTRAINT Privilegio_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -952,8 +953,8 @@ ALTER TABLE ONLY public."Privilegio"
 -- Name: Puerto Puerto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Puerto"
-    ADD CONSTRAINT "Puerto_pkey" PRIMARY KEY ("Cod");
+ALTER TABLE ONLY public.Puerto
+    ADD CONSTRAINT Puerto_pkey PRIMARY KEY ("Cod");
 
 
 --
@@ -961,8 +962,8 @@ ALTER TABLE ONLY public."Puerto"
 -- Name: Rol_Administrador Rol_Administrador_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Rol_Administrador"
-    ADD CONSTRAINT "Rol_Administrador_pkey" PRIMARY KEY ("Cedula");
+ALTER TABLE ONLY public.Rol_Administrador
+    ADD CONSTRAINT Rol_Administrador_pkey PRIMARY KEY ("Cedula");
 
 
 --
@@ -970,8 +971,8 @@ ALTER TABLE ONLY public."Rol_Administrador"
 -- Name: Rol_Cliente Rol_Cliente_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Rol_Cliente"
-    ADD CONSTRAINT "Rol_Cliente_pkey" PRIMARY KEY ("Cedula");
+ALTER TABLE ONLY public.Rol_Cliente
+    ADD CONSTRAINT Rol_Cliente_pkey PRIMARY KEY ("Cedula");
 
 
 --
@@ -979,8 +980,8 @@ ALTER TABLE ONLY public."Rol_Cliente"
 -- Name: Rol_Empleado Rol_Empleado_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Rol_Empleado"
-    ADD CONSTRAINT "Rol_Empleado_pkey" PRIMARY KEY ("Cedula");
+ALTER TABLE ONLY public.Rol_Empleado
+    ADD CONSTRAINT Rol_Empleado_pkey PRIMARY KEY ("Cedula");
 
 
 --
@@ -988,8 +989,8 @@ ALTER TABLE ONLY public."Rol_Empleado"
 -- Name: Ruta Ruta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Ruta"
-    ADD CONSTRAINT "Ruta_pkey" PRIMARY KEY ("Codigo_Ruta");
+ALTER TABLE ONLY public.Ruta
+    ADD CONSTRAINT Ruta_pkey PRIMARY KEY ("Codigo_Ruta");
 
 
 --
@@ -997,8 +998,8 @@ ALTER TABLE ONLY public."Ruta"
 -- Name: Servicio Servicio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Servicio"
-    ADD CONSTRAINT "Servicio_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Servicio
+    ADD CONSTRAINT Servicio_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -1006,8 +1007,8 @@ ALTER TABLE ONLY public."Servicio"
 -- Name: Taller Taller_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Taller"
-    ADD CONSTRAINT "Taller_pkey" PRIMARY KEY ("Cod");
+ALTER TABLE ONLY public.Taller
+    ADD CONSTRAINT Taller_pkey PRIMARY KEY ("Cod");
 
 
 --
@@ -1015,8 +1016,8 @@ ALTER TABLE ONLY public."Taller"
 -- Name: Telefono Telefono_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Telefono"
-    ADD CONSTRAINT "Telefono_pkey" PRIMARY KEY ("Numero");
+ALTER TABLE ONLY public.Telefono
+    ADD CONSTRAINT Telefono_pkey PRIMARY KEY ("Numero");
 
 
 --
@@ -1024,8 +1025,8 @@ ALTER TABLE ONLY public."Telefono"
 -- Name: Tipo_Pago_Cheque Tipo_Pago_Cheque_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Tipo_Pago_Cheque"
-    ADD CONSTRAINT "Tipo_Pago_Cheque_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Tipo_Pago_Cheque
+    ADD CONSTRAINT Tipo_Pago_Cheque_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -1033,8 +1034,8 @@ ALTER TABLE ONLY public."Tipo_Pago_Cheque"
 -- Name: Tipo_pago_Credit_Card Tipo_pago_Credit_Card_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Tipo_pago_Credit_Card"
-    ADD CONSTRAINT "Tipo_pago_Credit_Card_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Tipo_pago_Credit_Card
+    ADD CONSTRAINT Tipo_pago_Credit_Card_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -1042,8 +1043,8 @@ ALTER TABLE ONLY public."Tipo_pago_Credit_Card"
 -- Name: Tipo_pago_efectivo Tipo_pago_efectivo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Tipo_pago_efectivo"
-    ADD CONSTRAINT "Tipo_pago_efectivo_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Tipo_pago_efectivo
+    ADD CONSTRAINT Tipo_pago_efectivo_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -1051,8 +1052,8 @@ ALTER TABLE ONLY public."Tipo_pago_efectivo"
 -- Name: Usuario UK_Correo; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Usuario"
-    ADD CONSTRAINT "UK_Correo" UNIQUE ("Correo");
+ALTER TABLE ONLY public.Usuario
+    ADD CONSTRAINT UK_Correo UNIQUE ("Correo");
 
 
 --
@@ -1060,8 +1061,8 @@ ALTER TABLE ONLY public."Usuario"
 -- Name: Rol_Empleado UK_Correo_Personal; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Rol_Empleado"
-    ADD CONSTRAINT "UK_Correo_Personal" UNIQUE ("Correo_Personal");
+ALTER TABLE ONLY public.Rol_Empleado
+    ADD CONSTRAINT UK_Correo_Personal UNIQUE ("Correo_Personal");
 
 
 --
@@ -1069,8 +1070,8 @@ ALTER TABLE ONLY public."Rol_Empleado"
 -- Name: Rol_Cliente UK_Correo_Personal2; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Rol_Cliente"
-    ADD CONSTRAINT "UK_Correo_Personal2" UNIQUE ("Correo_Personal");
+ALTER TABLE ONLY public.Rol_Cliente
+    ADD CONSTRAINT UK_Correo_Personal2 UNIQUE ("Correo_Personal");
 
 
 --
@@ -1078,8 +1079,8 @@ ALTER TABLE ONLY public."Rol_Cliente"
 -- Name: Rol_Administrador UK_Correo_Personal3; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Rol_Administrador"
-    ADD CONSTRAINT "UK_Correo_Personal3" UNIQUE ("Correo_Personal");
+ALTER TABLE ONLY public.Rol_Administrador
+    ADD CONSTRAINT UK_Correo_Personal3 UNIQUE ("Correo_Personal");
 
 
 --
@@ -1087,8 +1088,8 @@ ALTER TABLE ONLY public."Rol_Administrador"
 -- Name: Tipo_Pago_Cheque UK_MumCheque; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Tipo_Pago_Cheque"
-    ADD CONSTRAINT "UK_MumCheque" UNIQUE ("Numero_Cheque");
+ALTER TABLE ONLY public.Tipo_Pago_Cheque
+    ADD CONSTRAINT UK_MumCheque UNIQUE ("Numero_Cheque");
 
 
 --
@@ -1096,8 +1097,8 @@ ALTER TABLE ONLY public."Tipo_Pago_Cheque"
 -- Name: Vehiculo_Maritimo UK_Nombre; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehiculo_Maritimo"
-    ADD CONSTRAINT "UK_Nombre" UNIQUE ("Nombre");
+ALTER TABLE ONLY public.Vehiculo_Maritimo
+    ADD CONSTRAINT UK_Nombre UNIQUE ("Nombre");
 
 
 --
@@ -1105,17 +1106,17 @@ ALTER TABLE ONLY public."Vehiculo_Maritimo"
 -- Name: Usuario UK_Nombre1; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Usuario"
-    ADD CONSTRAINT "UK_Nombre1" UNIQUE ("Nombre");
+ALTER TABLE ONLY public.Usuario
+    ADD CONSTRAINT UK_Nombre1 UNIQUE ("Nombre");
 
 
 --
 -- TOC entry 2812 (class 2606 OID 24768)
--- Name: Vehiculo_Maritimo UK_Serial_Motor; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: Vehiculo_Maritimo UK_Serial_MotorM; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehiculo_Maritimo"
-    ADD CONSTRAINT "UK_Serial_Motor" UNIQUE ("Serial_Motor");
+ALTER TABLE ONLY public.Vehiculo_Maritimo
+    ADD CONSTRAINT UK_Serial_MotorM UNIQUE ("Serial_Motor");
 
 
 --
@@ -1123,8 +1124,8 @@ ALTER TABLE ONLY public."Vehiculo_Maritimo"
 -- Name: Vehiculo_Aereo UK_Serial_MotorA; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehiculo_Aereo"
-    ADD CONSTRAINT "UK_Serial_MotorA" UNIQUE ("Serial_Motor");
+ALTER TABLE ONLY public.Vehiculo_Aereo
+    ADD CONSTRAINT UK_Serial_MotorA UNIQUE ("Serial_Motor");
 
 
 --
@@ -1132,8 +1133,8 @@ ALTER TABLE ONLY public."Vehiculo_Aereo"
 -- Name: Vehículo_Terrestre UK_Serial_carroceria; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehículo_Terrestre"
-    ADD CONSTRAINT "UK_Serial_carroceria" UNIQUE ("Serial_Carroceria");
+ALTER TABLE ONLY public.Vehiculo_Terrestre
+    ADD CONSTRAINT UK_Serial_carroceria UNIQUE ("Serial_Carroceria");
 
 
 --
@@ -1141,8 +1142,8 @@ ALTER TABLE ONLY public."Vehículo_Terrestre"
 -- Name: Vehículo_Terrestre UK_Serial_motor; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehículo_Terrestre"
-    ADD CONSTRAINT "UK_Serial_motor" UNIQUE ("Serial_Motor");
+ALTER TABLE ONLY public.Vehiculo_Terrestre
+    ADD CONSTRAINT UK_Serial_motor UNIQUE ("Serial_Motor");
 
 
 --
@@ -1150,8 +1151,8 @@ ALTER TABLE ONLY public."Vehículo_Terrestre"
 -- Name: Pago UK_TIPOPAGO; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Pago"
-    ADD CONSTRAINT "UK_TIPOPAGO" UNIQUE ("Codigo_TIPO_PAGO");
+ALTER TABLE ONLY public.Pago
+    ADD CONSTRAINT UK_TIPOPAGO UNIQUE ("Codigo_TIPO_PAGO");
 
 
 --
@@ -1159,8 +1160,8 @@ ALTER TABLE ONLY public."Pago"
 -- Name: Usuario Usuario_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Usuario"
-    ADD CONSTRAINT "Usuario_pkey" PRIMARY KEY ("Clave");
+ALTER TABLE ONLY public.Usuario
+    ADD CONSTRAINT Usuario_pkey PRIMARY KEY ("Clave");
 
 
 --
@@ -1168,8 +1169,8 @@ ALTER TABLE ONLY public."Usuario"
 -- Name: Vacacion Vacacion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vacacion"
-    ADD CONSTRAINT "Vacacion_pkey" PRIMARY KEY ("Cod");
+ALTER TABLE ONLY public.Vacacion
+    ADD CONSTRAINT Vacacion_pkey PRIMARY KEY ("Cod");
 
 
 --
@@ -1177,8 +1178,8 @@ ALTER TABLE ONLY public."Vacacion"
 -- Name: Vehiculo_Aereo Vehiculo_Aereo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehiculo_Aereo"
-    ADD CONSTRAINT "Vehiculo_Aereo_pkey" PRIMARY KEY ("Placa");
+ALTER TABLE ONLY public.Vehiculo_Aereo
+    ADD CONSTRAINT Vehiculo_Aereo_pkey PRIMARY KEY ("Placa");
 
 
 --
@@ -1186,8 +1187,8 @@ ALTER TABLE ONLY public."Vehiculo_Aereo"
 -- Name: Vehiculo_Maritimo Vehiculo_Maritimo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehiculo_Maritimo"
-    ADD CONSTRAINT "Vehiculo_Maritimo_pkey" PRIMARY KEY ("Placa");
+ALTER TABLE ONLY public.Vehiculo_Maritimo
+    ADD CONSTRAINT Vehiculo_Maritimo_pkey PRIMARY KEY ("Placa");
 
 
 --
@@ -1195,8 +1196,8 @@ ALTER TABLE ONLY public."Vehiculo_Maritimo"
 -- Name: Vehículo_Terrestre Vehículo_Terrestre_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Vehículo_Terrestre"
-    ADD CONSTRAINT "Vehículo_Terrestre_pkey" PRIMARY KEY ("Placa");
+ALTER TABLE ONLY public.Vehiculo_Terrestre
+    ADD CONSTRAINT Vehiculo_Terrestre_pkey PRIMARY KEY ("Placa");
 
 
 --
@@ -1204,8 +1205,8 @@ ALTER TABLE ONLY public."Vehículo_Terrestre"
 -- Name: Zona Zona_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Zona"
-    ADD CONSTRAINT "Zona_pkey" PRIMARY KEY ("Codigo");
+ALTER TABLE ONLY public.Zona
+    ADD CONSTRAINT Zona_pkey PRIMARY KEY ("Codigo");
 
 
 --
@@ -1213,8 +1214,8 @@ ALTER TABLE ONLY public."Zona"
 -- Name: Lugar FK_Lugar; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."Lugar"
-    ADD CONSTRAINT "FK_Lugar" FOREIGN KEY ("Codigo") REFERENCES public."Lugar"("Codigo");
+ALTER TABLE ONLY public.Lugar
+    ADD CONSTRAINT FK_Lugar FOREIGN KEY ("Codigo") REFERENCES public.Lugar("Codigo");
 
 
 -- Completed on 2018-11-21 17:35:40
