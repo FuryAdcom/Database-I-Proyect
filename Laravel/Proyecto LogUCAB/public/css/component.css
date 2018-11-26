@@ -345,7 +345,8 @@ input.gn-search:focus {
 	margin-top: 40px;
 	border-radius: 5px 5px 5px 5px;
 	padding: 20px;
-	min-height: 320px
+	min-height: 320px;
+	margin-bottom: 40px;
 }
 
 /* The sidemenu */
@@ -374,8 +375,6 @@ input.gn-search:focus {
 
 /* The wrapper*/
 .wrapper {
-	width: 95%;
-	height: 100%;
 	margin: 60px auto 0px auto;
 	display: flex;
 	justify-content: center;

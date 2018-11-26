@@ -3,12 +3,13 @@
 <div class="wrapper">
 					<div class="sidemenu">
 						<a href="/vehiculo/create">Agregar</a>
-						<a href="#">Modificar</a>
-						<a href="#">Consultar</a>
-						<a href="#" style="border-bottom: 0px solid #5993cd">Eliminar</a>
+						<a href="/vehiculo/edit">Modificar</a>
+						<a href="/vehiculo/show">Consultar</a>
+						<a href="#" style="border-bottom: 0px">Eliminar</a>
 					</div>
 					<div class="contenido_ppal">
                         <!--Agregar-->
+                        <h3 style="text-align: center; color: whitesmoke">Crear vehiculo</h3>
 						<form>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputPlaca" style="color: whitesmoke">Placa</label>

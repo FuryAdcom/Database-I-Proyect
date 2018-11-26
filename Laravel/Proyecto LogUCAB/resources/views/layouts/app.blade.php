@@ -55,7 +55,7 @@
 				<li><a href="#">LogUCAB</a></li>
 				<li><a href="#"><i class="fa fa-user"></i> <span>Login</span></a></li>
 			</ul>
-		<div class="container">
+		<div class="container" style="padding-left: 10px; padding-right: 10px">
 			<!--@yield('Content')-->
 			@yield('contenido')
 			<!--Til here-->	
