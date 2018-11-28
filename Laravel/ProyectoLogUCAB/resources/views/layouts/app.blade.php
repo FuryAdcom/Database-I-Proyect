@@ -14,7 +14,10 @@
 		<link rel="stylesheet" type="text/css" href="{{asset('/css/demo.css')}}" />
 		<link rel="stylesheet" type="text/css" href="{{asset('/css/component.css')}}" />
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-  		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+		<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     	<script src="{{asset('/js/modernizr.custom.js')}}"></script>
 	</head>
 	<body style="background: #34495e; overflow-y: scroll">
@@ -52,11 +55,11 @@
 						</div><!-- /gn-scroller -->
 					</nav>
 				</li>
-				<li><a href="#">LogUCAB</a></li>
-				<li><a href="#"><i class="fa fa-user"></i> <span>Login</span></a></li>
+				<li><a href="/">LogUCAB</a></li>
+				<li><a href="/login"><i class="fa fa-user"></i> <span>Login</span></a></li>
 			</ul>
 		<div class="container" style="padding-left: 10px; padding-right: 10px">
-			<!--@yield('Content')-->
+			<!---->
 			@yield('contenido')
 			<!--Til here-->	
 		</div><!-- /container -->

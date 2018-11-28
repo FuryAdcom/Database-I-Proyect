@@ -15,4 +15,10 @@ Route::get('/', function () {
     return view('layouts/app');
 });
 
-Route::resource('vehiculo','VehiculoController');
+Route::get('vehiculo','VehiculoController@inicio');
+Route::get('vehiculo/lista','VehiculoController@lista');
+Route::get('vehiculo/create','VehiculoController@create');
+Route::get('vehiculo/edit','VehiculoController@edit');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

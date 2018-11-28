@@ -21,7 +21,7 @@ class VehiculoController extends Controller
 
     }
 
-    public function index(){
+    public function inicio(){
         return view("vehiculo.vehiculo");
     }
     public function create(){
@@ -30,7 +30,7 @@ class VehiculoController extends Controller
     public function store(){
 
     }
-    public function show(){
+    public function lista(){
         return view("vehiculo.showvehiculo");
     }
     public function edit(){
