@@ -2,10 +2,10 @@
 @section('contenido')
 <div class="wrapper">
 					<div class="sidemenu">
-						<a href="/transporte">Inicio</a>
-						<a href="/transporte/create">Agregar</a>
-						<a href="/transporte/edit">Modificar</a>
-						<a href="/transporte/lista" style="border-bottom: 0px">Lista</a>
+						<a href="/oficina">Inicio</a>
+						<a href="/oficina/create">Agregar</a>
+						<a href="/oficina/edit">Modificar</a>
+						<a href="/oficina/lista" style="border-bottom: 0px">Lista</a>
 					</div>
 					<div class="contenido_ppal">
                         <!--Consultar-->

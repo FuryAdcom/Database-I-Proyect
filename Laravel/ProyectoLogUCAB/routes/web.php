@@ -15,10 +15,19 @@ Route::get('/', function () {
     return view('layouts/app');
 });
 
-Route::get('vehiculo','VehiculoController@inicio');
-Route::get('vehiculo/lista','VehiculoController@lista');
-Route::get('vehiculo/create','VehiculoController@create');
-Route::get('vehiculo/edit','VehiculoController@edit');
+//Transporte
+Route::get('transporte','VehiculoController@inicio');
+Route::get('transporte/lista','VehiculoController@lista');
+Route::get('transporte/create','VehiculoController@create');
+Route::get('transporte/edit','VehiculoController@edit');
+
+//Oficina
+Route::get('oficina','OfficeController@inicio');
+Route::get('oficina/lista','OfficeController@lista');
+Route::get('oficina/create','OfficeController@create');
+Route::get('oficina/edit','OfficeController@edit');
+
+//Login
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

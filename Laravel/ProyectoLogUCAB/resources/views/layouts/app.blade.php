@@ -31,26 +31,18 @@
 									<input placeholder="Buscar" type="search" class="gn-search">
 									<a class="gn-icon gn-icon-search"><span>Buscar</span></a>
 								</li>
+								<li><a href="/oficina"><i class="fa fa-building" id="inside_opt"></i>Oficina</a></li>
 								<li>
-									<a href="/vehiculo"><i class="fa fa-car" id="inside_opt"></i>Vehiculos</a>
+									<a href="/transporte"><i class="fa fa-car" id="inside_opt"></i>Transporte</a>
 									<ul class="gn-submenu">
-										<a href="/vehiculo/create"><li class="sub_option"><i class="fa fa-plus" id="inside_opt"></i>Agregar</li></a>
-										<a href="/vehiculo/edit"><li class="sub_option"><i class="fa fa-wrench" id="inside_opt"></i>Modificar</li></a>
-										<a href="/vehiculo/show"><li class="sub_option"><i class="fa fa-newspaper" id="inside_opt"></i>Consultar</li></a>
-										<a href="/vehiculo/destroy"><li class="sub_option"><i class="fa fa-times" id="inside_opt"></i>Eliminar</li></a>
+										<a href="/transporte/create"><li class="sub_option"><i class="fa fa-plus" id="inside_opt"></i>Agregar</li></a>
+										<a href="/transporte/edit"><li class="sub_option"><i class="fa fa-wrench" id="inside_opt"></i>Modificar</li></a>
+										<a href="/transporte/show"><li class="sub_option"><i class="fa fa-newspaper" id="inside_opt"></i>Consultar</li></a>
 									</ul>
 								</li>
-								<li><a class="gn-icon gn-icon-cog">Settings</a></li>
 								<li><a class="gn-icon gn-icon-help">Help</a></li>
 								<li><a class="gn-icon gn-icon-help">Prueba</a></li>
-								<li>
-									<a class="gn-icon gn-icon-archive">Archives</a>
-									<ul class="gn-submenu">
-										<li><a class="gn-icon gn-icon-article">Articles</a></li>
-										<li><a class="gn-icon gn-icon-pictures">Images</a></li>
-										<li><a class="gn-icon gn-icon-videos">Videos</a></li>
-									</ul>
-								</li>
+								<li><a class="gn-icon gn-icon-archive">Archives</a></li>
 							</ul>
 						</div><!-- /gn-scroller -->
 					</nav>

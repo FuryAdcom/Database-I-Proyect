@@ -2,10 +2,10 @@
 @section('contenido')
 <div class="wrapper">
 	<div class="sidemenu">
-		<a href="/vehiculo">Inicio</a>
-		<a href="/vehiculo/create">Agregar</a>
-		<a href="/vehiculo/edit">Modificar</a>
-		<a href="/vehiculo/lista" style="border-bottom: 0px">Lista</a>
+		<a href="/transporte">Inicio</a>
+		<a href="/transporte/create">Agregar</a>
+		<a href="/transporte/edit">Modificar</a>
+		<a href="/transporte/lista" style="border-bottom: 0px">Lista</a>
 	</div>
 					<div class="contenido_ppal">
                         <!--Agregar-->
@@ -16,18 +16,25 @@
 								<input type="text" class="form-control" id="inputPlaca" placeholder="Introduzca la placa" required>
 								<small id="placa" style="color: rgb(180, 198, 214)">Con ella identificaremos el vehiculo.</small>
 							</div>
+							<div class="form-group" style="width:49%; float: right;height: 79px">
+								<label for="inputSerial" style="color: whitesmoke">Serial motor</label>
+								<input type="text" class="form-control" id="inputSerial"placeholder="Introduzca el serial" required>
+							</div>
+							<div class="form-group" style="width:49%; float: left">
+								<label for="inputMarca" style="color: whitesmoke">Marca</label>
+								<input type="text" class="form-control" id="inputMarca" placeholder="Introduzca la marca">
+							</div>
 							<div class="form-group" style="width:49%; float: right;">
+								<label for="inputModelo" style="color: whitesmoke">Modelo</label>
+								<input type="text" class="form-control" id="inputModelo" placeholder="Introduzca el modelo" required>
+							</div>
+							<div class="form-group" style="width:49%; float: left">
 								<label for="inputPeso" style="color: whitesmoke">Peso</label>
 								<input type="number" class="form-control" id="inputPeso" placeholder="Introduzca el peso">
-								<small style="color:#5f6f81">.</small>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputCapa" style="color: whitesmoke">Capacidad</label>
 								<input type="number" class="form-control" id="inputCapa" placeholder="Introduzca la capacidad" required>
-							</div>
-							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputSerial" style="color: whitesmoke">Serial motor</label>
-								<input type="text" class="form-control" id="inputSerial"placeholder="Introduzca el serial" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputAltura" style="color: whitesmoke">Altura</label>
