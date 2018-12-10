@@ -27,11 +27,14 @@ class VehiculoController extends Controller
     public function create(){
         return view("vehiculo.createvehiculo");
     }
-    public function store(){
-
+    public function store(Request $request){
+        
     }
     public function lista(){
-        return view("vehiculo.showvehiculo");
+        $veha = VehiculoA::paginate(50);
+        $vehm = VehiculoM::paginate(50);
+        $veht = VehiculoT::paginate(50);
+        return view("vehiculo.showvehiculo", compact('veha','vehm','veht'));
     }
     public function edit(){
         return view("vehiculo.editvehiculo");

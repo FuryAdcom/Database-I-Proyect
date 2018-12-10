@@ -50,7 +50,7 @@
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputClasificacion" style="color: whitesmoke">Clasificacion</label>
-								<select class="form-control" id="inputClasificacion"  name="Clasificacion" required>
+								<select class="form-control" style="height: 34px" id="inputClasificacion"  name="Clasificacion" required>
 									<option value="">Seleccione una</option>
 									<option value="a">Aereo</option>
 									<option value="m">Maritimo</option>
@@ -105,4 +105,4 @@
                         <!---->
 					</div>
 				</div>		
-@stop
+@endsection

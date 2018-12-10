@@ -1853,6 +1853,8 @@ class ComposerStaticInitdede92598941d40382b79c1ae08dcad9
         'LogUCAB\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'LogUCAB\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'LogUCAB\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'LogUCAB\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'LogUCAB\\Http\\Controllers\\OfficeController' => __DIR__ . '/../..' . '/app/Http/Controllers/OfficeController.php',
         'LogUCAB\\Http\\Controllers\\VehiculoController' => __DIR__ . '/../..' . '/app/Http/Controllers/VehiculoController.php',
         'LogUCAB\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'LogUCAB\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',

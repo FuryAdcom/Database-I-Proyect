@@ -1223,4 +1223,3 @@ ALTER TABLE ONLY public.Lugar
 --
 -- PostgreSQL database dump complete
 --
-

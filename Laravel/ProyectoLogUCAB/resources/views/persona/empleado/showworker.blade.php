@@ -2,13 +2,13 @@
 @section('contenido')
 <div class="wrapper">
 					<div class="sidemenu">
-						<a href="/oficina">Inicio</a>
-						<a href="/oficina/create">Agregar</a>
-						<a href="/oficina/lista" style="border-bottom: 0px">Lista</a>
+						<a href="/empleado">Inicio</a>
+						<a href="/empleado/create">Agregar</a>
+						<a href="/empleado/lista" style="border-bottom: 0px">Lista</a>
 					</div>
 					<div class="contenido_ppal">
                         <!--Consultar-->
-						<h3 style="text-align: center; color: whitesmoke">Consultar oficinas</h3>
+						<h3 style="text-align: center; color: whitesmoke">Consultar empleados</h3>
 						@if(Session::has('message'))
 							<div class="alert alert-info"> {{Session::get('message')}} </div>
 						@elseif(Session::has('messagedel'))
@@ -27,18 +27,18 @@
 											<th>Encargado</th>
 											<th>Opciones</th>
 										</thead>
-										@foreach ($oficinas as $office)
+										@foreach ($empleados as $empleado)
 										<tbody>	
-											<th> {{$office->Codigo}} </th>
-											<th> {{$office->Nombre}} </th>
-											<th> {{$office->Cantidad_vehiculos}} </th>
-											<th> {{$office->Cantidad_empleados}} </th>
-											<th> {{$office->Empleado_cargo}} </th>
-										    <th> <a class="btn btn-secondary" href="/oficina/edit/{{$office->Codigo}}">Editar</a><a class="btn btn-danger" href="/oficina/delete/{{$office->Codigo}}">Eliminar</a> </th>
+											<th> {{$empleado->Codigo}} </th>
+											<th> {{$empleado->Nombre}} </th>
+											<th> {{$empleado->Cantidad_vehiculos}} </th>
+											<th> {{$empleado->Cantidad_empleados}} </th>
+											<th> {{$empleado->Empleado_cargo}} </th>
+										    <th> <a class="btn btn-secondary" href="/empleado/edit/{{$empleado->Codigo}}">Editar</a><a class="btn btn-danger" href="/empleado/delete/{{$empleado->Codigo}}">Eliminar</a> </th>
 										</tbody>
 										@endforeach
 									</table>
-									{{ $oficinas->links() }}
+									{{ $empleados->links() }}
 								</div>
 							</div>
 						</div>

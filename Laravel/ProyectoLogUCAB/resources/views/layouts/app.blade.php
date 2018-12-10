@@ -36,8 +36,6 @@
 									<a href="/transporte"><i class="fa fa-car" id="inside_opt"></i>Transporte</a>
 									<ul class="gn-submenu">
 										<a href="/transporte/create"><li class="sub_option"><i class="fa fa-plus" id="inside_opt"></i>Agregar</li></a>
-										<a href="/transporte/edit"><li class="sub_option"><i class="fa fa-wrench" id="inside_opt"></i>Modificar</li></a>
-										<a href="/transporte/show"><li class="sub_option"><i class="fa fa-newspaper" id="inside_opt"></i>Consultar</li></a>
 									</ul>
 								</li>
 								<li><a class="gn-icon gn-icon-help">Help</a></li>

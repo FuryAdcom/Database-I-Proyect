@@ -27,6 +27,7 @@
 		font-weight: 300;
 		font-family: 'Lato', Arial, sans-serif;
 		line-height: 60px;
+		z-index: 1;
 }
 
 .gn-menu-main {
@@ -355,7 +356,7 @@ input.gn-search:focus {
 /*The content container*/
 
 .contenido_ppal{
-	background-color: #5f6f81;
+	background-color: #728294;
 	width: 85%;
 	float: left;
 	overflow-x: hidden;

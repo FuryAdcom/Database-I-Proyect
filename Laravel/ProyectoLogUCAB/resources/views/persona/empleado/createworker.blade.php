@@ -2,14 +2,14 @@
 @section('contenido')
 <div class="wrapper">
 	<div class="sidemenu">
-		<a href="/oficina">Inicio</a>
-		<a href="/oficina/create">Agregar</a>
-		<a href="/oficina/lista" style="border-bottom: 0px">Lista</a>
+		<a href="/empleado">Inicio</a>
+		<a href="/empleado/create">Agregar</a>
+		<a href="/empleado/lista" style="border-bottom: 0px">Lista</a>
 	</div>
 					<div class="contenido_ppal">
                         <!--Agregar-->
-                        <h3 style="text-align: center; color: whitesmoke">Crear oficina</h3>
-						<form action="/oficina/store" method="POST">
+                        <h3 style="text-align: center; color: whitesmoke">Crear empleado</h3>
+						<form action="/empleado/store" method="POST">
 							@csrf
 
 							<div class="form-group" style="width:49%; float: left">

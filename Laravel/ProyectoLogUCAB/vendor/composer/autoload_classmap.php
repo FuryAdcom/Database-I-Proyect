@@ -1516,6 +1516,8 @@ return array(
     'LogUCAB\\Http\\Controllers\\Auth\\ResetPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ResetPasswordController.php',
     'LogUCAB\\Http\\Controllers\\Auth\\VerificationController' => $baseDir . '/app/Http/Controllers/Auth/VerificationController.php',
     'LogUCAB\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
+    'LogUCAB\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
+    'LogUCAB\\Http\\Controllers\\OfficeController' => $baseDir . '/app/Http/Controllers/OfficeController.php',
     'LogUCAB\\Http\\Controllers\\VehiculoController' => $baseDir . '/app/Http/Controllers/VehiculoController.php',
     'LogUCAB\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'LogUCAB\\Http\\Middleware\\Authenticate' => $baseDir . '/app/Http/Middleware/Authenticate.php',

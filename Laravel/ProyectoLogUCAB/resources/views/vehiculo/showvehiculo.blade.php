@@ -20,11 +20,37 @@
 											<th>Clasificacion</th>
 											<th>Marca</th>
 											<th>Modelo</th>
+											<th>Opciones</th>
 										</thead>
 										<tbody>
-											<!-- Tabla para listar -->
+											@foreach ($veha or $vehm or $veht as $vehiculo)
+												@if($vehiculo->Clasificacion == 'a')
+													<th> {{$vehiculo->Placa}} </th>
+													<th> Aereo </th>
+													<th> {{$vehiculo->Marca}} </th>
+													<th> {{$vehiculo->Modelo}} </th>
+													<th> <a class="btn btn-primary">Crear</a><a class="btn btn-secondary">Editar</a><a class="btn btn-danger">Eliminar</a> </th>
+												@endif
+												@if($vehiculo->Clasificacion == 'm')
+													<th> {{$vehiculo->Placa}} </th>
+													<th> Maritimo </th>
+													<th> {{$vehiculo->Marca}} </th>
+													<th> {{$vehiculo->Modelo}} </th>
+													<th> <a class="btn btn-primary">Crear</a><a class="btn btn-secondary">Editar</a><a class="btn btn-danger">Eliminar</a> </th>
+												@endif
+												@if($vehiculo->Clasificacion == 't')
+													<th> {{$vehiculo->Placa}} </th>
+													<th> Terrestre </th>
+													<th> {{$vehiculo->Marca}} </th>
+													<th> {{$vehiculo->Modelo}} </th>
+													<th> <a class="btn btn-primary">Crear</a><a class="btn btn-secondary">Editar</a><a class="btn btn-danger">Eliminar</a> </th>
+												@endif
+											@endforeach
 										</tbody>
 									</table>
+									{{ $veha->links() }}
+									{{ $vehm->links() }}
+									{{ $veht->links() }}
 								</div>
 							</div>
 						</div>

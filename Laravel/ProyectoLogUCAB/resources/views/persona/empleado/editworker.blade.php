@@ -2,14 +2,14 @@
 @section('contenido')
 <div class="wrapper">
 	<div class="sidemenu">
-		<a href="/oficina">Inicio</a>
-		<a href="/oficina/create">Agregar</a>
-		<a href="/oficina/lista" style="border-bottom: 0px">Lista</a>
+		<a href="/empleado">Inicio</a>
+		<a href="/empleado/create">Agregar</a>
+		<a href="/empleado/lista" style="border-bottom: 0px">Lista</a>
 	</div>
 	<div class="contenido_ppal">
         <!--Modificar-->
-        <h3 style="text-align: center; color: whitesmoke">Modificar oficina</h3>
-		<form method="POST" action="/oficina/update">
+        <h3 style="text-align: center; color: whitesmoke">Modificar empleado</h3>
+		<form method="POST" action="/empleado/update">
 			@csrf
 			<input type="text" name="Codigo" value="{{$validated->Codigo}}" hidden="">
 
