@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use LogUCAB\Http\Requests;
 use LogUCAB\Worker;
+use LogUCAB\Lugar;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Session;
@@ -31,10 +32,14 @@ class WorkerController extends Controller
 
         $request->validate([
             'Nombre' => 'required',
-            'Tamaño_deposito' => 'required',
-            'Cantidad_vehiculos' => 'required',
-            'Cantidad_empleados' => 'required',
-            'Empleado_cargo' => 'required',
+            'Apellido' => 'required',
+            'Correo_Personal' => 'required',
+            'Fecha_Nacimiento' => 'required',
+            'estado_civil' => 'required',
+            'Nivel_Academico' => 'required',
+            'Profesion' => 'required',
+            'Num_hijos' => 'required',
+            'FK_Habitacion' => 'required',
         ]);
 
         Worker::create($request->all());
@@ -55,12 +60,17 @@ class WorkerController extends Controller
 
     public function actualizar(Request $request){
         $empleado = Worker::find($request->Cedula);
+        $lugar = Lugar::find($request->FK_Habitacion);
     
         $empleado->Nombre = $request->Nombre;
-        $empleado->Tamaño_deposito = $request->Tamaño_deposito;
-        $empleado->Cantidad_vehiculos = $request->Cantidad_vehiculos;
-        $empleado->Cantidad_empleados = $request->Cantidad_empleados;
-        $empleado->Empleado_cargo = $request->Empleado_cargo;
+        $empleado->Apellido = $request->Apellido;
+        $empleado->Correo_Personal = $request->Correo_Personal;
+        $empleado->Fecha_Nacimiento = $request->Fecha_Nacimiento;
+        $empleado->estado_civil = $request->estado_civil;
+        $empleado->Nivel_Academico = $request->Nivel_Academico;
+        $empleado->Profesion = $request->Profesion;
+        $empleado->Num_hijos = $request->Num_hijos;
+        $empleado->FK_Habitacion = $lugar->Codigo;
         $empleado->save();
 
         Session::flash('message','Empleado modificado correctamente.');

@@ -13,28 +13,31 @@
 						<form>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputPlaca" style="color: whitesmoke">Placa</label>
-								<input type="text" class="form-control" id="inputPlaca" placeholder="Introduzca la placa" required>
+								<input type="text" name="Placa" class="form-control" id="inputPlaca" placeholder="Introduzca la placa" required>
 								<small id="placa" style="color: rgb(180, 198, 214)">Con ella identificaremos el vehiculo.</small>
 							</div>
 							<div class="form-group" style="width:49%; float: right;height: 79px">
 								<label for="inputSerial" style="color: whitesmoke">Serial motor</label>
-								<input type="text" class="form-control" id="inputSerial"placeholder="Introduzca el serial" required>
+								<input type="text" name="Serial_Motor" class="form-control" id="inputSerial"placeholder="Introduzca el serial" required>
 							</div>
+														<!--Probably fuck this-->
 							<div class="form-group" style="width:49%; float: left">
 								<label for="inputMarca" style="color: whitesmoke">Marca</label>
-								<input type="text" class="form-control" id="inputMarca" placeholder="Introduzca la marca">
+								<input type="text" name="Marca" class="form-control" id="inputMarca" placeholder="Introduzca la marca">
 							</div>
+														<!--And this too-->
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputModelo" style="color: whitesmoke">Modelo</label>
-								<input type="text" class="form-control" id="inputModelo" placeholder="Introduzca el modelo" required>
+								<input type="text" name="Motor" class="form-control" id="inputModelo" placeholder="Introduzca el modelo" required>
 							</div>
+														<!---->
 							<div class="form-group" style="width:49%; float: left">
 								<label for="inputPeso" style="color: whitesmoke">Peso</label>
-								<input type="number" class="form-control" id="inputPeso" placeholder="Introduzca el peso">
+								<input type="number" name="Peso" class="form-control" id="inputPeso" placeholder="Introduzca el peso">
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputCapa" style="color: whitesmoke">Capacidad</label>
-								<input type="number" class="form-control" id="inputCapa" placeholder="Introduzca la capacidad" required>
+								<input type="number" name="Capacidad" class="form-control" id="inputCapa" placeholder="Introduzca la capacidad" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputAltura" style="color: whitesmoke">Altura</label>
@@ -91,7 +94,7 @@
 							<div id="vehMar" class="form-group" style="width:100%; display:none;">
 								<h3 style="color: whitesmoke">Vehiculo maritimo</h3>
 								<label for="inputNomNav" style="color: whitesmoke">Nombre embarcacion</label>
-								<input type="text" class="form-control" id="inputNomNav" placeholder="Introduzca nombre del navio">
+								<input type="text" name="Nombre" class="form-control" id="inputNomNav" placeholder="Introduzca nombre del navio">
 							</div>
 							<div id="vehTer" class="form-group" style="width:100%; display:none;">
 								<h3 style="color: whitesmoke">Vehiculo terrestre</h3>

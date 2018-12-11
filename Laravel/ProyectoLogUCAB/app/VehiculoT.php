@@ -15,14 +15,15 @@ class VehiculoT extends Model
 
     protected $fillable =[
         'Placa',
-        'Clasificacion',
         'Peso',
         'Capacidad',
         'Serial_Motor',
         'Altura',
         'Velocidad_Maxima',
         'Capacidad_Combustible',
-        'Serial_Carroceria'
+        'Serial_Carroceria',
+        'FK_Representa',
+        'FK_Cuentacon'
     ];
 
     protected $guarded =[

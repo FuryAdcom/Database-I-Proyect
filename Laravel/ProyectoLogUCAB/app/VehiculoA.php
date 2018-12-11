@@ -15,7 +15,6 @@ class VehiculoA extends Model
 
     protected $fillable =[
         'Placa',
-        'Clasificacion',
         'Peso',
         'Capacidad',
         'Serial_Motor',
@@ -28,7 +27,9 @@ class VehiculoA extends Model
         'Peso_Vacio',
         'Peso_Max_Despegue',
         'Carrera_Despegue',
-        'Motores'
+        'Motores',
+        'FK_Representa',
+        'FK_Cuentacon'
     ];
 
     protected $guarded =[

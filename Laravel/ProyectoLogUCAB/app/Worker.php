@@ -6,22 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Worker extends Model
 {
-    protected $table='empleado';
+    protected $table='Empleado';
 
     protected $primaryKey='Cedula';
 
     public $timestamps=false;
 
-
     protected $fillable =[
+        'Cedula',
         'Nombre',
-        'Tamaño_deposito',
-        'Cantidad_vehiculos',
-        'Cantidad_empleados',
-        'Empleado_cargo'
+        'Apellido',
+        'Correo_Personal',
+        'Fecha_Nacimiento',
+        'estado_civil',
+        'Nivel_Academico',
+        'Profesion',
+        'Num_hijos',
+        'FK_Habitacion'
     ];
 
     protected $guarded =[
-        'Cedula'
+        'Cedula',
+        'Correo_Personal'
     ];
 }
