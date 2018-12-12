@@ -31,16 +31,15 @@
 									<input placeholder="Buscar" type="search" class="gn-search">
 									<a class="gn-icon gn-icon-search"><span>Buscar</span></a>
 								</li>
-								<li><a href="/oficina"><i class="fa fa-building" id="inside_opt"></i>Oficina</a></li>
 								<li>
-									<a href="/transporte"><i class="fa fa-car" id="inside_opt"></i>Transporte</a>
+									<a href="/user"><i class="fa fa-address-card" id="inside_opt"></i>Usuario</a>
 									<ul class="gn-submenu">
-										<a href="/transporte/create"><li class="sub_option"><i class="fa fa-plus" id="inside_opt"></i>Agregar</li></a>
+											<a href="/empleado"><li class="sub_option"><i class="fa fa-user-tie" id="inside_opt"></i>Empleado</li></a>
+											<a href="/cliente"><li class="sub_option"><i class="fa fa-users" id="inside_opt"></i>Cliente</li></a>
 									</ul>
 								</li>
-								<li><a class="gn-icon gn-icon-help">Help</a></li>
-								<li><a class="gn-icon gn-icon-help">Prueba</a></li>
-								<li><a class="gn-icon gn-icon-archive">Archives</a></li>
+								<li><a href="/oficina"><i class="fa fa-building" id="inside_opt"></i>Oficina</a></li>
+								<li><a href="/transporte"><i class="fa fa-car" id="inside_opt"></i>Transporte</a></li>
 							</ul>
 						</div><!-- /gn-scroller -->
 					</nav>
