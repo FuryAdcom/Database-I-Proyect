@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use LogUCAB\Http\Requests;
 use LogUCAB\Office;
+use LogUCAB\Lugar;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Session;
@@ -28,13 +29,13 @@ class OfficeController extends Controller
     }
 
     public function store(Request $request){
+        //Completar esto
+        $Lugar = Lugar::find($request->NombreLugar);
 
         $request->validate([
             'Nombre' => 'required',
             'Tamaño_deposito' => 'required',
-            'Cantidad_vehiculos' => 'required',
-            'Cantidad_empleados' => 'required',
-            'Empleado_cargo' => 'required',
+            'FK_Varios' => 'required'
         ]);
 
         Office::create($request->all());

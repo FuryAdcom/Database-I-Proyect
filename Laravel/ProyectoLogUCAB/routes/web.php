@@ -12,17 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('layouts/app');
+    return view('layouts/home');
 });
 
 //Transporte
-Route::get('/vehiculo','VehiculoController@inicio');
-Route::get('/vehiculo/lista','VehiculoController@lista');
-Route::get('/vehiculo/create','VehiculoController@create');
-Route::post('/vehiculo/store','VehiculoController@store');
-Route::get('/vehiculo/edit/{Codigo}','VehiculoController@edit');
-Route::post('/vehiculo/update','VehiculoController@actualizar');
-Route::get('/vehiculo/delete/{Codigo}','VehiculoController@delete');
+Route::get('/transporte','VehiculoController@inicio');
+Route::get('/transporte/lista','VehiculoController@lista');
+Route::get('/transporte/create','VehiculoController@create');
+Route::post('/transporte/store','VehiculoController@store');
+Route::get('/transporte/edit/{Codigo}','VehiculoController@edit');
+Route::post('/transporte/update','VehiculoController@actualizar');
+Route::get('/transporte/delete/{Codigo}','VehiculoController@delete');
 
 //Oficina
 Route::get('/oficina','OfficeController@inicio');

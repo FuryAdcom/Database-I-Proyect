@@ -14,24 +14,40 @@
 
 							<div class="form-group" style="width:49%; float: left">
 								<label for="inputNombre" style="color: whitesmoke">Nombre</label>
-								<input type="text" name="Nombre" class="form-control" id="Nombre" placeholder="Introduzca el nombre" required>
+								<input type="text" name="Nombre" class="form-control" id="Nombre" placeholder="Introduzca nombre" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
-								<label for="inputDeposito" style="color: whitesmoke">Deposito</label>
-								<input type="number" name="Tamaño_deposito" class="form-control" id="inputDeposito" placeholder="Introduzca el tamaño del deposito" required>
+								<label for="inputApellido" style="color: whitesmoke">Apellido</label>
+								<input type="number" name="Apellido" class="form-control" id="inputApellido" placeholder="Introduzca apellido" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputVehiculos" style="color: whitesmoke">Vehiculos</label>
-								<input type="number" name="Cantidad_vehiculos" class="form-control" id="inputVehiculos"placeholder="Introduzca la cantidad de vehiculos" required>
+								<label for="inputCorreo_Personal" style="color: whitesmoke">Correo</label>
+								<input type="number" name="Correo_Personal" class="form-control" id="inputCorreo_Personal"placeholder="Introduzca correo" required>
+							</div>
+							<!-- Fecha -->
+							<div class="form-group" style="width:49%; float: right;">
+								<label for="inputFecha_Nacimiento" style="color: whitesmoke">Fecha Nacimiento</label>
+								<input type="number" name="Fecha_Nacimiento" class="form-control" id="inputFecha_Nacimiento"placeholder="Introduzca fecha de nacimiento" required>
+							</div>
+							<!--  -->
+							<div class="form-group" style="width:49%; float: left;">
+								<label for="inputEmpresa" style="color: whitesmoke">Empresa</label>
+								<input type="text" name="Empresa" class="form-control" id="inputEmpresa" placeholder="Empresa">
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
-								<label for="inputEmpleados" style="color: whitesmoke">Empleados</label>
-								<input type="number" name="Cantidad_empleados" class="form-control" id="inputEmpleados"placeholder="Introduzca la cantidad de empleados" required>
+									<label for="inputEstado_civil" style="color: whitesmoke">Estado civil</label>
+									<select class="form-control" style="height: 34px" id="inputEstado_civil"  name="Estado civil" required>
+										<option value="">Seleccione una...</option>
+										<option value="soltero">Soltero</option>
+										<option value="casado">Casado</option>
+										<option value="viudo">Viudo</option>
+										<option value="divorciado">Divorciado</option>
+									</select>
 							</div>
-							<!-- REVISAR MEJOR FORMA -->
 							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputEncargado" style="color: whitesmoke">Encargado</label>
-								<input type="text" name="Empleado_cargo" class="form-control" id="inputEncargado" placeholder="Introduzca la capacidad de combustible" required>
+								<label for="inputL_vip" style="color: whitesmoke">L-VIP:</label>
+								<input class="form-check-input" name="l_vip" type="checkbox" value="true" id="inputL_vip">
+								<small id="inputL_vip" style="color: rgb(180, 198, 214); padding-left: 20px">Seleccione si desea ser cliente VIP</small>
 							</div>
 							<div style="width:100%; height: 40px; float: left;">
 								<button type="submit" class="btn btn-primary">Submit</button>
