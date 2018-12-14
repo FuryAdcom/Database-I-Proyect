@@ -4,18 +4,17 @@ namespace LogUCAB;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ruta extends Model
+class Env_Rut extends Model
 {
-    protected $table='Ruta';
+    protected $table='Env-Rut';
 
     protected $primaryKey='Codigo';
 
     public $timestamps=false;
 
     protected $fillable =[
-        'Descripcion',
-        'FK_Ruta',   //Ruta
-        'FK_Camino'   //Lugar
+        'FK_Adquiere_Pa',   //Ruta
+        'FK_Recorre'   //Envio
     ];
 
     protected $guarded =[

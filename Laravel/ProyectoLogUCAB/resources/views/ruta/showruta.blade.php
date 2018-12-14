@@ -20,25 +20,25 @@
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>ID</th>
+											<th>Descripcion</th>
 											<th>Nombre</th>
 											<th>Vehiculos</th>
 											<th>Empleados</th>
 											<th>Encargado</th>
 											<th>Opciones</th>
 										</thead>
-										@foreach ($empleados as $ruta)
+										@foreach ($rutas as $ruta)
 										<tbody>	
-											<th> {{$ruta->Codigo}} </th>
-											<th> {{$ruta->Nombre}} </th>
+											<th> {{$ruta->Descripcion}} </th>
+											<th> {{$ruta->sitio}} </th>
 											<th> {{$ruta->Cantidad_vehiculos}} </th>
-											<th> {{$ruta->Cantidad_empleados}} </th>
+											<th> {{$ruta->Cantidad_rutas}} </th>
 											<th> {{$ruta->Empleado_cargo}} </th>
 										    <th> <a class="btn btn-secondary" href="/ruta/edit/{{$ruta->Codigo}}">Editar</a><a class="btn btn-danger" href="/ruta/delete/{{$ruta->Codigo}}">Eliminar</a> </th>
 										</tbody>
 										@endforeach
 									</table>
-									{{ $empleados->links() }}
+									{{ $rutas->links() }}
 								</div>
 							</div>
 						</div>

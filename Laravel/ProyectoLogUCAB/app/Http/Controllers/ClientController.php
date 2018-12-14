@@ -34,18 +34,7 @@ class ClientController extends Controller
             $request->FK_Asignado_Tipo = 2;
         }
         $request->Frecuente = false;
-        $request->validate([
-            'Cedula' => 'required',
-            'Nombre' => 'required',
-            'Apellido' => 'required',
-            'Correo_Personal' => 'required',
-            'Fecha_Nacimiento' => 'required',
-            'Estado_Civil' => 'required',
-            'Empresa' => 'required',
-            'L_Vip' => 'required',
-            'Frecuente' => 'required',
-            'FK_Asignado_Tipo' => 'required'
-        ]);
+
         Client::create(['Cedula' => $request->Cedula,
         'Nombre' => $request->Nombre,
         'Apellido' => $request->Apellido,
@@ -96,7 +85,7 @@ class ClientController extends Controller
     }
 
     public function delete($Cedula){
-        DB::table('cliente')->where('Cedula', $Cedula)->delete();
+        DB::table('Cliente')->where('Cedula', $Cedula)->delete();
         Session::flash('messagedel','Cliente eliminado correctamente.');
         return redirect('/cliente/lista');
     }

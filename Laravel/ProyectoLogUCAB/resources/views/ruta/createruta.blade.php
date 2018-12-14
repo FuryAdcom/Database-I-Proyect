@@ -14,7 +14,7 @@
 
 							<div class="form-group" style="width:49%; float: left">
 								<label for="inputDescripcion" style="color: whitesmoke">Descripcion</label>
-								<input type="text" name="Descripcion" class="form-control" id="Descripcion" placeholder="Descripcion de la ruta" required>
+								<input type="text" name="Descripcion" class="form-control" id="Descripcion" placeholder="Descripcion de la ruta (Ej: Alto Orinoco-Atabapo)" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputDeposito" style="color: whitesmoke">Deposito</label>
