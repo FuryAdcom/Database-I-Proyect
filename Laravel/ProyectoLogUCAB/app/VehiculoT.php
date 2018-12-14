@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class VehiculoT extends Model
 {
     protected $table='Vehiculo_Terrestre';
-
     protected $primaryKey='Placa';
+    public $incrementing = false;
 
     public $timestamps=false;
 

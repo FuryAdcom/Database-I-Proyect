@@ -29,40 +29,58 @@ class OfficeController extends Controller
     }
 
     public function store(Request $request){
-        //Completar esto
-        $Lugar = Lugar::find($request->NombreLugar);
+        $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
+        ->where('Lugar.Tipo', 'Municipio')
+        ->first();
+
+        $max = Office::max('Oficina.Codigo');
+
+        $request->lugar = $lugar->Codigo;
 
         $request->validate([
             'Nombre' => 'required',
-            'Tamaño_deposito' => 'required',
-            'FK_Varios' => 'required'
+            'Tamaño_Deposito' => 'required',
+            'lugar' => 'required'
         ]);
 
-        Office::create($request->all());
+        $office = new Office;
+        $office->Codigo = $max + 1;
+        $office->Nombre = $request->Nombre;
+        $office->Tamaño_Deposito = $request->Tamaño_Deposito;
+        $office->FK_Varios = $request->lugar;
+        $office->save();
 
         Session::flash('message','Oficina creada correctamente.');
-        return Redirect::to('oficina/lista');
+        return Redirect::to('/oficina/lista');
     }
     
     public function lista(){
-        $oficinas = Office::paginate(50);
+        $oficinas = Office::leftjoin('Lugar', 'Lugar.Codigo','=','Oficina.FK_Varios')
+        ->select(\DB::raw("\"Oficina\".*, \"Lugar\".\"Nombre\" as sitio"))
+        ->paginate(50);
+
         return view("oficina.showoffice", compact('oficinas'));
     }
 
     public function edit($Codigo){
 
-        $validated = Office::where('Codigo', $Codigo)->first();
+        $validated = \LogUCAB\Office::where('Oficina.Codigo', $Codigo)
+        ->leftjoin('Lugar', 'Lugar.Codigo','=','Oficina.FK_Varios')
+        ->select(\DB::raw("\"Oficina\".*, \"Lugar\".\"Nombre\" as sitio"))
+        ->first();
+
         return view("oficina.editoffice", compact('validated'));
     }
 
     public function actualizar(Request $request){
         $oficina = Office::find($request->Codigo);
+        $lugar = Lugar::where('Lugar.Nombre', $request->sitio)
+        ->where('Lugar.Tipo', 'Municipio')
+        ->first();
     
         $oficina->Nombre = $request->Nombre;
-        $oficina->Tamaño_deposito = $request->Tamaño_deposito;
-        $oficina->Cantidad_vehiculos = $request->Cantidad_vehiculos;
-        $oficina->Cantidad_empleados = $request->Cantidad_empleados;
-        $oficina->Empleado_cargo = $request->Empleado_cargo;
+        $oficina->Tamaño_Deposito = $request->Tamaño_Deposito;
+        $oficina->FK_Varios = $lugar->Codigo;
         $oficina->save();
 
         Session::flash('message','Oficina modificada correctamente.');
@@ -70,7 +88,7 @@ class OfficeController extends Controller
     }
 
     public function delete($Codigo){
-        DB::table('oficina')->where('Codigo', $Codigo)->delete();
+        DB::table('Oficina')->where('Codigo', $Codigo)->delete();
         Session::flash('messagedel','Oficina eliminada correctamente.');
         return redirect('/oficina/lista');
     }

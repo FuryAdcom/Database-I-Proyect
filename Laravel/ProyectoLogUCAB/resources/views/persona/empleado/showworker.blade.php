@@ -16,25 +16,30 @@
 						@endif
 						<!-- Busqueda -->
 						<div class="row">
-							<div class="col-lg-12">
+							<div class="col-lg-15">
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>ID</th>
+											<th>Cedula</th>
 											<th>Nombre</th>
-											<th>Vehiculos</th>
-											<th>Empleados</th>
-											<th>Encargado</th>
+											<th>Apellido</th>
+											<th>Correo</th>
+											<th>Fecha de nacimiento</th>
+											<th>Puesto</th>
+											<th>Residencia</th>
 											<th>Opciones</th>
 										</thead>
 										@foreach ($empleados as $empleado)
 										<tbody>	
-											<th> {{$empleado->Codigo}} </th>
+											<th> {{$empleado->Cedula}} </th>
 											<th> {{$empleado->Nombre}} </th>
-											<th> {{$empleado->Cantidad_vehiculos}} </th>
-											<th> {{$empleado->Cantidad_empleados}} </th>
-											<th> {{$empleado->Empleado_cargo}} </th>
-										    <th> <a class="btn btn-secondary" href="/empleado/edit/{{$empleado->Codigo}}">Editar</a><a class="btn btn-danger" href="/empleado/delete/{{$empleado->Codigo}}">Eliminar</a> </th>
+											<th> {{$empleado->Apellido}} </th>
+											<th> {{$empleado->Correo_Personal}} </th>
+											<th> {{$empleado->Fecha_Nacimiento}} </th>
+											<th> {{$empleado->FK_Asignado_Puesto}} </th>
+											<!-- Mostrar toda -->
+											<th> {{$empleado->FK_Habitacion}} </th>
+										    <th> <a class="btn btn-secondary" href="/empleado/edit/{{$empleado->Cedula}}">Editar</a><a class="btn btn-danger" href="/empleado/delete/{{$empleado->Cedula}}">Eliminar</a> </th>
 										</tbody>
 										@endforeach
 									</table>

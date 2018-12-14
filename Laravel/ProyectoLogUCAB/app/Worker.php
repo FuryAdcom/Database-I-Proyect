@@ -21,7 +21,9 @@ class Worker extends Model
         'estado_civil',
         'Nivel_Academico',
         'Profesion',
-        'Num_hijos',
+        'Num_Hijos',
+        'Empleado_Cargo',
+        'FK_Asignado_Puesto',
         'FK_Habitacion'
     ];
 

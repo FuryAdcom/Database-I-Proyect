@@ -18,3 +18,7 @@ $("#inputClasificacion").on('change', function() {
           $("#vehTer").hide();
         }
 })
+
+$("#inputCharge").change(function() {
+      $('#inputEncargado').toggle();
+})

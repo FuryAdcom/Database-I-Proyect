@@ -12,7 +12,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Session;
 
 use DB;
-
+use Carbon\Carbon;
 
 class WorkerController extends Controller
 {
@@ -29,8 +29,14 @@ class WorkerController extends Controller
     }
 
     public function store(Request $request){
+        if($request->rol = 'Administrador'){
+            $request->FK_Asignado_Puesto = 1;
+        }else{
+            $request->FK_Asignado_Puesto = 4;
+        }
 
         $request->validate([
+            'Cedula' => 'required',
             'Nombre' => 'required',
             'Apellido' => 'required',
             'Correo_Personal' => 'required',
@@ -38,7 +44,9 @@ class WorkerController extends Controller
             'estado_civil' => 'required',
             'Nivel_Academico' => 'required',
             'Profesion' => 'required',
-            'Num_hijos' => 'required',
+            'Num_Hijos' => 'required',
+            'Empleado_Cargo' => 'required',
+            'FK_Asignado_Puesto' => 'required',
             'FK_Habitacion' => 'required',
         ]);
 
@@ -54,13 +62,21 @@ class WorkerController extends Controller
     }
 
     public function edit($Cedula){
-        $validated = Worker::where('Cedula', $Cedula)->first();
+        $validated = Worker::where('Empleado.Cedula', $Cedula)
+        ->leftjoin('Rol','Rol.Codigo','=','Empleado.FK_Asignado_Puesto')
+        ->select(\DB::raw("\"Empleado\".*, \"Rol\".\"Tipo\" as rol"))
+        ->first();
         return view("persona.empleado.editworker", compact('validated'));
     }
 
     public function actualizar(Request $request){
         $empleado = Worker::find($request->Cedula);
         $lugar = Lugar::find($request->FK_Habitacion);
+        if($request->rol = 'Administrador'){
+            $request->FK_Asignado_Puesto = 1;
+        }else{
+            $request->FK_Asignado_Puesto = 4;
+        }
     
         $empleado->Nombre = $request->Nombre;
         $empleado->Apellido = $request->Apellido;
@@ -69,7 +85,8 @@ class WorkerController extends Controller
         $empleado->estado_civil = $request->estado_civil;
         $empleado->Nivel_Academico = $request->Nivel_Academico;
         $empleado->Profesion = $request->Profesion;
-        $empleado->Num_hijos = $request->Num_hijos;
+        $empleado->Num_Hijos = $request->Num_Hijos;
+        $empleado->FK_Asignado_Puesto = $request->FK_Asignado_Puesto;
         $empleado->FK_Habitacion = $lugar->Codigo;
         $empleado->save();
 

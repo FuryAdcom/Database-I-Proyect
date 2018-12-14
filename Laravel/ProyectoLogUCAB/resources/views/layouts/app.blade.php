@@ -36,10 +36,12 @@
 									<ul class="gn-submenu">
 											<a href="/empleado"><li class="sub_option"><i class="fa fa-user-tie" id="inside_opt"></i>Empleado</li></a>
 											<a href="/cliente"><li class="sub_option"><i class="fa fa-users" id="inside_opt"></i>Cliente</li></a>
+											<a href="/rol"><li class="sub_option"><i class="fa fa-address-book" id="inside_opt"></i>Rol</li></a>
 									</ul>
 								</li>
 								<li><a href="/oficina"><i class="fa fa-building" id="inside_opt"></i>Oficina</a></li>
 								<li><a href="/transporte"><i class="fa fa-car" id="inside_opt"></i>Transporte</a></li>
+								<li><a href="/ruta"><i class="fa fa-map" id="inside_opt"></i>Ruta</a></li>
 							</ul>
 						</div><!-- /gn-scroller -->
 					</nav>

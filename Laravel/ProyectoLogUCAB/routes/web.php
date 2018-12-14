@@ -17,12 +17,18 @@ Route::get('/', function () {
 
 //Transporte
 Route::get('/transporte','VehiculoController@inicio');
-Route::get('/transporte/lista','VehiculoController@lista');
+Route::get('/transporte/listaAerea','VehiculoController@listaAvion');
+Route::get('/transporte/listaMarina','VehiculoController@listaBarco');
+Route::get('/transporte/listaTerrestre','VehiculoController@listaTerrestre');
 Route::get('/transporte/create','VehiculoController@create');
 Route::post('/transporte/store','VehiculoController@store');
-Route::get('/transporte/edit/{Codigo}','VehiculoController@edit');
+Route::get('/transporte/editAereo/{Placa}','VehiculoController@editAereo');
+Route::get('/transporte/editMarino/{Placa}','VehiculoController@editMarino');
+Route::get('/transporte/editTerrestre/{Placa}','VehiculoController@editTerrestre');
 Route::post('/transporte/update','VehiculoController@actualizar');
-Route::get('/transporte/delete/{Codigo}','VehiculoController@delete');
+Route::get('/transporte/deleteAereo/{Placa}','VehiculoController@deleteAereo');
+Route::get('/transporte/deleteMarino/{Placa}','VehiculoController@deleteMarino');
+Route::get('/transporte/deleteTerrestre/{Placa}','VehiculoController@deleteTerrestre');
 
 //Oficina
 Route::get('/oficina','OfficeController@inicio');
@@ -61,9 +67,7 @@ Route::post('/cliente/update','ClientController@actualizar');
 Route::get('/cliente/delete/{Codigo}','ClientController@delete');
 
 //Rol
-Route::get('/rol','RolController@inicio');
-Route::get('/rol/lista','RolController@lista');
-Route::get('/rol/create','RolController@create');
+Route::get('/rol','RolController@lista');
 Route::post('/rol/store','RolController@store');
 Route::get('/rol/edit/{Codigo}','RolController@edit');
 Route::post('/rol/update','RolController@actualizar');

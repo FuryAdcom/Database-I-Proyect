@@ -4,8 +4,9 @@
 					<div class="sidemenu">
 						<a href="/transporte">Inicio</a>
 						<a href="/transporte/create">Agregar</a>
-						<a href="/transporte/edit">Modificar</a>
-						<a href="/transporte/lista" style="border-bottom: 0px">Lista</a>
+						<a href="/transporte/listaAerea">Aereos</a>
+						<a href="/transporte/listaMarina">Maritimos</a>
+						<a href="/transporte/listaTerrestre" style="border-bottom: 0px">Terrestres</a>
 					</div>
 					<div class="contenido_ppal">
                         <!--Consultar-->
@@ -20,37 +21,21 @@
 											<th>Clasificacion</th>
 											<th>Marca</th>
 											<th>Modelo</th>
+											<th>Peso</th>
 											<th>Opciones</th>
 										</thead>
+										@foreach ($veh as $vehiculo)
 										<tbody>
-											@foreach ($veha or $vehm or $veht as $vehiculo)
-												@if($vehiculo->Clasificacion == 'a')
-													<th> {{$vehiculo->Placa}} </th>
-													<th> Aereo </th>
-													<th> {{$vehiculo->Marca}} </th>
-													<th> {{$vehiculo->Modelo}} </th>
-													<th> <a class="btn btn-primary">Crear</a><a class="btn btn-secondary">Editar</a><a class="btn btn-danger">Eliminar</a> </th>
-												@endif
-												@if($vehiculo->Clasificacion == 'm')
-													<th> {{$vehiculo->Placa}} </th>
-													<th> Maritimo </th>
-													<th> {{$vehiculo->Marca}} </th>
-													<th> {{$vehiculo->Modelo}} </th>
-													<th> <a class="btn btn-primary">Crear</a><a class="btn btn-secondary">Editar</a><a class="btn btn-danger">Eliminar</a> </th>
-												@endif
-												@if($vehiculo->Clasificacion == 't')
-													<th> {{$vehiculo->Placa}} </th>
-													<th> Terrestre </th>
-													<th> {{$vehiculo->Marca}} </th>
-													<th> {{$vehiculo->Modelo}} </th>
-													<th> <a class="btn btn-primary">Crear</a><a class="btn btn-secondary">Editar</a><a class="btn btn-danger">Eliminar</a> </th>
-												@endif
-											@endforeach
+											<th> {{$vehiculo->Placa}} </th>
+											<th> {{$tipo}} </th>
+											<th> {{$vehiculo->mark}} </th>
+											<th> {{$vehiculo->model}} </th>
+											<th> {{$vehiculo->Peso}} </th>
+											<th> <a class="btn btn-secondary" href="/transporte/edit{{$tipo}}/{{$vehiculo->Placa}}">Editar</a><a class="btn btn-danger" href="/transporte/delete{{$tipo}}/{{$vehiculo->Placa}}">Eliminar</a> </th>
 										</tbody>
+										@endforeach
 									</table>
-									{{ $veha->links() }}
-									{{ $vehm->links() }}
-									{{ $veht->links() }}
+									{{ $veh->links() }}
 								</div>
 							</div>
 						</div>

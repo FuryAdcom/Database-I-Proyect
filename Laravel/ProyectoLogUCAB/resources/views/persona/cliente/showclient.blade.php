@@ -8,7 +8,7 @@
 					</div>
 					<div class="contenido_ppal">
                         <!--Consultar-->
-						<h3 style="text-align: center; color: whitesmoke">Consultar empleados</h3>
+						<h3 style="text-align: center; color: whitesmoke">Consultar clientes</h3>
 						@if(Session::has('message'))
 							<div class="alert alert-info"> {{Session::get('message')}} </div>
 						@elseif(Session::has('messagedel'))
@@ -20,25 +20,37 @@
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>ID</th>
+											<th>Cedula</th>
 											<th>Nombre</th>
-											<th>Vehiculos</th>
-											<th>Empleados</th>
-											<th>Encargado</th>
+											<th>Apellido</th>
+											<th>Correo</th>
+											<th>Fecha nacimiento</th>
+											<th>L-VIP</th>
+											<th>Frecuente</th>
 											<th>Opciones</th>
 										</thead>
-										@foreach ($empleados as $cliente)
+										@foreach ($clientes as $cliente)
 										<tbody>	
-											<th> {{$cliente->Codigo}} </th>
+											<th> {{$cliente->Cedula}} </th>
 											<th> {{$cliente->Nombre}} </th>
-											<th> {{$cliente->Cantidad_vehiculos}} </th>
-											<th> {{$cliente->Cantidad_empleados}} </th>
-											<th> {{$cliente->Empleado_cargo}} </th>
-										    <th> <a class="btn btn-secondary" href="/cliente/edit/{{$cliente->Codigo}}">Editar</a><a class="btn btn-danger" href="/cliente/delete/{{$cliente->Codigo}}">Eliminar</a> </th>
+											<th> {{$cliente->Apellido}} </th>
+											<th> {{$cliente->Correo_Personal}} </th>
+											<th> {{$cliente->Fecha_Nacimiento}} </th>
+											@if($cliente->l_vip)
+												<th> Si </th>
+											@else
+												<th> No </th>
+											@endif
+											@if($cliente->Frecuente)
+												<th> Si </th>
+											@else
+												<th> No </th>
+											@endif
+										    <th> <a class="btn btn-secondary" href="/cliente/edit/{{$cliente->Cedula}}">Editar</a><a class="btn btn-danger" href="/cliente/delete/{{$cliente->Cedula}}">Eliminar</a> </th>
 										</tbody>
 										@endforeach
 									</table>
-									{{ $empleados->links() }}
+									{{ $clientes->links() }}
 								</div>
 							</div>
 						</div>

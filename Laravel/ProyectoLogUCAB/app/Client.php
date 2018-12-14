@@ -9,6 +9,7 @@ class Client extends Model
     protected $table='Cliente';
 
     protected $primaryKey='Cedula';
+    public $incrementing = false;
 
     public $timestamps=false;
 
@@ -18,10 +19,11 @@ class Client extends Model
         'Apellido',
         'Correo_Personal',
         'Fecha_Nacimiento',
-        'estado_civil',
+        'Estado_Civil',
         'Empresa',
-        'l_vip',
-        'Frecuente'
+        'L_Vip',
+        'Frecuente',
+        'FK_Asignado_Tipo'
     ];
 
     protected $guarded =[

@@ -27,49 +27,77 @@ class ClientController extends Controller
     }
 
     public function store(Request $request){
-        //Completar esto
-        $Lugar = Lugar::find($request->NombreLugar);
-
+        $request->edo = $request->Estado;
+        if($request->L_Vip){
+            $request->FK_Asignado_Tipo = 3;
+        }else{
+            $request->FK_Asignado_Tipo = 2;
+        }
+        $request->Frecuente = false;
         $request->validate([
+            'Cedula' => 'required',
             'Nombre' => 'required',
-            'Tamaño_deposito' => 'required',
-            'FK_Varios' => 'required'
+            'Apellido' => 'required',
+            'Correo_Personal' => 'required',
+            'Fecha_Nacimiento' => 'required',
+            'Estado_Civil' => 'required',
+            'Empresa' => 'required',
+            'L_Vip' => 'required',
+            'Frecuente' => 'required',
+            'FK_Asignado_Tipo' => 'required'
+        ]);
+        Client::create(['Cedula' => $request->Cedula,
+        'Nombre' => $request->Nombre,
+        'Apellido' => $request->Apellido,
+        'Correo_Personal' => $request->Correo_Personal,
+        'Fecha_Nacimiento' => $request->Fecha_Nacimiento,
+        'Estado_Civil' => $request->edo,
+        'Empresa' => $request->Empresa,
+        'L_Vip' => $request->L_Vip,
+        'Frecuente' => $request->Frecuente,
+        'FK_Asignado_Tipo' => $request->FK_Asignado_Tipo
         ]);
 
-        Client::create($request->all());
-
-        Session::flash('message','Oficina creada correctamente.');
-        return Redirect::to('cliente/lista');
+        Session::flash('message','Cliente creado correctamente.');
+        return Redirect::to('/cliente/lista');
     }
     
     public function lista(){
-        $oficinas = Client::paginate(50);
-        return view("persona.cliente.showclient", compact('oficinas'));
+        $clientes = Client::paginate(50);
+        return view("persona.cliente.showclient", compact('clientes'));
     }
 
-    public function edit($Codigo){
+    public function edit($Cedula){
 
-        $validated = Client::where('Codigo', $Codigo)->first();
+        $validated = Client::where('Cedula', $Cedula)->first();
         return view("persona.cliente.editclient", compact('validated'));
     }
 
     public function actualizar(Request $request){
-        $cliente = Client::find($request->Codigo);
+        $cliente = Client::find($request->Cedula);
+        if($request->L_Vip){
+            $request->FK_Asignado_Tipo = 3;
+        }else{
+            $request->FK_Asignado_Tipo = 2;
+        }
     
         $cliente->Nombre = $request->Nombre;
-        $cliente->Tamaño_deposito = $request->Tamaño_deposito;
-        $cliente->Cantidad_vehiculos = $request->Cantidad_vehiculos;
-        $cliente->Cantidad_empleados = $request->Cantidad_empleados;
-        $cliente->Empleado_cargo = $request->Empleado_cargo;
+        $cliente->Apellido = $request->Apellido;
+        $cliente->Correo_Personal = $request->Correo_Personal;
+        $cliente->Fecha_Nacimiento = $request->Fecha_Nacimiento;
+        $cliente->Estado_Civil = $request->Estado_Civil;
+        $cliente->Empresa = $request->Empresa;
+        $cliente->Frecuente = $request->Frecuente;
+        $cliente->FK_Asignado_Tipo = $request->FK_Asignado_Tipo;
         $cliente->save();
 
-        Session::flash('message','Oficina modificada correctamente.');
+        Session::flash('message','Cliente modificado correctamente.');
         return Redirect::to('/cliente/lista');
     }
 
-    public function delete($Codigo){
-        DB::table('cliente')->where('Codigo', $Codigo)->delete();
-        Session::flash('messagedel','Oficina eliminada correctamente.');
+    public function delete($Cedula){
+        DB::table('cliente')->where('Cedula', $Cedula)->delete();
+        Session::flash('messagedel','Cliente eliminado correctamente.');
         return redirect('/cliente/lista');
     }
 }

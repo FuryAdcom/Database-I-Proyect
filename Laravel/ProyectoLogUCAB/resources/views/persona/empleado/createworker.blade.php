@@ -12,32 +12,67 @@
 						<form action="/empleado/store" method="POST">
 							@csrf
 
+							<div class="form-group" style="width:100%; float: left">
+									<label for="inputCedula" style="color: whitesmoke">Cedula</label>
+									<input type="number" name="Cedula" class="form-control" id="Cedula" placeholder="Introduzca cedula" required>
+									<small id="Cedula" style="color: rgb(180, 198, 214)">Importante, sin puntos.</small>
+							</div>
 							<div class="form-group" style="width:49%; float: left">
 								<label for="inputNombre" style="color: whitesmoke">Nombre</label>
-								<input type="text" name="Nombre" class="form-control" id="Nombre" placeholder="Introduzca el nombre" required>
+								<input type="text" name="Nombre" class="form-control" id="Nombre" placeholder="Introduzca nombre" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
-								<label for="inputDeposito" style="color: whitesmoke">Deposito</label>
-								<input type="number" name="Tamaño_deposito" class="form-control" id="inputDeposito" placeholder="Introduzca el tamaño del deposito" required>
+								<label for="inputApellido" style="color: whitesmoke">Apellido</label>
+								<input type="text" name="Apellido" class="form-control" id="inputApellido" placeholder="Introduzca apellido" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputVehiculos" style="color: whitesmoke">Vehiculos</label>
-								<input type="number" name="Cantidad_vehiculos" class="form-control" id="inputVehiculos"placeholder="Introduzca la cantidad de vehiculos" required>
+								<label for="inputCorreo_Personal" style="color: whitesmoke">Correo</label>
+								<input type="text" name="Correo_Personal" class="form-control" id="inputCorreo_Personal"placeholder="Introduzca correo" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
-								<label for="inputEmpleados" style="color: whitesmoke">Empleados</label>
-								<input type="number" name="Cantidad_empleados" class="form-control" id="inputEmpleados"placeholder="Introduzca la cantidad de empleados" required>
+								<label for="inputFecha_Nacimiento" style="color: whitesmoke">Fecha Nacimiento</label>
+								<input type="date" name="Fecha_Nacimiento" class="form-control" id="inputFecha_Nacimiento"placeholder="Introduzca fecha de nacimiento" required>
 							</div>
-							<!-- REVISAR MEJOR FORMA -->
+							<div class="form-group" style="width:60%; float: left;">
+									<label for="inputRol" style="color: whitesmoke">Rol</label>
+									<input type="text" name="rol" class="form-control" id="inputRol"placeholder="Introduzca rol" required>
+								</div>
 							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputEncargado" style="color: whitesmoke">Encargado</label>
-								<input type="text" name="Empleado_cargo" class="form-control" id="inputEncargado" placeholder="Introduzca la capacidad de combustible" required>
+									<label for="inputNivel_Academico" style="color: whitesmoke">Nivel Academico</label>
+									<select class="form-control" style="height: 34px" id="inputNivel_Academico"  name="Nivel_Academico" required>
+										<option value="">Seleccione una...</option>
+										<option value="Sin estudios">Sin estudios</option>
+										<option value="Educación básica">Educación básica</option>
+										<option value="Educación media">Educación media</option>
+										<option value="Educación superior">Educación superior</option>
+									</select>
 							</div>
-							<div style="width:100%; height: 40px; float: left;">
+							<div class="form-group" style="width:49%; float: right;">
+									<label for="inputEstado_civil" style="color: whitesmoke">Estado civil</label>
+									<select class="form-control" style="height: 34px" id="inputEstado_civil"  name="Estado civil" required>
+										<option value="">Seleccione una...</option>
+										<option value="soltero">Soltero</option>
+										<option value="casado">Casado</option>
+										<option value="viudo">Viudo</option>
+										<option value="divorciado">Divorciado</option>
+									</select>
+							</div>
+							<div class="form-group" style="width:49%; float: left;">
+								<label for="inputNum_hijos" style="color: whitesmoke">Numero de hijos</label>
+								<input class="form-control" name="Num_Hijos" type="number" id="inputNum_hijos"placeholder="Introduzca cantidad">
+							</div>
+							<div class="form-group" style="width:49%; float: right;margin-bottom:0px">
+									<label for="inputCharge" style="color: whitesmoke; padding-right: 5px">Encargado de oficina:</label>
+									<input class="form-check-input" name="Charge" type="checkbox" value="true" id="inputCharge">
+							</div>
+							<div  id="inputEncargado" class="form-group" style="width:49%; float: right;display: none">
+									<input class="form-control" name="Empleado_Cargo" type="text" id="inputEncargado"placeholder="Introduzca nombre de oficina">
+								</div>
+							<div style="width:100%; height: 40px; float: left; ">
 								<button type="submit" class="btn btn-primary">Submit</button>
 							</div>
                         </form>
                         <!---->
 					</div>
 				</div>		
-@stop
+@endsection

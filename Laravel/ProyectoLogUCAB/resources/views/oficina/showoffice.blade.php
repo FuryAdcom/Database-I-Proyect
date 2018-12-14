@@ -20,20 +20,16 @@
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>ID</th>
 											<th>Nombre</th>
-											<th>Vehiculos</th>
-											<th>Empleados</th>
-											<th>Encargado</th>
+											<th>Tamaño deposito (m­²)</th>
+											<th>Localidad</th>
 											<th>Opciones</th>
 										</thead>
 										@foreach ($oficinas as $office)
 										<tbody>	
-											<th> {{$office->Codigo}} </th>
 											<th> {{$office->Nombre}} </th>
-											<th> {{$office->Cantidad_vehiculos}} </th>
-											<th> {{$office->Cantidad_empleados}} </th>
-											<th> {{$office->Empleado_cargo}} </th>
+											<th> {{$office->Tamaño_Deposito}} </th>
+											<th> {{$office->sitio}} </th>
 										    <th> <a class="btn btn-secondary" href="/oficina/edit/{{$office->Codigo}}">Editar</a><a class="btn btn-danger" href="/oficina/delete/{{$office->Codigo}}">Eliminar</a> </th>
 										</tbody>
 										@endforeach

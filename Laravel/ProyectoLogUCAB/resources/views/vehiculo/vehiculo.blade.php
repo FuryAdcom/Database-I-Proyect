@@ -4,11 +4,26 @@
 	<div class="sidemenu">
 		<a href="/transporte">Inicio</a>
 		<a href="/transporte/create">Agregar</a>
-		<a href="/transporte/edit">Modificar</a>
-		<a href="/transporte/lista" style="border-bottom: 0px">Lista</a>
+		<a href="/transporte/listaAerea">Aereos</a>
+		<a href="/transporte/listaMarina">Maritimos</a>
+		<a href="/transporte/listaTerrestre" style="border-bottom: 0px">Terrestres</a>
 	</div>
 	<div class="contenido_ppal">
-		<span>Still working on it</span>
+		<h3 style="text-align: center; color: whitesmoke">Transportes</h3>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		<span>Still working on it</span><br>
+		
 	</div>
 </div>	
 @stop

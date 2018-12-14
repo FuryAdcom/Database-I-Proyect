@@ -9,6 +9,7 @@ class VehiculoM extends Model
     protected $table='Vehiculo_Maritimo';
 
     protected $primaryKey='Placa';
+    public $incrementing = false;
 
     public $timestamps=false;
 

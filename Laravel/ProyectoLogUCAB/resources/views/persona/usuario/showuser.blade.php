@@ -20,25 +20,23 @@
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>ID</th>
+											<th>Codigo</th>
 											<th>Nombre</th>
-											<th>Vehiculos</th>
-											<th>Empleados</th>
-											<th>Encargado</th>
+											<th>Correo</th>
+											<th>Rol</th>
 											<th>Opciones</th>
 										</thead>
-										@foreach ($empleados as $user)
+										@foreach ($users as $user)
 										<tbody>	
 											<th> {{$user->Codigo}} </th>
 											<th> {{$user->Nombre}} </th>
-											<th> {{$user->Cantidad_vehiculos}} </th>
-											<th> {{$user->Cantidad_empleados}} </th>
-											<th> {{$user->Empleado_cargo}} </th>
+											<th> {{$user->Correo}} </th>
+											<th> {{$user->FK_Sele_Concede}} </th>
 										    <th> <a class="btn btn-secondary" href="/user/edit/{{$user->Codigo}}">Editar</a><a class="btn btn-danger" href="/user/delete/{{$user->Codigo}}">Eliminar</a> </th>
 										</tbody>
 										@endforeach
 									</table>
-									{{ $empleados->links() }}
+									{{ $users->links() }}
 								</div>
 							</div>
 						</div>
