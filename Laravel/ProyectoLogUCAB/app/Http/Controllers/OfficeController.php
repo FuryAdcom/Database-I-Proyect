@@ -9,6 +9,7 @@ use LogUCAB\Office;
 use LogUCAB\Lugar;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Input;
 use Session;
 
 use DB;
@@ -16,9 +17,7 @@ use DB;
 
 class OfficeController extends Controller
 {
-    public function __construct(){
-
-    }
+    public function __construct(){}
 
     public function inicio(){
         return view("oficina.office");
@@ -32,56 +31,90 @@ class OfficeController extends Controller
         $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
         ->where('Lugar.Tipo', 'Municipio')
         ->first();
+        $edo = Lugar::where('Lugar.Nombre', $request->est)
+        ->where('Lugar.Tipo', 'Estado')
+        ->first();
+        
+        if(isset($lugar->Nombre) && $lugar->FK_Lugar==$edo->Codigo){
+            $request->lugar = $lugar->Codigo;
 
-        $max = Office::max('Oficina.Codigo');
+            $request->validate([
+                'Nombre' => 'required',
+                'Deposito' => 'required',
+                'lugar' => 'required',
+                'est' => 'required'
+            ]);
 
-        $request->lugar = $lugar->Codigo;
-
-        $request->validate([
-            'Nombre' => 'required',
-            'Tamaño_Deposito' => 'required',
-            'lugar' => 'required'
-        ]);
-
-        $office = new Office;
-        $office->Codigo = $max + 1;
-        $office->Nombre = $request->Nombre;
-        $office->Tamaño_Deposito = $request->Tamaño_Deposito;
-        $office->FK_Varios = $request->lugar;
-        $office->save();
+            Office::create([
+                'Codigo' => (Office::max('Codigo')) + 1,
+                'Nombre' => $request->Nombre,
+                'Tamaño_Deposito' => $request->Deposito,
+                'FK_Varios' => $request->lugar
+            ]);
+        }elseif(isset($lugar->Nombre) && $lugar->FK_Lugar!=$edo->Codigo){
+            Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
+            return Redirect::back()->withInput(Input::all());
+        }else{
+            Session::flash('message','El municipio '.$request->lugar.' no existe.');
+            return Redirect::back()->withInput(Input::all());
+        }
 
         Session::flash('message','Oficina creada correctamente.');
         return Redirect::to('/oficina/lista');
     }
     
     public function lista(){
-        $oficinas = Office::leftjoin('Lugar', 'Lugar.Codigo','=','Oficina.FK_Varios')
-        ->select(\DB::raw("\"Oficina\".*, \"Lugar\".\"Nombre\" as sitio"))
+        
+        $oficinas = Office::leftjoin('Lugar as mun', 'mun.Codigo','=','Oficina.FK_Varios')
+        ->leftjoin('Lugar as est', 'est.Codigo','=','mun.FK_Lugar')
+        ->select(\DB::raw("\"Oficina\".*, mun.\"Nombre\" as sitio, est.\"Nombre\" as estado"))
         ->paginate(50);
 
         return view("oficina.showoffice", compact('oficinas'));
+    }
+
+    public function mostrar($Codigo){
+        //Ira aqui mostrar ese elemento y relacionados
     }
 
     public function edit($Codigo){
 
         $validated = \LogUCAB\Office::where('Oficina.Codigo', $Codigo)
         ->leftjoin('Lugar', 'Lugar.Codigo','=','Oficina.FK_Varios')
-        ->select(\DB::raw("\"Oficina\".*, \"Lugar\".\"Nombre\" as sitio"))
+        ->select(\DB::raw("\"Oficina\".*, \"Lugar\".\"Nombre\" as lugar"))
         ->first();
-
+        $lug = DB::table('Lugar')
+        ->where('Lugar.Codigo', $validated->FK_Varios)
+        ->first();
+        $validated->est = \LogUCAB\Lugar::where('Lugar.Codigo', $lug->FK_Lugar)
+        ->value('Nombre');
+                     
         return view("oficina.editoffice", compact('validated'));
     }
 
     public function actualizar(Request $request){
         $oficina = Office::find($request->Codigo);
-        $lugar = Lugar::where('Lugar.Nombre', $request->sitio)
+        $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
         ->where('Lugar.Tipo', 'Municipio')
         ->first();
+        $edo = Lugar::where('Lugar.Nombre', $request->est)
+        ->where('Lugar.Tipo', 'Estado')
+        ->first();
     
-        $oficina->Nombre = $request->Nombre;
-        $oficina->Tamaño_Deposito = $request->Tamaño_Deposito;
-        $oficina->FK_Varios = $lugar->Codigo;
-        $oficina->save();
+        if(isset($lugar) && $lugar->FK_Lugar==$edo->Codigo){
+
+            $oficina->Nombre = $request->Nombre;
+            $oficina->Tamaño_Deposito = $request->Tamaño_Deposito;
+            $oficina->FK_Varios = $lugar->Codigo;
+            $oficina->save();
+
+        }elseif(isset($lugar) && $lugar->FK_Lugar!=$edo->Codigo){
+            Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
+            return Redirect::back()->withInput(Input::all());
+        }else{
+            Session::flash('message','El municipio '.$request->lugar.' no existe.');
+            return Redirect::back()->withInput(Input::all());
+        }
 
         Session::flash('message','Oficina modificada correctamente.');
         return Redirect::to('/oficina/lista');

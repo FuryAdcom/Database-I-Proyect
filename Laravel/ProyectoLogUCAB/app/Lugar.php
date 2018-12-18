@@ -12,12 +12,6 @@ class Lugar extends Model
 
     public $timestamps=false;
 
-    protected $fillable =[
-        'Nombre',
-        'Tipo',
-        'FK_Lugar'
-    ];
-
     protected $guarded =[
         'Codigo'
     ];

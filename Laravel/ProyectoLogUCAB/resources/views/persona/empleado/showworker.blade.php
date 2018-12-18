@@ -16,18 +16,18 @@
 						@endif
 						<!-- Busqueda -->
 						<div class="row">
-							<div class="col-lg-15">
+							<div class="col-lg-18">
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>Cedula</th>
+											<th>Cédula</th>
 											<th>Nombre</th>
 											<th>Apellido</th>
 											<th>Correo</th>
-											<th>Fecha de nacimiento</th>
+											<th style="width: 70px;">Fecha de nacimiento</th>
 											<th>Puesto</th>
 											<th>Residencia</th>
-											<th>Opciones</th>
+											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($empleados as $empleado)
 										<tbody>	
@@ -35,11 +35,14 @@
 											<th> {{$empleado->Nombre}} </th>
 											<th> {{$empleado->Apellido}} </th>
 											<th> {{$empleado->Correo_Personal}} </th>
-											<th> {{$empleado->Fecha_Nacimiento}} </th>
-											<th> {{$empleado->FK_Asignado_Puesto}} </th>
-											<!-- Mostrar toda -->
-											<th> {{$empleado->FK_Habitacion}} </th>
-										    <th> <a class="btn btn-secondary" href="/empleado/edit/{{$empleado->Cedula}}">Editar</a><a class="btn btn-danger" href="/empleado/delete/{{$empleado->Cedula}}">Eliminar</a> </th>
+											<th style="text-align:center"> {{ date('d-m-Y', strtotime($empleado->Fecha_Nacimiento)) }} </th>
+											<th> {{$empleado->rolt}} </th>
+											<th> {{$empleado->sitio}} </th>
+											<th> 
+												<a class="boton_show btn btn-info" href="/empleado/mostrar/{{$empleado->Cedula}}"><i class="fa fa-align-left"></i></a>
+												<a class="boton_show btn btn-secondary" href="/empleado/edit/{{$empleado->Cedula}}"><i class="fa fa-wrench"></i></a>
+												<a class="boton_show btn btn-danger" href="/empleado/delete/{{$empleado->Cedula}}"><i class="fa fa-times"></i></a> 
+											</th>
 										</tbody>
 										@endforeach
 									</table>

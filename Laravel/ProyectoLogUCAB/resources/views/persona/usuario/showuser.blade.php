@@ -24,15 +24,18 @@
 											<th>Nombre</th>
 											<th>Correo</th>
 											<th>Rol</th>
-											<th>Opciones</th>
+											<th style="width: 20px;">Opciones</th>
 										</thead>
 										@foreach ($users as $user)
 										<tbody>	
 											<th> {{$user->Codigo}} </th>
 											<th> {{$user->Nombre}} </th>
 											<th> {{$user->Correo}} </th>
-											<th> {{$user->FK_Sele_Concede}} </th>
-										    <th> <a class="btn btn-secondary" href="/user/edit/{{$user->Codigo}}">Editar</a><a class="btn btn-danger" href="/user/delete/{{$user->Codigo}}">Eliminar</a> </th>
+											<th> {{$user->rol}} </th>
+											<th style="text-align:center"> 
+												<a class="boton_show btn btn-secondary" href="/user/edit/{{$user->Codigo}}"><i class="fa fa-wrench"></i></a>
+												<a class="boton_show btn btn-danger" href="/user/delete/{{$user->Codigo}}"><i class="fa fa-times"></i></a> 
+											</th>
 										</tbody>
 										@endforeach
 									</table>

@@ -56,7 +56,8 @@ class RutaController extends Controller
     }
     
     public function lista(){
-        $rutas = Ruta::leftjoin('Lugar', 'Lugar.Codigo','=','Ruta.FK_Varios')
+        $rutas = Ruta::leftjoin('Lugar', 'Lugar.Codigo','=','Ruta.FK_Camino')
+        ->leftjoin('Ofi-Rut', 'Ofi-Rut.Codigo','=','Ruta.FK_Varios')
         ->select(\DB::raw("\"Ruta\".*, \"Lugar\".\"Nombre\" as sitio"))
         ->paginate(50);
 

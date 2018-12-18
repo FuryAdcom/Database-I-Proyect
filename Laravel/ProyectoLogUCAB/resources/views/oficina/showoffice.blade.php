@@ -14,23 +14,29 @@
 						@elseif(Session::has('messagedel'))
 							<div class="alert alert-danger"> {{Session::get('messagedel')}} </div>
 						@endif
-						<!-- Busqueda -->
+						<!-- Busqueda-->
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
 											<th>Nombre</th>
-											<th>Tamaño deposito (m­²)</th>
-											<th>Localidad</th>
-											<th>Opciones</th>
+											<th>Tamaño depósito (m­²)</th>
+											<th>Municipio</th>
+											<th>Estado</th>
+											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($oficinas as $office)
 										<tbody>	
 											<th> {{$office->Nombre}} </th>
 											<th> {{$office->Tamaño_Deposito}} </th>
 											<th> {{$office->sitio}} </th>
-										    <th> <a class="btn btn-secondary" href="/oficina/edit/{{$office->Codigo}}">Editar</a><a class="btn btn-danger" href="/oficina/delete/{{$office->Codigo}}">Eliminar</a> </th>
+											<th> {{$office->estado}} </th>
+										    <th> 
+												<a class="boton_show btn btn-info" href="/oficina/mostrar/{{$office->Codigo}}"><i class="fa fa-align-left"></i></a>
+												<a class="boton_show btn btn-secondary" href="/oficina/edit/{{$office->Codigo}}"><i class="fa fa-wrench"></i></a>
+												<a class="boton_show btn btn-danger" href="/oficina/delete/{{$office->Codigo}}"><i class="fa fa-times"></i></a> 
+											</th>
 										</tbody>
 										@endforeach
 									</table>

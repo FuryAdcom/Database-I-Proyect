@@ -13,8 +13,9 @@ class Office extends Model
     public $timestamps=false;
 
     protected $fillable =[
+        'Codigo',
         'Nombre',
-        'Tamaño_deposito',
+        'Tamaño_Deposito',
         'FK_Varios'
     ];
 

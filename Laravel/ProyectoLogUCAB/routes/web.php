@@ -33,6 +33,7 @@ Route::get('/transporte/deleteTerrestre/{Placa}','VehiculoController@deleteTerre
 //Oficina
 Route::get('/oficina','OfficeController@inicio');
 Route::get('/oficina/lista','OfficeController@lista');
+Route::get('/oficina/mostrar/{Codigo}','OfficeController@mostar');
 Route::get('/oficina/create','OfficeController@create');
 Route::post('/oficina/store','OfficeController@store');
 Route::get('/oficina/edit/{Codigo}','OfficeController@edit');

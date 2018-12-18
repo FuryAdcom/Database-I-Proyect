@@ -9,3 +9,28 @@ TOTAL A PAGAR = (MontoTipoPaquete + MontoRutaMediotransporteSeleccionado) * (alt
 Si el peso es menor a 10 kg
 
 TOTAL A PAGAR = (MontoTipoPaquete + MontoRutaMediotransporteSeleccionado) * peso]
+
+[SELECT COUNT(E.*), O."Codigo"
+FROM "Empleado" as E, "Oficina" as O, "Lugar" as L
+WHERE E."FK_Habitacion"=L."Codigo" AND O."FK_Varios"=L."Codigo"
+GROUP BY O."Codigo"]
+
+CREATE TABLE public."Rol"
+(
+    "Tipo" character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    "Codigo" integer NOT NULL DEFAULT nextval('"Rol_Codigo_seq"'::regclass),
+    CONSTRAINT "Rol_pkey" PRIMARY KEY ("Codigo")
+)
+
+INSERT INTO public."Rol" ("Codigo","Tipo")
+VALUES (1, 'VIP');
+INSERT INTO public."Rol" ("Codigo","Tipo")
+VALUES (2, 'Frecuente');
+INSERT INTO public."Rol" ("Codigo","Tipo")
+VALUES (3, 'Cliente');
+INSERT INTO public."Rol" ("Codigo","Tipo")
+VALUES (4, 'Administrador');
+INSERT INTO public."Rol" ("Codigo","Tipo")
+VALUES (5, 'Vendedor');
+INSERT INTO public."Rol" ("Codigo","Tipo")
+VALUES (6, 'Transportista');

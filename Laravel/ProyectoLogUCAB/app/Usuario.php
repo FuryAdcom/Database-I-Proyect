@@ -13,6 +13,7 @@ class Usuario extends Model
     public $timestamps=false;
 
     protected $fillable =[
+        'Codigo',
         'Nombre',
         'Correo',
         'Contraseña',
@@ -20,7 +21,7 @@ class Usuario extends Model
     ];
 
     protected $guarded =[
-        'Cedula',
+        'Codigo',
         'Correo',
         'Contraseña'
     ];
