@@ -16,7 +16,6 @@ use DB;
 class RolController extends Controller
 {
     public function __construct(){
-
     }
 
     public function store(Request $request){
@@ -25,14 +24,17 @@ class RolController extends Controller
             'Tipo' => 'required'
         ]);
 
-        Rol::create($request->all());
+        Rol::create([
+            'Codigo' =>  Rol::max('Codigo')+1,
+            'Tipo' => $request->Tipo
+        ]);
 
         Session::flash('message','Rol creado correctamente.');
-        return Redirect::to('rol/lista');
+        return Redirect::to('rol');
     }
     
     public function lista(){
-        $roles = Rol::paginate(50);
+        $roles = Rol::orderBy('Codigo')->paginate(50);
         return view("rol.showrol", compact('roles'));
     }
 
@@ -49,12 +51,12 @@ class RolController extends Controller
         $rol->save();
 
         Session::flash('message','Rol modificado correctamente.');
-        return Redirect::to('/rol/lista');
+        return Redirect::to('/rol');
     }
 
     public function delete($Codigo){
-        DB::table('rol')->where('Codigo', $Codigo)->delete();
+        Rol::find($Codigo)->delete();
         Session::flash('messagedel','Rol eliminado correctamente.');
-        return redirect('/rol/lista');
+        return redirect('/rol');
     }
 }

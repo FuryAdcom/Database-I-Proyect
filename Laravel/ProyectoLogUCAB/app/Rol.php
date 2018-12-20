@@ -14,6 +14,7 @@ class Rol extends Model
 
 
     protected $fillable =[
+        'Codigo',
         'Tipo',
         'FK_Asignado_tipo',
         'FK_Asignado_Puesto'

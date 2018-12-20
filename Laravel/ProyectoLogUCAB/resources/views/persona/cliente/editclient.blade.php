@@ -11,10 +11,14 @@
         <h3 style="text-align: center; color: whitesmoke">Modificar cliente</h3>
 		<form method="POST" action="/cliente/update">
 			@csrf
-			<input type="text" name="Cedula" value="{{$validated->Cedula}}" hidden>
+			@if(Session::has('message'))
+				<div class="alert alert-warning"> {{Session::get('message')}} </div>
+			@endif
+
+			<input type="text" name="CedulaAnt" value="{{$validated->Cedula}}" hidden>
 			<div class="form-group" style="width:100%; float: left">
-					<label for="inputCedula" style="color: whitesmoke">Cedula</label>
-					<input type="number" name="Cedula" value="{{$validated->Cedula}}" class="form-control" disabled required>
+					<label for="inputCedula" style="color: whitesmoke">Cédula</label>
+					<input type="number" name="Cedula" value="{{$validated->Cedula}}" class="form-control" required>
 					<small id="Cedula" style="color: rgb(180, 198, 214)">Importante.</small>
 			</div>
 			<div class="form-group" style="width:49%; float: left">
@@ -27,14 +31,12 @@
 				</div>
 				<div class="form-group" style="width:49%; float: left;">
 					<label for="inputCorreo_Personal" style="color: whitesmoke">Correo</label>
-					<input type="text" name="Correo_Personal" value="{{$validated->Correo_Personal}}" class="form-control" id="inputCorreo_Personal"placeholder="Introduzca correo" required>
+					<input type="email" name="Correo_Personal" value="{{$validated->Correo_Personal}}" class="form-control" id="inputCorreo_Personal"placeholder="Introduzca correo" required>
 				</div>
-				<!-- Fecha -->
 				<div class="form-group" style="width:49%; float: right;">
 					<label for="inputFecha_Nacimiento" style="color: whitesmoke">Fecha Nacimiento</label>
 					<input type="date" name="Fecha_Nacimiento" value="{{$validated->Fecha_Nacimiento}}" class="form-control" id="inputFecha_Nacimiento"placeholder="Introduzca fecha de nacimiento" required>
 				</div>
-				<!--  -->
 				<div class="form-group" style="width:49%; float: left;">
 					<label for="inputEmpresa" style="color: whitesmoke">Empresa</label>
 					<input type="text" name="Empresa" value="{{$validated->Empresa}}" class="form-control" id="inputEmpresa" placeholder="Empresa">
@@ -51,11 +53,12 @@
 				</div>
 				<div class="form-group" style="width:49%; float: left;">
 						<label for="inputL_vip" style="color: whitesmoke">L-VIP:</label>
-						<input class="form-check-input" name="l_vip" @if($validated->L_Vip=true) checked @endif type="checkbox" value="true" id="inputL_vip">
+						<input class="form-check-input" name="L_Vip" @if($validated->FK_Asignado_Tipo == 1) checked @endif type="checkbox" value="true" id="inputL_vip">
 						<small id="inputL_vip" style="color: rgb(180, 198, 214); padding-left: 20px">Seleccione si desea ser cliente VIP</small>
-					</div>
+				</div>
+				<input class="form-check-input" name="Frecuente" @if( $validated->Frecuente ) checked @endif type="checkbox" value="true" id="inputFrecuente" hidden>
 				<div style="width:100%; height: 40px; float: left;">
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="submit" class="btn btn-primary">Modificar</button>
 				</div>
         <!---->
 	</div>

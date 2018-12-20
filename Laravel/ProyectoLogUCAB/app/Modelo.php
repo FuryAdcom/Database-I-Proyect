@@ -14,6 +14,7 @@ class Modelo extends Model
 
 
     protected $fillable =[
+        'Codigo',
         'Descripcion',
         'FK_Contiene'
     ];

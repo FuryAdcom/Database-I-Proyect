@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use LogUCAB\Http\Requests;
 use LogUCAB\Ruta;
+use LogUCAB\Lugar;
+use LogUCAB\Office;
 use LogUCAB\Ofi_Rut;
 use LogUCAB\Env_Rut;
 use Illuminate\Support\Facades\Redirect;
@@ -18,7 +20,6 @@ use DB;
 class RutaController extends Controller
 {
     public function __construct(){
-
     }
 
     public function inicio(){
@@ -26,33 +27,52 @@ class RutaController extends Controller
     }
 
     public function create(){
-        return view("ruta.createruta");
+        $oficinas = Office::select()->orderBy('Nombre', 'asc')->get();
+        $rutas = Ruta::leftjoin('Oficina as ofiog', 'ofiog.Codigo','=','Ruta.FK_Ofi_Origen')
+        ->leftjoin('Oficina as ofidest', 'ofidest.Codigo','=','Ruta.FK_Ofi_Destino')
+        ->leftjoin('Lugar as log', 'log.Codigo','=','ofiog.FK_Varios')
+        ->leftjoin('Lugar as ogest', 'ogest.Codigo','=','log.FK_Lugar')
+        ->leftjoin('Lugar as ldest', 'ldest.Codigo','=','ofidest.FK_Varios')
+        ->leftjoin('Lugar as destest', 'destest.Codigo','=','ldest.FK_Lugar')
+        ->select(\DB::raw("\"Ruta\".*, ofiog.\"Nombre\" as ofog, ofidest.\"Nombre\" as ofdest, log.\"Nombre\" as og, ldest.\"Nombre\" as dest, ogest.\"Nombre\" as oge, destest.\"Nombre\" as deste"))
+        ->orderBy('Ruta.Codigo', 'asc')->get();
+
+        return view("ruta.createruta", compact('oficinas', 'rutas'));
     }
 
     public function store(Request $request){
-        $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
-        ->where('Lugar.Tipo', 'Municipio')
-        ->first();
 
-        $max = Ruta::max('Ruta.Codigo');
+        if($request->FK_Ofi_Origen == $request->FK_Ofi_Destino){
+            Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
+            return Redirect::back()->withInput(Input::all());
+        }
 
-        $request->lugar = $lugar->Codigo;
+        if(isset($request->FK_Ruta)){
+            while(isset($request->FK_Ruta)){
+                $rutaPrima = Ruta::where('Codigo', $request->FK_Ruta)->first();
+            }
 
-        $request->validate([
-            'Nombre' => 'required',
-            'Tamaño_Deposito' => 'required',
-            'lugar' => 'required'
-        ]);
+            $ofiog = Office::find($rutaPrima->FK_Ofi_Origen);
+            $lugar = Lugar::find($ofiog->FK_Varios);
 
-        $ruta = new Ruta;
-        $ruta->Codigo = $max + 1;
-        $ruta->Nombre = $request->Nombre;
-        $ruta->Tamaño_Deposito = $request->Tamaño_Deposito;
-        $ruta->FK_Varios = $request->lugar;
-        $ruta->save();
+            Ruta::create([
+                'Codigo' => Ruta::max('Codigo')+1,
+                'Descripcion' => $request->Descripcion,
+                'FK_Ruta' => $request->FK_Ruta,
+                'FK_Camino' => $lugar->Codigo,  
+                'FK_Ofi_Destino' => $ofiog->Codigo,  
+                'FK_Ofi_Origen' => $request->FK_Ofi_Destino
+            ]);
+        }
 
-        Session::flash('message','Ruta creada correctamente.');
-        return Redirect::to('/ruta/lista');
+
+
+        
+        
+        
+        $oficinas = Office::select()->orderBy('Nombre', 'asc')->get();
+
+        return redirect('/ruta/lista');
     }
     
     public function lista(){

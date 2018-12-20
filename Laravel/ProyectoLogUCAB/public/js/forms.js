@@ -21,4 +21,5 @@ $("#inputClasificacion").on('change', function() {
 
 $("#inputCharge").change(function() {
       $('#inputEncargado').toggle();
+      $('#inputEncargado2').toggle();
 })

@@ -16,7 +16,7 @@ class Office extends Model
         'Codigo',
         'Nombre',
         'Tamaño_Deposito',
-        'FK_Varios'
+        'FK_Varios'  //Lugar
     ];
 
     protected $guarded =[

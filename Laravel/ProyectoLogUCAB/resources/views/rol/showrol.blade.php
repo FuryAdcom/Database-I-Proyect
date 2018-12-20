@@ -6,6 +6,8 @@
 						<h3 style="text-align: center; color: whitesmoke">Consultar roles</h3>
 						@if(Session::has('messagedel'))
 							<div class="alert alert-danger"> {{Session::get('messagedel')}} </div>
+						@elseif(Session::has('message'))
+							<div class="alert alert-info"> {{Session::get('message')}} </div>
 						@endif
 						<!-- Busqueda -->
 						<form action="/rol/store" method="POST">
@@ -18,9 +20,6 @@
 									<button type="submit" class="btn btn-primary" style="width:100%">Agregar</button>
 								</div>
 						</form>
-						@if(Session::has('message'))
-						<div class="alert alert-info"> {{Session::get('message')}} </div>
-						@endif
 						<div class="row" style="width:103%;float: left">
 							<div class="col-lg-12">
 								<div class="table-responsive">
@@ -28,13 +27,16 @@
 										<thead class="thead-dark">
 											<th>ID</th>
 											<th>Tipo</th>
-											<th>Opciones</th>
+											<th style="width:200px">Opciones</th>
 										</thead>
 										@foreach ($roles as $rol)
 										<tbody>	
 											<th> {{$rol->Codigo}} </th>
 											<th> {{$rol->Tipo}} </th>
-										    <th> <a class="btn btn-secondary" href="/rol/edit/{{$rol->Codigo}}">Editar</a><a class="btn btn-danger" href="/rol/delete/{{$rol->Codigo}}">Eliminar</a> </th>
+										    <th style="text-align:center"> 
+												<a class="btn btn-secondary" href="/rol/edit/{{$rol->Codigo}}"><i class="fa fa-wrench"></i> Editar</a>
+												<a class="btn btn-danger" href="/rol/delete/{{$rol->Codigo}}"><i class="fa fa-times"></i> Eliminar</a> 
+											</th>
 										</tbody>
 										@endforeach
 									</table>

@@ -25,14 +25,16 @@ class VehiculoController extends Controller
     public function inicio(){
         return view("vehiculo.vehiculo");
     }
+
     public function create(){
-        return view("vehiculo.createvehiculo");
+        $oficinas = Office::select()->orderBy('Nombre', 'asc')->get();
+        return view("vehiculo.createvehiculo", compact('oficinas'));
     }
 
     public function store(Request $request){
         
         //Aviones
-        if(!is_null($request->Envergadura)){ 
+        if($request->Clasificacion == 'a'){ 
             $request->validate([
             'Placa' => 'required',
             'Peso' => 'required',
@@ -50,13 +52,10 @@ class VehiculoController extends Controller
             'Peso_Max_Despegue' => 'required',
             'Carrera_Despegue' => 'required',
             'Motores' => 'required',
-            'oficina' => 'required'
+            'FK_Cuentacon' => 'required'
             ]);
             $tipoVehiculo='Aerea';
-            $veha = VehiculoA::where('Vehiculo_Aereo.Placa', $request->Placa)
-            ->leftjoin('Modelo', 'Modelo.Codigo','=','Vehiculo_Aereo.FK_Representa')
-            ->leftjoin('Marca', 'Marca.Codigo','=','Modelo.FK_Contiene')
-            ->first();
+            $veha = VehiculoA::find($request->Placa);
 
             if(is_null($veha)){
                 $marca = Marca::where('Marca.Descripcion', $request->marca)
@@ -66,9 +65,11 @@ class VehiculoController extends Controller
 
                 if(is_null($marca)){
                     Marca::create([
+                        'Codigo' => (Marca::max('Codigo'))+1,
                         'Descripcion' => $request->marca
                     ]);
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => (Marca::max('Codigo'))
                     ]);
@@ -88,10 +89,11 @@ class VehiculoController extends Controller
                         'Carrera_Despegue' => $request->Carrera_Despegue,
                         'Motores' => $request->Motores,
                         'FK_Representa' => (Modelo::max('Codigo')),
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }elseif(!is_null($marca) && !!is_null($modelo)){
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => $marca->Codigo
                     ]);
@@ -111,7 +113,7 @@ class VehiculoController extends Controller
                         'Carrera_Despegue' => $request->Carrera_Despegue,
                         'Motores' => $request->Motores,
                         'FK_Representa' => (Modelo::max('Codigo')),
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }else{
                     VehiculoA::create([
@@ -130,13 +132,16 @@ class VehiculoController extends Controller
                         'Carrera_Despegue' => $request->Carrera_Despegue,
                         'Motores' => $request->Motores,
                         'FK_Representa' => $modelo->Codigo,
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }
 
+            }else{
+                Session::flash('message','El vehiculo de placa '.$request->Placa.' ya existe.');
+                return Redirect::back()->withInput(Input::all());
             }
         //Barcos
-        }elseif(!is_null($request->Nombre)){    
+        }elseif($request->Clasificacion == 'm'){    
             $request->validate([
             'Placa' => 'required',
             'Peso' => 'required',
@@ -148,13 +153,10 @@ class VehiculoController extends Controller
             'Velocidad_Maxima' => 'required',
             'Capacidad_Combustible' => 'required',
             'Nombre' => 'required',
-            'oficina' => 'required'
+            'FK_Cuentacon' => 'required'
             ]);
             $tipoVehiculo='Marina';
-            $vehm = VehiculoM::where('Vehiculo_Maritimo.Placa', $request->Placa)
-            ->leftjoin('Modelo', 'Modelo.Codigo','=','Modelo.FK_Contiene')
-            ->leftjoin('Marca', 'Marca.Codigo','=','Modelo.FK_Contiene')
-            ->first();
+            $vehm = VehiculoM::find($request->Placa);
 
             if(is_null($vehm)){
                 $marca = Marca::where('Marca.Descripcion', $request->marca)
@@ -164,9 +166,11 @@ class VehiculoController extends Controller
 
                 if(is_null($marca)){
                     Marca::create([
+                        'Codigo' => (Marca::max('Codigo'))+1,
                         'Descripcion' => $request->marca
                     ]);
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => (Marca::max('Codigo'))
                     ]);
@@ -180,10 +184,11 @@ class VehiculoController extends Controller
                         'Capacidad_Combustible' => $request->Capacidad_Combustible,
                         'Nombre' => $request->Nombre,
                         'FK_Representa' => (Modelo::max('Codigo')),
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
-                }elseif(!is_null($marca) && !!is_null($modelo)){
+                }elseif(isset($marca) && is_null($modelo)){
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => $marca->Codigo
                     ]);
@@ -197,7 +202,7 @@ class VehiculoController extends Controller
                         'Capacidad_Combustible' => $request->Capacidad_Combustible,
                         'Nombre' => $request->Nombre,
                         'FK_Representa' => (Modelo::max('Codigo')),
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }else{
                     VehiculoM::create([
@@ -210,13 +215,16 @@ class VehiculoController extends Controller
                         'Capacidad_Combustible' => $request->Capacidad_Combustible,
                         'Nombre' => $request->Nombre,
                         'FK_Representa' => $modelo->Codigo,
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }
 
+            }else{
+                Session::flash('message','El vehiculo de placa '.$request->Placa.' ya existe.');
+                return Redirect::back()->withInput(Input::all());
             }
         //Autos
-        }elseif(!is_null($request->Serial_Carroceria)){    
+        }elseif($request->Clasificacion == 't'){    
             $request->validate([
             'Placa' => 'required',
             'Peso' => 'required',
@@ -228,13 +236,11 @@ class VehiculoController extends Controller
             'Velocidad_Maxima' => 'required',
             'Capacidad_Combustible' => 'required',
             'Serial_Carroceria' => 'required',
-            'oficina' => 'required'
+            'FK_Cuentacon' => 'required'
             ]);
             $tipoVehiculo='Terrestre';
-            $veht = VehiculoT::where('Vehiculo_Terrestre.Placa', $request->Placa)
-            ->leftjoin('Modelo', 'Modelo.Codigo','=','Modelo.FK_Contiene')
-            ->leftjoin('Marca', 'Marca.Codigo','=','Modelo.FK_Contiene')
-            ->first();
+            $veht = VehiculoT::find($request->Placa);
+
             if(is_null($veht)){
                 $marca = Marca::where('Marca.Descripcion', $request->marca)
                 ->first();
@@ -242,9 +248,11 @@ class VehiculoController extends Controller
                 ->first();
                 if(is_null($marca)){
                     Marca::create([
+                        'Codigo' => (Marca::max('Codigo'))+1,
                         'Descripcion' => $request->marca
                     ]);
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => (Marca::max('Codigo')) 
                     ]);
@@ -258,10 +266,11 @@ class VehiculoController extends Controller
                         'Capacidad_Combustible' => $request->Capacidad_Combustible,
                         'Serial_Carroceria' => $request->Serial_Carroceria,
                         'FK_Representa' => (Modelo::max('Codigo')),
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }elseif(isset($marca) && is_null($modelo)){
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => $marca->Codigo
                     ]);
@@ -275,7 +284,7 @@ class VehiculoController extends Controller
                         'Capacidad_Combustible' => $request->Capacidad_Combustible,
                         'Serial_Carroceria' => $request->Serial_Carroceria,
                         'FK_Representa' => (Modelo::max('Codigo')),
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }else{
                     VehiculoT::create([
@@ -288,9 +297,12 @@ class VehiculoController extends Controller
                         'Capacidad_Combustible' => $request->Capacidad_Combustible,
                         'Serial_Carroceria' => $request->Serial_Carroceria,
                         'FK_Representa' => $modelo->Codigo,
-                        'FK_Cuentacon' => $request->oficina
+                        'FK_Cuentacon' => $request->FK_Cuentacon
                     ]);
                 }
+            }else{
+                Session::flash('message','El vehiculo de placa '.$request->Placa.' ya existe.');
+                return Redirect::back()->withInput(Input::all());
             }
         }
         //PADORU PADORU
@@ -325,7 +337,8 @@ class VehiculoController extends Controller
 
     public function editAereo($Placa){
 
-        $validated = \LogUCAB\VehiculoA::where('Vehiculo_Aereo.Placa', $Placa)
+        $oficinas = Office::select()->orderBy('Nombre', 'asc')->get();
+        $validated = VehiculoA::where('Vehiculo_Aereo.Placa', $Placa)
         ->leftjoin('Modelo', 'Modelo.Codigo','=','Vehiculo_Aereo.FK_Representa')
         ->leftjoin('Marca', 'Marca.Codigo','=','Modelo.FK_Contiene')
         ->leftjoin('Oficina', 'Oficina.Codigo','=','Vehiculo_Aereo.FK_Cuentacon')
@@ -333,54 +346,60 @@ class VehiculoController extends Controller
         ->first();
         $class = 'a';
 
-        return view("vehiculo.editvehiculo", compact('validated', 'class'));
+        return view("vehiculo.editvehiculo", compact('validated', 'class','oficinas'));
     }
     public function editMarino($Placa){
 
-        $validated = \LogUCAB\VehiculoM::where('Vehiculo_Maritimo.Placa', $Placa)
+        $oficinas = Office::select()->orderBy('Nombre', 'asc')->get();
+        $validated = VehiculoM::where('Vehiculo_Maritimo.Placa', $Placa)
         ->leftjoin('Modelo', 'Modelo.Codigo','=','Vehiculo_Maritimo.FK_Representa')
         ->leftjoin('Marca', 'Marca.Codigo','=','Modelo.FK_Contiene')
-        ->leftjoin('Oficina', 'Oficina.Codigo','=','Vehiculo_Aereo.FK_Cuentacon')        
+        ->leftjoin('Oficina', 'Oficina.Codigo','=','Vehiculo_Maritimo.FK_Cuentacon')        
         ->select(\DB::raw("\"Vehiculo_Maritimo\".*, \"Marca\".\"Descripcion\" as mark, \"Modelo\".\"Descripcion\" as model, \"Oficina\".\"Codigo\" as oficina"))
         ->first();
         $class = 'm';
 
-        return view("vehiculo.editvehiculo", compact('validated', 'class'));
+        return view("vehiculo.editvehiculo", compact('validated', 'class','oficinas'));
     }
     public function editTerrestre($Placa){
 
-        $validated = \LogUCAB\VehiculoT::where('Vehiculo_Terrestre.Placa', $Placa)
+        $oficinas = Office::select()->orderBy('Nombre', 'asc')->get();
+        $validated = VehiculoT::where('Vehiculo_Terrestre.Placa', $Placa)
         ->leftjoin('Modelo', 'Modelo.Codigo','=','Vehiculo_Terrestre.FK_Representa')
         ->leftjoin('Marca', 'Marca.Codigo','=','Modelo.FK_Contiene')
-        ->leftjoin('Oficina', 'Oficina.Codigo','=','Vehiculo_Aereo.FK_Cuentacon')
+        ->leftjoin('Oficina', 'Oficina.Codigo','=','Vehiculo_Terrestre.FK_Cuentacon')
         ->select(\DB::raw("\"Vehiculo_Terrestre\".*, \"Marca\".\"Descripcion\" as mark, \"Modelo\".\"Descripcion\" as model, \"Oficina\".\"Codigo\" as oficina"))
         ->first();
         $class = 't';
 
-        return view("vehiculo.editvehiculo", compact('validated', 'class'));
+        return view("vehiculo.editvehiculo", compact('validated', 'class','oficinas'));
     }
 
     public function actualizar(Request $request){
 
         //Aviones
-        if(!is_null($request->Envergadura)){ 
+        if($request->Clasificacion == 'a'){ 
             $tipoVehiculo='Aerea';
-            $veha = VehiculoA::where('Vehiculo_Aereo.Placa', $request->placa)
+            $veh = VehiculoM::find($request->Placa);
+            $veha = VehiculoA::find($request->PlacaAnt);
+
+            $marca = Marca::where('Marca.Descripcion', $request->marca)
+            ->first();
+            $modelo = Modelo::where('Modelo.Descripcion', $request->modelo)
             ->first();
 
-                $marca = Marca::where('Marca.Descripcion', $request->marca)
-                ->first();
-                $modelo = Modelo::where('Modelo.Descripcion', $request->modelo)
-                ->first();
-                
+            if(is_null($veh)){
                 if(is_null($marca)){
                     Marca::create([
+                        'Codigo' => (Marca::max('Codigo'))+1,
                         'Descripcion' => $request->marca
                     ]);
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => (Marca::max('Codigo'))
                     ]);
+                        $veha->Placa = $request->Placa;
                         $veha->Peso = $request->Peso;
                         $veha->Capacidad = $request->Capacidad;
                         $veha->Serial_Motor = $request->Serial_Motor;
@@ -395,14 +414,16 @@ class VehiculoController extends Controller
                         $veha->Carrera_Despegue = $request->Carrera_Despegue;
                         $veha->Motores = $request->Motores;
                         $veha->FK_Representa = (Modelo::max('Codigo'));
-                        $veha->FK_Cuentacon = $request->oficina;
+                        $veha->FK_Cuentacon = $request->FK_Cuentacon;
                         $veha->save();
 
                 }elseif(!is_null($marca) && is_null($modelo)){
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => $marca->Codigo
                     ]);
+                        $veha->Placa = $request->Placa;
                         $veha->Peso = $request->Peso;
                         $veha->Capacidad = $request->Capacidad;
                         $veha->Serial_Motor = $request->Serial_Motor;
@@ -417,9 +438,10 @@ class VehiculoController extends Controller
                         $veha->Carrera_Despegue = $request->Carrera_Despegue;
                         $veha->Motores = $request->Motores;
                         $veha->FK_Representa = (Modelo::max('Codigo'));
-                        $veha->FK_Cuentacon = $request->oficina;
+                        $veha->FK_Cuentacon = $request->FK_Cuentacon;
                         $veha->save();
                 }else{
+                        $veha->Placa = $request->Placa;
                         $veha->Peso = $request->Peso;
                         $veha->Capacidad = $request->Capacidad;
                         $veha->Serial_Motor = $request->Serial_Motor;
@@ -434,28 +456,37 @@ class VehiculoController extends Controller
                         $veha->Carrera_Despegue = $request->Carrera_Despegue;
                         $veha->Motores = $request->Motores;
                         $veha->FK_Representa = $modelo->Codigo;
-                        $veha->FK_Cuentacon = $request->oficina;
+                        $veha->FK_Cuentacon = $request->FK_Cuentacon;
                         $veha->save();
                 }
+            }else{
+                Session::flash('message','El vehiculo de placa '.$request->Placa.' ya existe.');
+                return Redirect::back()->withInput(Input::all());
+            }
         //Barcos
-        }elseif(!is_null($request->Nombre)){    
+        }elseif($request->Clasificacion == 'm'){    
             $tipoVehiculo='Marina';
-            $vehm = VehiculoM::where('Vehiculo_Maritimo.Placa', $request->placa)
+            $vehm = VehiculoM::find($request->PlacaAnt);
+            $veh = VehiculoM::find($request->Placa);
+
+
+            $marca = Marca::where('Marca.Descripcion', $request->marca)
+            ->first();
+            $modelo = Modelo::where('Modelo.Descripcion', $request->modelo)
             ->first();
 
-                $marca = Marca::where('Marca.Descripcion', $request->marca)
-                ->first();
-                $modelo = Modelo::where('Modelo.Descripcion', $request->modelo)
-                ->first();
-
+            if(is_null($veh)){
                 if(is_null($marca)){
                     Marca::create([
+                        'Codigo' => (Marca::max('Codigo'))+1,
                         'Descripcion' => $request->marca
                     ]);
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => (Marca::max('Codigo'))
                     ]);
+                        $vehm->Placa = $request->Placa;
                         $vehm->Peso = $request->Peso;
                         $vehm->Capacidad = $request->Capacidad;
                         $vehm->Serial_Motor = $request->Serial_Motor;
@@ -464,13 +495,15 @@ class VehiculoController extends Controller
                         $vehm->Capacidad_Combustible = $request->Capacidad_Combustible;
                         $vehm->Nombre = $request->Nombre;
                         $vehm->FK_Representa = (Modelo::max('Codigo'));
-                        $vehm->FK_Cuentacon = $request->oficina;
+                        $vehm->FK_Cuentacon = $request->FK_Cuentacon;
                         $vehm->save();
                 }elseif(!is_null($marca) && !!is_null($modelo)){
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => $marca->Codigo
                     ]);
+                        $vehm->Placa = $request->Placa;
                         $vehm->Peso = $request->Peso;
                         $vehm->Capacidad = $request->Capacidad;
                         $vehm->Serial_Motor = $request->Serial_Motor;
@@ -479,9 +512,10 @@ class VehiculoController extends Controller
                         $vehm->Capacidad_Combustible = $request->Capacidad_Combustible;
                         $vehm->Nombre = $request->Nombre;
                         $vehm->FK_Representa = (Modelo::max('Codigo'));
-                        $vehm->FK_Cuentacon = $request->oficina;
+                        $vehm->FK_Cuentacon = $request->FK_Cuentacon;
                         $vehm->save();
                 }else{
+                        $vehm->Placa = $request->Placa;
                         $vehm->Peso = $request->Peso;
                         $vehm->Capacidad = $request->Capacidad;
                         $vehm->Serial_Motor = $request->Serial_Motor;
@@ -490,28 +524,37 @@ class VehiculoController extends Controller
                         $vehm->Capacidad_Combustible = $request->Capacidad_Combustible;
                         $vehm->Nombre = $request->Nombre;
                         $vehm->FK_Representa = $modelo->Codigo;
-                        $vehm->FK_Cuentacon = $request->oficina;
+                        $vehm->FK_Cuentacon = $request->FK_Cuentacon;
                         $vehm->save();
                 }
 
+            }else{
+                    Session::flash('message','El vehiculo de placa '.$request->Placa.' ya existe.');
+                    return Redirect::back()->withInput(Input::all());
+                }
         //Autos
-        }elseif(!is_null($request->Serial_Carroceria)){    
+        }elseif($request->Clasificacion == 't'){    
             $tipoVehiculo='Terrestre';
-            $veht = VehiculoT::where('Vehiculo_Terrestre.Placa', $request->placa)
+            $veht = VehiculoT::find($request->PlacaAnt);
+            $veh = VehiculoT::find($request->Placa);
+
+            $marca = Marca::where('Marca.Descripcion', $request->marca)
+            ->first();
+            $modelo = Modelo::where('Modelo.Descripcion', $request->modelo)
             ->first();
 
-                $marca = Marca::where('Marca.Descripcion', $request->marca)
-                ->first();
-                $modelo = Modelo::where('Modelo.Descripcion', $request->modelo)
-                ->first();
+            if(is_null($veh)){
                 if(is_null($marca)){
                     Marca::create([
+                        'Codigo' => (Marca::max('Codigo'))+1,
                         'Descripcion' => $request->marca
                     ]);
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => (Marca::max('Codigo')) 
                     ]);
+                        $veht->Placa = $request->Placa;
                         $veht->Peso = $request->Peso;
                         $veht->Capacidad = $request->Capacidad;
                         $veht->Serial_Motor = $request->Serial_Motor;
@@ -520,13 +563,15 @@ class VehiculoController extends Controller
                         $veht->Capacidad_Combustible = $request->Capacidad_Combustible;
                         $veht->Serial_Carroceria = $request->Serial_Carroceria;
                         $veht->FK_Representa = (Modelo::max('Codigo'));
-                        $veht->FK_Cuentacon = $request->oficina;
+                        $veht->FK_Cuentacon = $request->FK_Cuentacon;
                         $veht->save();
                 }elseif(isset($marca) && is_null($modelo)){
                     Modelo::create([
+                        'Codigo' => (Modelo::max('Codigo'))+1,
                         'Descripcion' => $request->modelo,
                         'FK_Contiene' => $marca->Codigo
                     ]);
+                        $veht->Placa = $request->Placa;
                         $veht->Peso = $request->Peso;
                         $veht->Capacidad = $request->Capacidad;
                         $veht->Serial_Motor = $request->Serial_Motor;
@@ -535,9 +580,10 @@ class VehiculoController extends Controller
                         $veht->Capacidad_Combustible = $request->Capacidad_Combustible;
                         $veht->Serial_Carroceria = $request->Serial_Carroceria;
                         $veht->FK_Representa = (Modelo::max('Codigo'));
-                        $veht->FK_Cuentacon = $request->oficina;
+                        $veht->FK_Cuentacon = $request->FK_Cuentacon;
                         $veht->save();
                 }else{
+                        $veht->Placa = $request->Placa;
                         $veht->Peso = $request->Peso;
                         $veht->Capacidad = $request->Capacidad;
                         $veht->Serial_Motor = $request->Serial_Motor;
@@ -546,8 +592,12 @@ class VehiculoController extends Controller
                         $veht->Capacidad_Combustible = $request->Capacidad_Combustible;
                         $veht->Serial_Carroceria = $request->Serial_Carroceria;
                         $veht->FK_Representa = $modelo->Codigo;
-                        $veht->FK_Cuentacon = $request->oficina;
+                        $veht->FK_Cuentacon = $request->FK_Cuentacon;
                         $veht->save();
+                }
+            }else{
+                    Session::flash('message','El vehiculo de placa '.$request->Placa.' ya existe.');
+                    return Redirect::back()->withInput(Input::all());
                 }
         }
         //PADORU PADORU

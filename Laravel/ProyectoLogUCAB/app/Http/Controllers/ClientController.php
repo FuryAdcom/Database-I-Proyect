@@ -15,7 +15,6 @@ use DB;
 class ClientController extends Controller
 {
     public function __construct(){
-
     }
 
     public function inicio(){
@@ -27,20 +26,33 @@ class ClientController extends Controller
     }
 
     public function store(Request $request){
-        $request->edo = $request->Estado;
-        if($request->L_Vip){
-            $request->FK_Asignado_Tipo = 3;
-        }else{
-            $request->FK_Asignado_Tipo = 2;
-        }
-        $request->Frecuente = false;
 
-        Client::create(['Cedula' => $request->Cedula,
+        if($request->L_Vip){
+            $request->FK_Asignado_Tipo = 1;
+        }else{
+            $request->FK_Asignado_Tipo = 3;
+        }
+        $cliente = Client::find($request->Cedula);
+
+        if(isset($cliente)){
+            Session::flash('message','Ya existe un cliente con la cédula: "'.$request->Cedula.'".');
+            return Redirect::back()->withInput(Input::all());
+        }else{
+            $cliente = Client::where('Correo_Personal',$request->Correo_Personal);
+            
+            if(isset($cliente)){
+                Session::flash('message','Ya existe un cliente con el correo: "'.$request->Correo_Personal.'".');
+                return Redirect::back()->withInput(Input::all());
+            }
+        }
+
+        Client::create([
+        'Cedula' => $request->Cedula,
         'Nombre' => $request->Nombre,
         'Apellido' => $request->Apellido,
         'Correo_Personal' => $request->Correo_Personal,
         'Fecha_Nacimiento' => $request->Fecha_Nacimiento,
-        'Estado_Civil' => $request->edo,
+        'Estado_Civil' => $request->Estado_Civil,
         'Empresa' => $request->Empresa,
         'L_Vip' => $request->L_Vip,
         'Frecuente' => $request->Frecuente,
@@ -56,35 +68,49 @@ class ClientController extends Controller
         return view("persona.cliente.showclient", compact('clientes'));
     }
 
-    public function edit($Cedula){
+    public function edit($Codigo){
 
-        $validated = Client::where('Cedula', $Cedula)->first();
+        $validated = Client::find($Codigo);
         return view("persona.cliente.editclient", compact('validated'));
     }
 
     public function actualizar(Request $request){
+        $clienteOG = Client::find($request->CedulaAnt);
         $cliente = Client::find($request->Cedula);
         if($request->L_Vip){
-            $request->FK_Asignado_Tipo = 3;
+            $request->FK_Asignado_Tipo = 1;
         }else{
-            $request->FK_Asignado_Tipo = 2;
+            $request->FK_Asignado_Tipo = 3;
         }
-    
-        $cliente->Nombre = $request->Nombre;
-        $cliente->Apellido = $request->Apellido;
-        $cliente->Correo_Personal = $request->Correo_Personal;
-        $cliente->Fecha_Nacimiento = $request->Fecha_Nacimiento;
-        $cliente->Estado_Civil = $request->Estado_Civil;
-        $cliente->Empresa = $request->Empresa;
-        $cliente->Frecuente = $request->Frecuente;
-        $cliente->FK_Asignado_Tipo = $request->FK_Asignado_Tipo;
-        $cliente->save();
+        
+        if(isset($cliente) && $cliente != $clienteOG){
+            Session::flash('message','Ya existe un cliente con la cédula: "'.$request->Cedula.'".');
+            return Redirect::back()->withInput(Input::all());
+        }else{
+            $cliente = Client::where('Correo_Personal', $request->Correo_Personal)->first();
+
+            if(isset($cliente) && $cliente != $clienteOG){
+                Session::flash('message','Ya existe un cliente con el correo: "'.$request->Correo_Personal.'".');
+                return Redirect::back()->withInput(Input::all());
+            }
+        }
+
+        $clienteOG->Cedula = $request->Cedula;
+        $clienteOG->Nombre = $request->Nombre;
+        $clienteOG->Apellido = $request->Apellido;
+        $clienteOG->Correo_Personal = $request->Correo_Personal;
+        $clienteOG->Fecha_Nacimiento = $request->Fecha_Nacimiento;
+        $clienteOG->Estado_Civil = $request->Estado_Civil;
+        $clienteOG->Empresa = $request->Empresa;
+        $clienteOG->Frecuente = $request->Frecuente;
+        $clienteOG->FK_Asignado_Tipo = $request->FK_Asignado_Tipo;
+        $clienteOG->save();
 
         Session::flash('message','Cliente modificado correctamente.');
         return Redirect::to('/cliente/lista');
     }
 
-    public function delete($Cedula){
+    public function delete($Codigo){
         DB::table('Cliente')->where('Cedula', $Cedula)->delete();
         Session::flash('messagedel','Cliente eliminado correctamente.');
         return redirect('/cliente/lista');

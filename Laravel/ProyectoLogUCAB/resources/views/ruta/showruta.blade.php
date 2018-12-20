@@ -8,7 +8,7 @@
 					</div>
 					<div class="contenido_ppal">
                         <!--Consultar-->
-						<h3 style="text-align: center; color: whitesmoke">Consultar roles</h3>
+						<h3 style="text-align: center; color: whitesmoke">Consultar rutas</h3>
 						@if(Session::has('message'))
 							<div class="alert alert-info"> {{Session::get('message')}} </div>
 						@elseif(Session::has('messagedel'))
@@ -25,7 +25,7 @@
 											<th>Vehiculos</th>
 											<th>Empleados</th>
 											<th>Encargado</th>
-											<th>Opciones</th>
+											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($rutas as $ruta)
 										<tbody>	
@@ -34,7 +34,11 @@
 											<th> {{$ruta->Cantidad_vehiculos}} </th>
 											<th> {{$ruta->Cantidad_rutas}} </th>
 											<th> {{$ruta->Empleado_cargo}} </th>
-										    <th> <a class="btn btn-secondary" href="/ruta/edit/{{$ruta->Codigo}}">Editar</a><a class="btn btn-danger" href="/ruta/delete/{{$ruta->Codigo}}">Eliminar</a> </th>
+											<th> 
+												<a class="boton_show btn btn-info" href="/ruta/mostrar/{{$ruta->Codigo}}"><i class="fa fa-align-left"></i></a>
+												<a class="boton_show btn btn-secondary" href="/ruta/edit/{{$ruta->Codigo}}"><i class="fa fa-wrench"></i></a>
+												<a class="boton_show btn btn-danger" href="/ruta/delete/{{$ruta->Codigo}}"><i class="fa fa-times"></i></a> 
+											</th>
 										</tbody>
 										@endforeach
 									</table>

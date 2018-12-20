@@ -20,14 +20,14 @@
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>Cedula</th>
+											<th>Cédula</th>
 											<th>Nombre</th>
 											<th>Apellido</th>
 											<th>Correo</th>
 											<th>Fecha nacimiento</th>
 											<th>L-VIP</th>
 											<th>Frecuente</th>
-											<th>Opciones</th>
+											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($clientes as $cliente)
 										<tbody>	
@@ -35,18 +35,22 @@
 											<th> {{$cliente->Nombre}} </th>
 											<th> {{$cliente->Apellido}} </th>
 											<th> {{$cliente->Correo_Personal}} </th>
-											<th> {{$cliente->Fecha_Nacimiento}} </th>
-											@if($cliente->l_vip)
-												<th> Si </th>
+											<th style="text-align:center"> {{ date('d-m-Y', strtotime($cliente->Fecha_Nacimiento)) }} </th>
+											@if($cliente->FK_Asignado_Tipo == 1)
+												<th> Sí </th>
 											@else
 												<th> No </th>
 											@endif
 											@if($cliente->Frecuente)
-												<th> Si </th>
+												<th> Sí </th>
 											@else
 												<th> No </th>
 											@endif
-										    <th> <a class="btn btn-secondary" href="/cliente/edit/{{$cliente->Cedula}}">Editar</a><a class="btn btn-danger" href="/cliente/delete/{{$cliente->Cedula}}">Eliminar</a> </th>
+										    <th> 
+												<a class="boton_show btn btn-info" href="/cliente/mostrar/{{$cliente->Cedula}}"><i class="fa fa-align-left"></i></a>
+												<a class="boton_show btn btn-secondary" href="/cliente/edit/{{$cliente->Cedula}}"><i class="fa fa-wrench"></i></a>
+												<a class="boton_show btn btn-danger" href="/cliente/delete/{{$cliente->Cedula}}"><i class="fa fa-times"></i></a> 
+											</th>
 										</tbody>
 										@endforeach
 									</table>

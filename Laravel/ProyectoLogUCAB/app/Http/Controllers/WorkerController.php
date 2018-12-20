@@ -97,7 +97,6 @@ class WorkerController extends Controller
         ->first();
 
         Session::flash('msg','Favor introducir la oficina de la que esta encargado, si la casilla esta seleccionada.');
-
         return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas'));
     }
 

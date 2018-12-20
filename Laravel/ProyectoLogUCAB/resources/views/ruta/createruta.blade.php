@@ -11,33 +11,50 @@
                         <h3 style="text-align: center; color: whitesmoke">Crear ruta</h3>
 						<form action="/ruta/store" method="POST">
 							@csrf
+							@if(Session::has('message'))
+								<div class="alert alert-warning"> {{Session::get('message')}} </div>
+							@endif
 
-							<div class="form-group" style="width:49%; float: left">
+							<div class="form-group" style="width:49%; float: left;margin-bottom:0px">
+								<label for="inputCharge" style="color: whitesmoke; padding-right: 5px">Crear a partir de ruta existente:</label>
+								<input class="form-check-input" name="Charge" type="checkbox" value="true" @if ( old('Charge') ) checked @endif id="inputCharge">
+							</div>
+							<div class="form-group" style="width:100%; float: left; @if ( is_null(old('Charge') )) display: none @else display: block @endif" id="inputEncargado">
+								<input class="form-control" name="FK_Ruta" list="rutas" placeholder="Ruta" style="width: 100%;">
+								<datalist id="rutas">
+									@foreach ($rutas as $ruta)
+										<option value="{{ $ruta->Codigo }}"> {{ $ruta->ofog.': '.$ruta->og.', '.$ruta->oge.' - '.$ruta->ofdest.': '.$ruta->dest.', '.$ruta->deste }} </option>
+									@endforeach
+								</datalist>
+							</div>
+							<div class="form-group" style="width:100%; float: left">
 								<label for="inputDescripcion" style="color: whitesmoke">Descripcion</label>
-								<input type="text" name="Descripcion" class="form-control" id="Descripcion" placeholder="Descripcion de la ruta (Ej: Alto Orinoco-Atabapo)" required>
+								<input type="text" name="Descripcion" value="{{ old('Descripcion') }}" class="form-control" id="Descripcion" placeholder="Descripcion de la ruta (Ej: Alto Orinoco-Atabapo)" required>
 							</div>
-							<div class="form-group" style="width:49%; float: right;">
-								<label for="inputDeposito" style="color: whitesmoke">Deposito</label>
-								<input type="number" name="Tamaño_deposito" class="form-control" id="inputDeposito" placeholder="Introduzca el tamaño del deposito" required>
+							<div class="form-group" style="width:50%; float: left; @if ( is_null(old('Charge') )) display: block @else display: none @endif" id="inputEncargado2">
+								<label for="inputFK_Ofi_Origen" style="color: whitesmoke">Oficina Origen</label>
+								<input class="form-control" name="FK_Ofi_Origen" value="{{ old('FK_Ofi_Origen') }}" list="oficinas" placeholder="Nombre de oficina origen">
+								<datalist id="oficinas">
+									@foreach ($oficinas as $oficina)
+										<option value="{{ $oficina->Codigo }}"> {{ $oficina->Nombre }} </option>
+									@endforeach
+								</datalist>
 							</div>
-							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputVehiculos" style="color: whitesmoke">Vehiculos</label>
-								<input type="number" name="Cantidad_vehiculos" class="form-control" id="inputVehiculos"placeholder="Introduzca la cantidad de vehiculos" required>
+							<div class="form-group" style="width:50%; float: left;" id="inputFK_Ofi_Destino">
+								<label for="inputFK_Ofi_Destino" style="color: whitesmoke">Oficina Destino</label>
+								<input class="form-control" name="FK_Ofi_Destino" value="{{ old('FK_Ofi_Destino') }}" list="oficinas" placeholder="Nombre de oficina destino">
+								<datalist id="oficinas">
+									@foreach ($oficinas as $oficina)
+										<option value="{{ $oficina->Codigo }}"> {{ $oficina->Nombre }} </option>
+									@endforeach
+								</datalist>
 							</div>
-							<div class="form-group" style="width:49%; float: right;">
-								<label for="inputEmpleados" style="color: whitesmoke">Empleados</label>
-								<input type="number" name="Cantidad_empleados" class="form-control" id="inputEmpleados"placeholder="Introduzca la cantidad de empleados" required>
-							</div>
-							<!-- REVISAR MEJOR FORMA -->
-							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputEncargado" style="color: whitesmoke">Encargado</label>
-								<input type="text" name="Empleado_cargo" class="form-control" id="inputEncargado" placeholder="Introduzca la capacidad de combustible" required>
-							</div>
+
 							<div style="width:100%; height: 40px; float: left;">
-								<button type="submit" class="btn btn-primary">Submit</button>
+								<button type="submit" class="btn btn-primary">Siguiente</button>
 							</div>
                         </form>
                         <!---->
 					</div>
 				</div>		
-@stop
+@endsection

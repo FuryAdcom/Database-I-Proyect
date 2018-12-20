@@ -13,9 +13,12 @@ class Ruta extends Model
     public $timestamps=false;
 
     protected $fillable =[
+        'Codigo',
         'Descripcion',
         'FK_Ruta',   //Ruta
-        'FK_Camino'   //Lugar
+        'FK_Camino',   //Lugar
+        'FK_Ofi_Destino',  //Oficina (Llegada)
+        'FK_Ofi_Origen'    //Oficina (Salida)
     ];
 
     protected $guarded =[

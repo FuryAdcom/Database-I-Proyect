@@ -22,7 +22,7 @@
 											<th>Marca</th>
 											<th>Modelo</th>
 											<th>Peso</th>
-											<th>Opciones</th>
+											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($veh as $vehiculo)
 										<tbody>
@@ -31,7 +31,11 @@
 											<th> {{$vehiculo->mark}} </th>
 											<th> {{$vehiculo->model}} </th>
 											<th> {{$vehiculo->Peso}} </th>
-											<th> <a class="btn btn-secondary" href="/transporte/edit{{$tipo}}/{{$vehiculo->Placa}}">Editar</a><a class="btn btn-danger" href="/transporte/delete{{$tipo}}/{{$vehiculo->Placa}}">Eliminar</a> </th>
+											<th> 
+												<a class="boton_show btn btn-info" href="/transporte/mostrar{{$tipo}}/{{$vehiculo->Placa}}"><i class="fa fa-align-left"></i></a>
+												<a class="boton_show btn btn-secondary" href="/transporte/edit{{$tipo}}/{{$vehiculo->Placa}}"><i class="fa fa-wrench"></i></a>
+												<a class="boton_show btn btn-danger" href="/transporte/delete{{$tipo}}/{{$vehiculo->Placa}}"><i class="fa fa-times"></i></a> 
+											</th>
 										</tbody>
 										@endforeach
 									</table>
