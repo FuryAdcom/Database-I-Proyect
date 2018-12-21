@@ -21,19 +21,19 @@
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
 											<th>Descripcion</th>
-											<th>Nombre</th>
-											<th>Vehiculos</th>
-											<th>Empleados</th>
-											<th>Encargado</th>
+											<th>Lugar Origen</th>
+											<th>Oficina Origen</th>
+											<th>Lugar Destino</th>
+											<th>Oficina Destino</th>
 											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($rutas as $ruta)
 										<tbody>	
 											<th> {{$ruta->Descripcion}} </th>
-											<th> {{$ruta->sitio}} </th>
-											<th> {{$ruta->Cantidad_vehiculos}} </th>
-											<th> {{$ruta->Cantidad_rutas}} </th>
-											<th> {{$ruta->Empleado_cargo}} </th>
+											<th> {{$ruta->og.', '.$ruta->oge}} </th>
+											<th> {{$ruta->ofog}} </th>
+											<th> {{$ruta->dest.', '.$ruta->deste}} </th>
+											<th> {{$ruta->ofdest}} </th>
 											<th> 
 												<a class="boton_show btn btn-info" href="/ruta/mostrar/{{$ruta->Codigo}}"><i class="fa fa-align-left"></i></a>
 												<a class="boton_show btn btn-secondary" href="/ruta/edit/{{$ruta->Codigo}}"><i class="fa fa-wrench"></i></a>

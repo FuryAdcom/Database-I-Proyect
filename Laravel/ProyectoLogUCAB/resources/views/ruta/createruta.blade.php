@@ -51,7 +51,7 @@
 							</div>
 
 							<div style="width:100%; height: 40px; float: left;">
-								<button type="submit" class="btn btn-primary">Siguiente</button>
+								<button type="submit" class="btn btn-primary">Crear</button>
 							</div>
                         </form>
                         <!---->
