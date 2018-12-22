@@ -9,7 +9,7 @@
 					<div class="contenido_ppal">
                         <!--Agregar-->
                         <h3 style="text-align: center; color: whitesmoke">Crear ruta</h3>
-						<form action="/ruta/agregar" method="POST">
+						<form action="/ruta/store" method="POST">
 							@csrf
 							@if(Session::has('message'))
 								<div class="alert alert-warning"> {{Session::get('message')}} </div>
@@ -51,7 +51,7 @@
 							</div>
 
 							<div style="width:100%; height: 40px; float: left;">
-								<button type="submit" class="btn btn-primary">Siguiente</button>
+								<button type="submit" class="btn btn-primary">Crear</button>
 							</div>
                         </form>
                         <!---->

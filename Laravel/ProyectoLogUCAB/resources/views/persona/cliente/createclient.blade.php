@@ -22,23 +22,23 @@
 							</div>
 							<div class="form-group" style="width:49%; float: left">
 								<label for="inputNombre" style="color: whitesmoke">Nombre</label>
-								<input type="text" name="Nombre" value="{{old('Cedula')}}" class="form-control" id="Nombre" placeholder="Introduzca nombre" required>
+								<input type="text" name="Nombre" value="{{old('Nombre')}}" class="form-control" id="Nombre" placeholder="Introduzca nombre" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputApellido" style="color: whitesmoke">Apellido</label>
-								<input type="text" name="Apellido" value="{{old('Cedula')}}" class="form-control" id="inputApellido" placeholder="Introduzca apellido" required>
+								<input type="text" name="Apellido" value="{{old('Apellido')}}" class="form-control" id="inputApellido" placeholder="Introduzca apellido" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputCorreo_Personal" style="color: whitesmoke">Correo</label>
-								<input type="email" name="Correo_Personal" value="{{old('Cedula')}}" class="form-control" id="inputCorreo_Personal"placeholder="Introduzca correo" required>
+								<input type="email" name="Correo_Personal" value="{{old('Correo_Personal')}}" class="form-control" id="inputCorreo_Personal"placeholder="Introduzca correo" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputFecha_Nacimiento" style="color: whitesmoke">Fecha Nacimiento</label>
-								<input type="date" name="Fecha_Nacimiento" value="{{old('Cedula')}}" class="form-control" id="inputFecha_Nacimiento"placeholder="Introduzca fecha de nacimiento" required>
+								<input type="date" name="Fecha_Nacimiento" value="{{old('Fecha_Nacimiento')}}" class="form-control" id="inputFecha_Nacimiento"placeholder="Introduzca fecha de nacimiento" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputEmpresa" style="color: whitesmoke">Empresa</label>
-								<input type="text" name="Empresa" value="{{old('Cedula')}}" class="form-control" id="inputEmpresa" placeholder="Empresa">
+								<input type="text" name="Empresa" value="{{old('Empresa')}}" class="form-control" id="inputEmpresa" placeholder="Empresa">
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 									<label for="inputEstado_civil" style="color: whitesmoke">Estado civil</label>

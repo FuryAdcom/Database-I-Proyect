@@ -23,3 +23,4 @@ $("#inputCharge").change(function() {
       $('#inputEncargado').toggle();
       $('#inputEncargado2').toggle();
 })
+

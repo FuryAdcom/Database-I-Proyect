@@ -84,6 +84,7 @@ Route::get('/ruta','RutaController@inicio');
 Route::get('/ruta/lista','RutaController@lista');
 Route::get('/ruta/mostrar/{Codigo}','RutaController@mostrar');
 Route::get('/ruta/create','RutaController@create');
+Route::post('/ruta/agregar','RutaController@agregar');
 Route::post('/ruta/store','RutaController@store');
 Route::get('/ruta/edit/{Codigo}','RutaController@edit');
 Route::post('/ruta/update','RutaController@actualizar');

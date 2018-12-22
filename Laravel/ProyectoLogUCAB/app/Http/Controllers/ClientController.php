@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use LogUCAB\Http\Requests;
 use LogUCAB\Client;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Session;
@@ -38,9 +39,9 @@ class ClientController extends Controller
             Session::flash('message','Ya existe un cliente con la cédula: "'.$request->Cedula.'".');
             return Redirect::back()->withInput(Input::all());
         }else{
-            $cliente = Client::where('Correo_Personal',$request->Correo_Personal);
+            $cliente = Client::where('Correo_Personal', $request->Correo_Personal);
             
-            if(isset($cliente)){
+            if(isset($cliente->Correo_Personal)){
                 Session::flash('message','Ya existe un cliente con el correo: "'.$request->Correo_Personal.'".');
                 return Redirect::back()->withInput(Input::all());
             }
@@ -111,7 +112,7 @@ class ClientController extends Controller
     }
 
     public function delete($Codigo){
-        DB::table('Cliente')->where('Cedula', $Cedula)->delete();
+        DB::table('Cliente')->where('Cedula', $Codigo)->delete();
         Session::flash('messagedel','Cliente eliminado correctamente.');
         return redirect('/cliente/lista');
     }

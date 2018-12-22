@@ -27,7 +27,8 @@ class RutaController extends Controller
     }
 
     public function create(){
-        $oficinas = Office::select()->orderBy('Nombre', 'asc')->get();
+        $oficinas = Office::select()
+        ->orderBy('Nombre', 'asc')->get();
         $rutas = Ruta::leftjoin('Oficina as ofiog', 'ofiog.Codigo','=','Ruta.FK_Ofi_Origen')
         ->leftjoin('Oficina as ofidest', 'ofidest.Codigo','=','Ruta.FK_Ofi_Destino')
         ->leftjoin('Lugar as log', 'log.Codigo','=','ofiog.FK_Varios')
@@ -40,7 +41,67 @@ class RutaController extends Controller
         return view("ruta.createruta", compact('oficinas', 'rutas'));
     }
 
+    public function agregar(Request $request){
+
+        if(isset($request->FK_Ruta)){
+            while(isset($request->FK_Ruta)){
+                $rutaPrima = Ruta::where('Codigo', $request->FK_Ruta)->first();
+            }
+
+            $ofiog = Office::find($rutaPrima->FK_Ofi_Origen);
+            $lugar = Lugar::find($ofiog->FK_Varios);
+
+            if($ofiog->Codigo == $request->FK_Ofi_Destino){
+                Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
+                return Redirect::back()->withInput(Input::all());
+            }
+
+        }else{
+            $ofiog = Office::find($request->FK_Ofi_Origen);
+            $lugar = Lugar::find($ofiog->FK_Varios);
+
+            if($request->FK_Ofi_Origen == $request->FK_Ofi_Destino){
+                Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
+                return Redirect::back()->withInput(Input::all());
+            }
+
+        }
+
+        $max = Ruta::max('Codigo')+1;
+
+        $oficina = Office::find($request->FK_Ofi_Origen)
+        ->leftjoin('Vehiculo_Aereo as aero', 'aero.FK_Cuentacon', '=', 'Oficina.Codigo')
+        ->leftjoin('Vehiculo_Maritimo as mar', 'mar.FK_Cuentacon', '=', 'Oficina.Codigo')
+        ->leftjoin('Vehiculo_Terrestre as terra', 'terra.FK_Cuentacon', '=', 'Oficina.Codigo')
+        ->select(\DB::raw("\"Oficina\".*, aero.\"Placa\" as avion, mar.\"Placa\" as barco, terra.\"Placa\" as auto"))
+        ->first();
+
+        return view('ruta.createruta2', compact('oficina','request','max'));
+    }
+
     public function store(Request $request){
+
+        $ofiog = Office::find($request->FK_Ofi_Origen);
+        $lugar = Lugar::find($ofiog->FK_Varios);
+
+        if(isset($request->FK_Ruta)){
+            Ruta::create([
+                'Codigo' => $request->Codigo,
+                'Descripcion' => $request->Descripcion,
+                'FK_Ruta' => $request->FK_Ruta,
+                'FK_Camino' => $lugar->Codigo,  
+                'FK_Ofi_Destino' => $ofiog->Codigo,  
+                'FK_Ofi_Origen' => $request->FK_Ofi_Destino
+            ]);
+        }else{
+            Ruta::create([
+                'Codigo' => $request->Codigo,
+                'Descripcion' => $request->Descripcion,
+                'FK_Camino' => $lugar->Codigo,  
+                'FK_Ofi_Destino' => $request->FK_Ofi_Origen,  
+                'FK_Ofi_Origen' => $request->FK_Ofi_Destino
+            ]);
+        }
 
         if(isset($request->FK_Ruta)){
             while(isset($request->FK_Ruta)){

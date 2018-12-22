@@ -34,6 +34,7 @@ class WorkerController extends Controller
         from "Lugar" as Mun left join "Lugar" as L
         on L."Codigo" = Mun."FK_Lugar" 
         where Mun."Tipo" = \'Municipio\' order by Mun."Nombre" asc'));
+
         return view("persona.empleado.createworker", compact('rols', 'oficinas', 'muns'));
     }
 
