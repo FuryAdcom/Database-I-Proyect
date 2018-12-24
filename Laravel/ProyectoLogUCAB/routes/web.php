@@ -84,7 +84,6 @@ Route::get('/ruta','RutaController@inicio');
 Route::get('/ruta/lista','RutaController@lista');
 Route::get('/ruta/mostrar/{Codigo}','RutaController@mostrar');
 Route::get('/ruta/create','RutaController@create');
-Route::post('/ruta/agregar','RutaController@agregar');
 Route::post('/ruta/store','RutaController@store');
 Route::get('/ruta/edit/{Codigo}','RutaController@edit');
 Route::post('/ruta/update','RutaController@actualizar');
@@ -99,6 +98,18 @@ Route::post('/paquete/store','PacketController@store');
 Route::get('/paquete/edit/{Codigo}','PacketController@edit');
 Route::post('/paquete/update','PacketController@actualizar');
 Route::get('/paquete/delete/{Codigo}','PacketController@delete');
+
+//Envios
+Route::get('/envio','EnvioController@inicio');
+Route::get('/envio/lista','EnvioController@lista');
+Route::get('/envio/mostrar/{Codigo}','EnvioController@mostrar');
+Route::get('/envio/create','EnvioController@create');
+Route::post('/envio/store','EnvioController@store');
+Route::post('/envio/store2','EnvioController@store2');
+Route::post('/envio/store3','EnvioController@store3');
+Route::get('/envio/edit/{Codigo}','EnvioController@edit');
+Route::post('/envio/update','EnvioController@actualizar');
+Route::get('/envio/delete/{Codigo}','EnvioController@delete');
 
 //Login
 Auth::routes();

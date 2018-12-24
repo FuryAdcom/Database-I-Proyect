@@ -31,6 +31,11 @@
 								<label for="inputLocalidad" style="color: whitesmoke">Localidad municipio</label>
 								<input type="text" name="lugar" value="{{old('lugar')}}" class="form-control" placeholder="Introduzca el municipio donde se ubica la oficina (Ej: Atabapo, Muñóz, etc.)" required>
 							</div>
+							<div class="form-group" style="width:49%; float: right;">
+									<label for="inputTelefono" style="color: whitesmoke">Telefono</label>
+									<input type="tel"pattern="[0-9]{4}-[0-9]{7}" name="Telefono" value="{{old('Telefono')}}" class="form-control" placeholder="Introduzca el telefono (Formato: 0XXX-XXXXXXX)" required>
+								</div>
+
 							<div style="width:100%; height: 40px; float: left;">
 								<button type="submit" class="btn btn-primary">Crear</button>
 							</div>

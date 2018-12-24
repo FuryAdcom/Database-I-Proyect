@@ -89,10 +89,14 @@
 								@endforeach
 							</datalist>
 					</div>
-					<div class="form-group" style="width:60%; float: left;">
+					<div class="form-group" style="width:49%; float: left;">
 							<label for="inputProfesion" style="color: whitesmoke">Profesión</label>
 							<input class="form-control" name="Profesion"value="{{ $validated->Profesion }}" type="text" id="inputProfesion"placeholder="Introduzca su profesión">
 					</div>
+					<div class="form-group" style="width:49%; float: right;">
+							<label for="inputTelefono" style="color: whitesmoke">Telefono</label>
+							<input type="tel"pattern="[0-9]{4}-[0-9]{7}" name="Telefono" value="{{old('Telefono', $telf)}}" class="form-control" placeholder="Introduzca el telefono (Formato: 0XXX-XXXXXXX)" required>
+						</div>
 					<div class="form-group" style="width:60%; float: left;" id="inputFK_Habitacion">
 							<label for="inputFK_Habitacion" style="color: whitesmoke">Lugar de residencia:</label>
 							<input class="form-control" name="FK_Habitacion" value="{{ $validated->FK_Habitacion }}" list="muns" placeholder="Municipio de residencia" required>
@@ -104,7 +108,7 @@
 					</div>
 					
 			<div style="width:100%; height: 40px; float: left;">
-				<button type="submit" class="btn btn-primary">Submit</button>
+				<button type="submit" class="btn btn-primary">Modificar</button>
 			</div>
 		</form>
         <!---->

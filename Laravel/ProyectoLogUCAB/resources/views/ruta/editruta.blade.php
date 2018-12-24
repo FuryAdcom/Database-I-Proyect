@@ -50,6 +50,10 @@
 					@endforeach
 				</datalist>
 			</div>
+			<div class="form-group" style="width:49%; float: left;">
+					<label for="inputDuracion" style="color: whitesmoke">Duracion aproximada para un auto</label>
+					<input type="number" name="Duracion" class="form-control" id="inputDuracion"placeholder="Introduzca duracion aproximada en minutos" required>
+				</div>
 
 			<div style="width:100%; height: 40px; float: left;">
 				<button type="submit" class="btn btn-primary">Modificar</button>

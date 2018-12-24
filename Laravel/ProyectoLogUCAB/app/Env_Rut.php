@@ -13,6 +13,7 @@ class Env_Rut extends Model
     public $timestamps=false;
 
     protected $fillable =[
+        'Codigo',
         'FK_Adquiere_Pa',   //Ruta
         'FK_Recorre'   //Envio
     ];

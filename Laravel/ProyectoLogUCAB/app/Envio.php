@@ -10,11 +10,9 @@ class Envio extends Model
 
     protected $primaryKey='Codigo';
 
-    public $timestamps=false;
-
     protected $fillable =[
-        'Monto',
         'Codigo',
+        'Monto',
         'FK_Destino'  //Lugar
     ];
 

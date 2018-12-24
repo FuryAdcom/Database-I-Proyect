@@ -14,11 +14,11 @@ class Ofi_Rut extends Model
 
     protected $fillable =[
         'Costo',
+        'Duracion',
         'FK_Camino', //Aer
         'FK_Camino2',  //Mar    
-        'FK_Camino3',   //Terr
-        'FK_Ofi_Origen',  //Ruta
-        'FK_Ofi_Destino'   //Oficina
+        'FK_Camino3',  //Terrestre
+        'FK_Coche'   //Ruta
     ];
 
     protected $guarded =[

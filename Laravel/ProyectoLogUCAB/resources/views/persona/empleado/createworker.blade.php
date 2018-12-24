@@ -85,10 +85,14 @@
 									@endforeach
 								</datalist>
 							</div>
-							<div class="form-group" style="width:60%; float: left;">
+							<div class="form-group" style="width:49%; float: left;">
 									<label for="inputProfesion" style="color: whitesmoke">Profesión</label>
 									<input class="form-control" name="Profesion"value="{{ old('Profesion') }}" type="text" id="inputProfesion"placeholder="Introduzca su profesión">
 							</div>
+							<div class="form-group" style="width:49%; float: right;">
+									<label for="inputTelefono" style="color: whitesmoke">Telefono</label>
+									<input type="tel"pattern="[0-9]{4}-[0-9]{7}" name="Telefono" value="{{old('Telefono')}}" class="form-control" placeholder="Introduzca el telefono (Formato: 0XXX-XXXXXXX)" required>
+								</div>
 							<div class="form-group" style="width:60%; float: left;" id="inputFK_Habitacion">
 									<label for="inputFK_Habitacion" style="color: whitesmoke">Lugar de residencia:</label>
 									<input class="form-control" name="FK_Habitacion" list="muns" placeholder="Municipio de residencia" required>

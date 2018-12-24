@@ -9,13 +9,15 @@ use LogUCAB\Ruta;
 use LogUCAB\Lugar;
 use LogUCAB\Office;
 use LogUCAB\Ofi_Rut;
-use LogUCAB\Env_Rut;
+use LogUCAB\Veh_Rut;
+use LogUCAB\VehiculoT;
+use LogUCAB\VehiculoM;
+use LogUCAB\VehiculoA;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Session;
 
 use DB;
-
 
 class RutaController extends Controller
 {
@@ -41,75 +43,55 @@ class RutaController extends Controller
         return view("ruta.createruta", compact('oficinas', 'rutas'));
     }
 
-    public function agregar(Request $request){
-
-        if(isset($request->FK_Ruta)){
-            while(isset($request->FK_Ruta)){
-                $rutaPrima = Ruta::where('Codigo', $request->FK_Ruta)->first();
-            }
-
-            $ofiog = Office::find($rutaPrima->FK_Ofi_Origen);
-            $lugar = Lugar::find($ofiog->FK_Varios);
-
-            if($ofiog->Codigo == $request->FK_Ofi_Destino){
-                Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
-                return Redirect::back()->withInput(Input::all());
-            }
-
-        }else{
-            $ofiog = Office::find($request->FK_Ofi_Origen);
-            $lugar = Lugar::find($ofiog->FK_Varios);
-
-            if($request->FK_Ofi_Origen == $request->FK_Ofi_Destino){
-                Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
-                return Redirect::back()->withInput(Input::all());
-            }
-
-        }
-
-        $max = Ruta::max('Codigo')+1;
-
-        $oficina = Office::find($request->FK_Ofi_Origen)
-        ->leftjoin('Vehiculo_Aereo as aero', 'aero.FK_Cuentacon', '=', 'Oficina.Codigo')
-        ->leftjoin('Vehiculo_Maritimo as mar', 'mar.FK_Cuentacon', '=', 'Oficina.Codigo')
-        ->leftjoin('Vehiculo_Terrestre as terra', 'terra.FK_Cuentacon', '=', 'Oficina.Codigo')
-        ->select(\DB::raw("\"Oficina\".*, aero.\"Placa\" as avion, mar.\"Placa\" as barco, terra.\"Placa\" as auto"))
-        ->first();
-
-        return view('ruta.createruta2', compact('oficina','request','max'));
-    }
-
     public function store(Request $request){
-
-        $ofiog = Office::find($request->FK_Ofi_Origen);
-        $lugar = Lugar::find($ofiog->FK_Varios);
-
-        if(isset($request->FK_Ruta)){
-            Ruta::create([
-                'Codigo' => $request->Codigo,
-                'Descripcion' => $request->Descripcion,
-                'FK_Ruta' => $request->FK_Ruta,
-                'FK_Camino' => $lugar->Codigo,  
-                'FK_Ofi_Destino' => $ofiog->Codigo,  
-                'FK_Ofi_Origen' => $request->FK_Ofi_Destino
-            ]);
-        }else{
-            Ruta::create([
-                'Codigo' => $request->Codigo,
-                'Descripcion' => $request->Descripcion,
-                'FK_Camino' => $lugar->Codigo,  
-                'FK_Ofi_Destino' => $request->FK_Ofi_Origen,  
-                'FK_Ofi_Origen' => $request->FK_Ofi_Destino
-            ]);
-        }
+        $apuer = Office::where('Nombre', 'LIKE', 'AeroLogUCAB%')->get();
+        $puer = Office::where('Nombre', 'LIKE', 'MarLogUCAB%')->get();
+        $aps = 0; $ps = 0;
 
         if(isset($request->FK_Ruta)){
+
             while(isset($request->FK_Ruta)){
-                $rutaPrima = Ruta::where('Codigo', $request->FK_Ruta)->first();
+                $rutaPrima = Ruta::where('Codigo', $request->FK_Ruta)->first(); 
+                $oficina = Office::find($rutaPrima->FK_Ofi_Origen);
+
+                foreach($apuer as $a){
+                    if($a->Codigo == $oficina->Codigo){
+                        $aps = $aps + 1;
+                    }
+                }
+                foreach($puer as $p){
+                    if($p->Codigo == $oficina->Codigo){
+                        $ps = $ps + 1;
+                    }
+                }
             }
+
+            //Para la destino sola
+            $oficina = Office::find($request->FK_Ofi_Destino);
+            $lugarDest = Lugar::find($oficina->FK_Varios);
+            $estDest = Lugar::find($lugarDest->FK_Lugar);
+            foreach($apuer as $a){
+                if($a->Codigo == $oficina->Codigo){
+                    $aps = $aps + 1;
+                }
+            }
+            foreach($puer as $p){
+                if($p->Codigo == $oficina->Codigo){
+                    $ps = $ps + 1;
+                }
+            }
+            //^
 
             $ofiog = Office::find($rutaPrima->FK_Ofi_Origen);
             $lugar = Lugar::find($ofiog->FK_Varios);
+            $estOg = Lugar::find($lugar->FK_Lugar);
+
+            $able = 0;
+            if($estDest != $estOg && $estOg->Codigo != 1616 && $estOg->Codigo != 1625 && $estDest->Codigo != 1616 && $estDest->Codigo != 1625){
+                $able = 1;
+            }elseif($estDest == $estOg && $estOg->Codigo == 1616){
+                $able = 1;
+            }
 
             if($ofiog->Codigo == $request->FK_Ofi_Destino){
                 Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
@@ -124,9 +106,105 @@ class RutaController extends Controller
                 'FK_Ofi_Destino' => $ofiog->Codigo,  
                 'FK_Ofi_Origen' => $request->FK_Ofi_Destino
             ]);
+
+            if($able == 1){
+                $vehiculos = VehiculoT::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 1000,
+                        'Duracion' => $request->Duracion,
+                        'FK_Camino3' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 1000,
+                        'Duracion' => $request->Duracion,
+                        'FK_Camino3' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }
+            if($aps > 1){
+                $vehiculos = VehiculoA::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 3500,
+                        'Duracion' => 105,
+                        'FK_Camino' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 3500,
+                        'Duracion' => 105,
+                        'FK_Camino' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }elseif($ps > 1){
+                $vehiculos = VehiculoM::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 600,
+                        'Duracion' => 1080,
+                        'FK_Camino2' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 600,
+                        'Duracion' => 1080,
+                        'FK_Camino2' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }
+
         }else{
+            //Origen
             $ofiog = Office::find($request->FK_Ofi_Origen);
             $lugar = Lugar::find($ofiog->FK_Varios);
+            $estOg = Lugar::find($lugar->FK_Lugar);
+            foreach($apuer as $a){
+                if($a->Codigo == $ofiog->Codigo){
+                    $aps = $aps + 1;
+                }
+            }
+            foreach($puer as $p){
+                if($p->Codigo == $ofiog->Codigo){
+                    $ps = $ps + 1;
+                }
+            }
+            //
+            //Destino
+            $oficina = Office::find($request->FK_Ofi_Destino);
+            $lugarDest = Lugar::find($oficina->FK_Varios);
+            $estDest = Lugar::find($lugarDest->FK_Lugar);
+            foreach($apuer as $a){
+                if($a->Codigo == $oficina->Codigo){
+                    $aps = $aps + 1;
+                }
+            }
+            foreach($puer as $p){
+                if($p->Codigo == $oficina->Codigo){
+                    $ps = $ps + 1;
+                }
+            }
+            //
+
+            $able = 0;
+            if($estDest != $estOg && $estOg->Codigo != 1616 && $estOg->Codigo != 1625 && $estDest->Codigo != 1616 && $estDest->Codigo != 1625){
+                $able = 1;
+            }elseif($estDest == $estOg && $estOg->Codigo == 1616){
+                $able = 1;
+            }
 
             if($request->FK_Ofi_Origen == $request->FK_Ofi_Destino){
                 Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
@@ -140,10 +218,69 @@ class RutaController extends Controller
                 'FK_Ofi_Destino' => $request->FK_Ofi_Origen,  
                 'FK_Ofi_Origen' => $request->FK_Ofi_Destino
             ]);
+
+            if($able == 1){
+                $vehiculos = VehiculoT::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 1000,
+                        'Duracion' => $request->Duracion,
+                        'FK_Camino3' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 1000,
+                        'Duracion' => $request->Duracion,
+                        'FK_Camino3' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }
+            if($aps > 1){
+                $vehiculos = VehiculoA::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 3500,
+                        'Duracion' => 105,
+                        'FK_Camino' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 3500,
+                        'Duracion' => 105,
+                        'FK_Camino' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }elseif($ps > 1){
+                $vehiculos = VehiculoM::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 600,
+                        'Duracion' => 1080,
+                        'FK_Camino2' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 600,
+                        'Duracion' => 1080,
+                        'FK_Camino2' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }
         }
 
-        Session::flash('message','Ruta creada correctamente.');
-        return redirect('/ruta/lista');
+        return view('/ruta/lista');
     }
     
     public function lista(){
@@ -184,31 +321,169 @@ class RutaController extends Controller
     }
 
     public function actualizar(Request $request){
-        $ruta = Ruta::where('Codigo', $request->Codigo)->first();
 
-        if(isset($request->FK_Ruta)){
+        $apuer = Office::where('Nombre', 'LIKE', 'AeroLogUCAB%')->get();
+        $puer = Office::where('Nombre', 'LIKE', 'MarLogUCAB%')->get();
+        $aps = 0; $ps = 0;
+
+        $ruta = Ruta::where('Ruta.Codigo', $request->Codigo)->first();
+        Ofi_Rut::where('FK_Coche', $ruta->Codigo)->delete();
+        Veh_Rut::where('FK_Coche', $ruta->Codigo)->delete();
+
+        if(isset($request->FK_Ruta) && $request->FK_Ruta != $ruta->Codigo){
             while(isset($request->FK_Ruta)){
-                $rutaPrima = Ruta::where('Codigo', $request->FK_Ruta)->first();
+                $rutaPrima = Ruta::where('Codigo', $request->FK_Ruta)->first(); 
+                $oficina = Office::find($rutaPrima->FK_Ofi_Origen);
+
+                foreach($apuer as $a){
+                    if($a->Codigo == $oficina->Codigo){
+                        $aps = $aps + 1;
+                    }
+                }
+                foreach($puer as $p){
+                    if($p->Codigo == $oficina->Codigo){
+                        $ps = $ps + 1;
+                    }
+                }
             }
+
+            //Para la destino sola
+            $oficina = Office::find($request->FK_Ofi_Destino);
+            $lugarDest = Lugar::find($oficina->FK_Varios);
+            $estDest = Lugar::find($lugarDest->FK_Lugar);
+            foreach($apuer as $a){
+                if($a->Codigo == $oficina->Codigo){
+                    $aps = $aps + 1;
+                }
+            }
+            foreach($puer as $p){
+                if($p->Codigo == $oficina->Codigo){
+                    $ps = $ps + 1;
+                }
+            }
+            //^
 
             $ofiog = Office::find($rutaPrima->FK_Ofi_Origen);
             $lugar = Lugar::find($ofiog->FK_Varios);
+            $estOg = Lugar::find($lugar->FK_Lugar);
+
+            $able = 0;
+            if($estDest != $estOg && $estOg->Codigo != 1616 && $estOg->Codigo != 1625 && $estDest->Codigo != 1616 && $estDest->Codigo != 1625){
+                $able = 1;
+            }elseif($estDest == $estOg && $estOg->Codigo == 1616){
+                $able = 1;
+            }
 
             if($ofiog->Codigo == $request->FK_Ofi_Destino){
                 Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
                 return Redirect::back()->withInput(Input::all());
             }
 
-                $ruta->Descripcion = $request->Descripcion;
-                $ruta->FK_Ruta = $request->FK_Ruta;
-                $ruta->FK_Camino = $lugar->Codigo;
-                $ruta->FK_Ofi_Origen = $ofiog->Codigo; 
-                $ruta->FK_Ofi_Destino = $request->FK_Ofi_Destino;
-                $ruta->save();
+            $ruta->Descripcion = $request->Descripcion;
+            $ruta->FK_Ruta = $request->FK_Ruta;
+            $ruta->FK_Camino = $lugar->Codigo;
+            $ruta->FK_Ofi_Origen = $ofiog->Codigo; 
+            $ruta->FK_Ofi_Destino = $request->FK_Ofi_Destino;
+            $ruta->save();
+
+            if($able == 1){
+                $vehiculos = VehiculoT::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 1000,
+                        'Duracion' => $request->Duracion,
+                        'FK_Camino3' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 1000,
+                        'Duracion' => $request->Duracion,
+                        'FK_Camino3' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }
+            if($aps > 1){
+                $vehiculos = VehiculoA::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 3500,
+                        'Duracion' => 105,
+                        'FK_Camino' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 3500,
+                        'Duracion' => 105,
+                        'FK_Camino' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }elseif($ps > 1){
+                $vehiculos = VehiculoM::where('FK_Cuentacon', $ofiog->Codigo)->get();
+
+                foreach($vehiculos as $veh){
+                    Ofi_Rut::create([
+                        'Codigo' => Ofi_Rut::max('Codigo')+1,
+                        'Costo' => 600,
+                        'Duracion' => 1080,
+                        'FK_Camino2' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                    Veh_Rut::create([
+                        'Codigo' => Veh_Rut::max('Codigo')+1,
+                        'Costo' => 600,
+                        'Duracion' => 1080,
+                        'FK_Camino2' => $veh->Placa,
+                        'FK_Coche' => Ruta::max('Codigo')
+                        ]);
+                }
+            }
 
         }else{
+            //Origen
             $ofiog = Office::find($request->FK_Ofi_Origen);
             $lugar = Lugar::find($ofiog->FK_Varios);
+            $estOg = Lugar::find($lugar->FK_Lugar);
+            foreach($apuer as $a){
+                if($a->Codigo == $ofiog->Codigo){
+                    $aps = $aps + 1;
+                }
+            }
+            foreach($puer as $p){
+                if($p->Codigo == $ofiog->Codigo){
+                    $ps = $ps + 1;
+                }
+            }
+            //
+            //Destino
+            $oficina = Office::find($request->FK_Ofi_Destino);
+            $lugarDest = Lugar::find($oficina->FK_Varios);
+            $estDest = Lugar::find($lugarDest->FK_Lugar);
+            foreach($apuer as $a){
+                if($a->Codigo == $oficina->Codigo){
+                    $aps = $aps + 1;
+                }
+            }
+            foreach($puer as $p){
+                if($p->Codigo == $oficina->Codigo){
+                    $ps = $ps + 1;
+                }
+            }
+            //
+
+            $able = 0;
+            if($estDest != $estOg && $estOg->Codigo != 1616 && $estOg->Codigo != 1625 && $estDest->Codigo != 1616 && $estDest->Codigo != 1625){
+                $able = 1;
+            }elseif($estDest == $estOg && $estOg->Codigo == 1616){
+                $able = 1;
+            }
 
             if($request->FK_Ofi_Origen == $request->FK_Ofi_Destino){
                 Session::flash('message','Tiene que escoger origen-destino oficinas diferentes.');
@@ -222,6 +497,66 @@ class RutaController extends Controller
                 $ruta->FK_Ofi_Destino = $request->FK_Ofi_Destino;
                 $ruta->save();
 
+                if($able == 1){
+                    $vehiculos = VehiculoT::where('FK_Cuentacon', $ofiog->Codigo)->get();
+    
+                    foreach($vehiculos as $veh){
+                        Ofi_Rut::create([
+                            'Codigo' => Ofi_Rut::max('Codigo')+1,
+                            'Costo' => 1000,
+                            'Duracion' => $request->Duracion,
+                            'FK_Camino3' => $veh->Placa,
+                            'FK_Coche' => Ruta::max('Codigo')
+                            ]);
+                        Veh_Rut::create([
+                            'Codigo' => Veh_Rut::max('Codigo')+1,
+                            'Costo' => 1000,
+                            'Duracion' => $request->Duracion,
+                            'FK_Camino3' => $veh->Placa,
+                            'FK_Coche' => Ruta::max('Codigo')
+                            ]);
+                    }
+                }
+                if($aps > 1){
+                    $vehiculos = VehiculoA::where('FK_Cuentacon', $ofiog->Codigo)->get();
+    
+                    foreach($vehiculos as $veh){
+                        Ofi_Rut::create([
+                            'Codigo' => Ofi_Rut::max('Codigo')+1,
+                            'Costo' => 3500,
+                            'Duracion' => 105,
+                            'FK_Camino' => $veh->Placa,
+                            'FK_Coche' => Ruta::max('Codigo')
+                            ]);
+                        Veh_Rut::create([
+                            'Codigo' => Veh_Rut::max('Codigo')+1,
+                            'Costo' => 3500,
+                            'Duracion' => 105,
+                            'FK_Camino' => $veh->Placa,
+                            'FK_Coche' => Ruta::max('Codigo')
+                            ]);
+                    }
+                }elseif($ps > 1){
+                    $vehiculos = VehiculoM::where('FK_Cuentacon', $ofiog->Codigo)->get();
+    
+                    foreach($vehiculos as $veh){
+                        Ofi_Rut::create([
+                            'Codigo' => Ofi_Rut::max('Codigo')+1,
+                            'Costo' => 600,
+                            'Duracion' => 1080,
+                            'FK_Camino2' => $veh->Placa,
+                            'FK_Coche' => Ruta::max('Codigo')
+                            ]);
+                        Veh_Rut::create([
+                            'Codigo' => Veh_Rut::max('Codigo')+1,
+                            'Costo' => 600,
+                            'Duracion' => 1080,
+                            'FK_Camino2' => $veh->Placa,
+                            'FK_Coche' => Ruta::max('Codigo')
+                            ]);
+                    }
+                }
+
         }
 
         Session::flash('message','Ruta modificada correctamente.');
@@ -229,7 +564,10 @@ class RutaController extends Controller
     }
 
     public function delete($Codigo){
-        DB::table('Ruta')->where('Codigo', $Codigo)->delete();
+        $ruta = Ruta::where('Codigo', $Codigo)->first();
+        Ofi_Rut::where('FK_Coche', $ruta)->delete();
+        Veh_Rut::where('FK_Coche', $ruta)->delete();
+        $ruta->delete();
         Session::flash('messagedel','Ruta eliminada correctamente.');
         return redirect('/ruta/lista');
     }

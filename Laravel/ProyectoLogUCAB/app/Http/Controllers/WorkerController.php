@@ -8,6 +8,7 @@ use LogUCAB\Http\Requests;
 use LogUCAB\Worker;
 use LogUCAB\Lugar;
 use LogUCAB\Office;
+use LogUCAB\Phone;
 use LogUCAB\Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
@@ -74,6 +75,11 @@ class WorkerController extends Controller
             'FK_Asignado_Puesto' => $request->FK_Asignado_Puesto,
             'FK_Habitacion' => $request->FK_Habitacion,
         ]);
+        Phone::create([
+            'Numero' => $request->Telefono,
+            'tipo' => 'Personal',
+            'FK_Telefonia' => $request->Cedula
+        ]);
 
         Session::flash('message','Empleado creado correctamente.');
         return Redirect::to('/empleado/lista');
@@ -96,15 +102,18 @@ class WorkerController extends Controller
         where Mun."Tipo" = \'Municipio\' order by Mun."Nombre" asc'));
         $validated = Worker::where('Empleado.Cedula', $Cedula)
         ->first();
+        $telf = Phone::where('Telefono.FK_Telefonia', $validated->Cedula)->first();
 
         Session::flash('msg','Favor introducir la oficina de la que esta encargado, si la casilla esta seleccionada.');
-        return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas'));
+        return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas', 'telf'));
     }
 
     public function actualizar(Request $request){
         $empleadoOG = Worker::find($request->CedulaAnt);
         $empleado = Worker::find($request->Cedula);
         $lugar = Lugar::find($request->FK_Habitacion);
+        $telefono = Phone::where('Telefono.FK_Telefonia', $request->Cedula)->first();
+        $telfcomp = Phone::find($request->Telefono)->first();
     
         if(isset($empleado) && $empleado != $empleadoOG){
             Session::flash('message','Ya existe un empleado con la cédula: "'.$request->Cedula.'".');
@@ -137,6 +146,11 @@ class WorkerController extends Controller
         $empleadoOG->FK_Asignado_Puesto = $request->FK_Asignado_Puesto;
         $empleadoOG->FK_Habitacion = $request->FK_Habitacion;
         $empleadoOG->save();
+
+        if($telefono != $request->Telefono && is_null($telfcomp)){
+            $telefono->Numero = $request->Telefono;
+            $telefono->save();
+        }
 
         Session::flash('message','Empleado modificado correctamente.');
         return Redirect::to('/empleado/lista');

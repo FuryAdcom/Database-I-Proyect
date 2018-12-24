@@ -34,3 +34,5 @@ INSERT INTO public."Rol" ("Codigo","Tipo")
 VALUES (5, 'Vendedor');
 INSERT INTO public."Rol" ("Codigo","Tipo")
 VALUES (6, 'Transportista');
+
+Todo lo que este en Nueva Esparta (1616) y Dependencias Federales (1625) queda por fuera de los movimientos internos

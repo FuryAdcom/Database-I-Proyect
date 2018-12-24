@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use LogUCAB\Http\Requests;
 use LogUCAB\Office;
 use LogUCAB\Lugar;
+use LogUCAB\Phone;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Input;
@@ -51,6 +52,12 @@ class OfficeController extends Controller
                 'Tamaño_Deposito' => $request->Deposito,
                 'FK_Varios' => $request->lugar
             ]);
+            Phone::create([
+                'Numero' => $request->Telefono,
+                'tipo' => 'Oficina',
+                'FK_Posee' => Office::max('Codigo')
+            ]);
+
         }elseif(isset($lugar->Nombre) && $lugar->FK_Lugar!=$edo->Codigo){
             Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
             return Redirect::back()->withInput(Input::all());
@@ -88,18 +95,21 @@ class OfficeController extends Controller
         ->first();
         $validated->est = \LogUCAB\Lugar::where('Lugar.Codigo', $lug->FK_Lugar)
         ->value('Nombre');
+        $telf = Phone::where('Telefono.FK_Posee', $validated->Codigo)->first();
                      
-        return view("oficina.editoffice", compact('validated'));
+        return view("oficina.editoffice", compact('validated', 'telf'));
     }
 
     public function actualizar(Request $request){
-        $oficina = Office::find($request->Codigo);
+        $oficina = Office::find($request->Codigo)->first();
         $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
         ->where('Lugar.Tipo', 'Municipio')
         ->first();
         $edo = Lugar::where('Lugar.Nombre', $request->est)
         ->where('Lugar.Tipo', 'Estado')
         ->first();
+        $telefono = Phone::where('Telefono.FK_Posee', $request->Codigo)->first();
+        $telfcomp = Phone::find($request->Telefono)->first();
     
         if(isset($lugar) && $lugar->FK_Lugar==$edo->Codigo){
 
@@ -107,6 +117,11 @@ class OfficeController extends Controller
             $oficina->Tamaño_Deposito = $request->Tamaño_Deposito;
             $oficina->FK_Varios = $lugar->Codigo;
             $oficina->save();
+
+            if($telefono != $request->Telefono && is_null($telfcomp)){
+                $telefono->Numero = $request->Telefono;
+                $telefono->save();
+            }
 
         }elseif(isset($lugar) && $lugar->FK_Lugar!=$edo->Codigo){
             Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
