@@ -81,7 +81,7 @@
 								<input class="form-control" name="Empleado_Cargo" list="oficinas" placeholder="Nombre de oficina">
 								<datalist id="oficinas">
 									@foreach ($oficinas as $oficina)
-										<option value="{{ $oficina->Nombre }}">
+										<option value="{{ $oficina->Codigo }}"> {{ $oficina->Nombre }} </option>
 									@endforeach
 								</datalist>
 							</div>
@@ -93,15 +93,24 @@
 									<label for="inputTelefono" style="color: whitesmoke">Telefono</label>
 									<input type="tel"pattern="[0-9]{4}-[0-9]{7}" name="Telefono" value="{{old('Telefono')}}" class="form-control" placeholder="Introduzca el telefono (Formato: 0XXX-XXXXXXX)" required>
 								</div>
-							<div class="form-group" style="width:60%; float: left;" id="inputFK_Habitacion">
+							<div class="form-group" style="width:100%; float: left;" id="inputFK_Habitacion">
 									<label for="inputFK_Habitacion" style="color: whitesmoke">Lugar de residencia:</label>
-									<input class="form-control" name="FK_Habitacion" list="muns" placeholder="Municipio de residencia" required>
+									<input class="form-control" name="FK_Habitacion" value="{{old('FK_Habitacion')}}" list="muns" placeholder="Municipio de residencia" required>
 									<datalist id="muns">
 										@foreach ($muns as $mun)
 											<option value="{{ $mun->Codigo }}">{{ $mun->Nombre.', '.$mun->est }}</option>
 										@endforeach
 									</datalist>
-								</div>
+							</div>
+							<div class="form-group" style="width:100%; float: left;" id="inputZona">
+										<label for="inputZona" style="color: whitesmoke">Zona donde desea trabajar (Por Oficina):</label>
+										<input class="form-control" name="Zona" value="{{old('Zona')}}" list="zonas" placeholder="Seleccione la zona (revise las cercanas)" required>
+										<datalist id="zonas">
+											@foreach ($zonas as $zona)
+												<option value="{{ $zona->Codigo }}">{{ '"'.$zona->Nombre.'". Ubicada en: '.$zona->mun.', '.$zona->est }}</option>
+											@endforeach
+										</datalist>
+							</div>
 							<div style="width:100%; height: 40px; float: left; ">
 								<button type="submit" class="btn btn-primary">Crear</button>
 							</div>

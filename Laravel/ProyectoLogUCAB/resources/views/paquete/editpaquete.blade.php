@@ -28,13 +28,14 @@
 								<label for="inputClasificacion" style="color: whitesmoke">Clasificacion</label>
 								<select class="form-control" style="height: 34px" id="inputClasificacion"  name="Clasificacion" required>
 										<option value="">Seleccione una...</option>
-										<option value="Linea blanca" @if (old('Clasificacion') == 'Linea blanca') selected @endif>Linea blanca</option>
-										<option value="Alimento"@if (old('Clasificacion') == 'Alimento') selected @endif>Alimento</option>
-										<option value="Tecnologia"@if (old('Clasificacion') == 'Tecnologia') selected @endif>Tecnologia (Telefono, Computador, Consola, etc)</option>
-										<option value="Vestimenta"@if (old('Clasificacion') == 'Vestimenta') selected @endif>Vestimenta</option>
-										<option value="Juguete"@if (old('Clasificacion') == 'Juguete') selected @endif>Juguete</option>
-										<option value="Automovil"@if (old('Clasificacion') == 'Automovil') selected @endif>Automovil (Auto, repuestos, etc)</option>
-										<option value="Medicamento"@if (old('Clasificacion') == 'Medicamento') selected @endif>Medicamento</option>
+										<option value="Linea blanca" @if (old('Clasificacion', $validated->Clasificacion) == 'Linea blanca') selected @endif>Linea blanca</option>
+										<option value="Alimento"@if (old('Clasificacion', $validated->Clasificacion) == 'Alimento') selected @endif>Alimento</option>
+										<option value="Electrónica"@if (old('Clasificacion', $validated->Clasificacion) == 'Electrónica') selected @endif>Electrónica (Telefono, Computador, Consola, etc)</option>
+										<option value="Vestimenta"@if (old('Clasificacion', $validated->Clasificacion) == 'Vestimenta') selected @endif>Vestimenta</option>
+										<option value="Juguete"@if (old('Clasificacion', $validated->Clasificacion) == 'Juguete') selected @endif>Juguete</option>
+										<option value="Automovil"@if (old('Clasificacion', $validated->Clasificacion) == 'Automovil') selected @endif>Automovil</option>
+										<option value="Medicamento"@if (old('Clasificacion', $validated->Clasificacion) == 'Medicamento') selected @endif>Medicamento</option>
+										<option value="Otro"@if (old('Clasificacion', $validated->Clasificacion) == 'Otro') selected @endif>Otro</option>
 									</select>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
