@@ -14,6 +14,9 @@ use LogUCAB\Veh_Rut;
 use LogUCAB\Office;
 use LogUCAB\Client;
 use LogUCAB\Ruta;
+use LogUCAB\Status;
+use LogUCAB\Env_Sta;
+use LogUCAB\Worker;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Input;
@@ -69,6 +72,8 @@ class EnvioController extends Controller
         $destino = $dest->Codigo;
         $route = $ruta->Codigo;
 
+
+        //Para los VIP hay que poner 10% descuento
         if($paquete->Peso < 10){
 
             if($paquete->Clasificacion == 'Linea blanca'){
@@ -108,8 +113,9 @@ class EnvioController extends Controller
                 $costo = (130 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
             }
         }
+        //
 
-        $est = Carbon::now()->addMinutes($vehiculo->Duracion)->format('l jS \\of F Y h:i:s A');
+        $est = Carbon::now()->addMinutes($vehiculo->Duracion)->addHours(5)->format('l jS \\of F Y h:i:s A');
 
         Session::flash('message','Ruta creada correctamente.');
         return view('envio.createenvio3', compact('costo', 'paquete', 'est', 'request', 'ofiog', 'ofidest', 'destino', 'route'));
@@ -137,7 +143,17 @@ class EnvioController extends Controller
             'FK_Recorre' => Envio::max('Codigo')
         ]);
 
+        $oficina = Office::find($ruta->FK_Ofi_Origen)->first();
+        $lugar = Lugar::find($oficina->FK_Varios)->first();
+        //Hay que crear Zona
+       // $worker = Worker::where();
 
+        //::inRandomOrder()->get();
+        Status::create([
+            'Codigo' => Status::max('Codigo')+1,
+            'Descripcion' => 'Recibido en '.$oficina->Nombre,
+            //'FK_Revision' => 
+        ]);
 
         Session::flash('message','Envio creado correctamente.');
         return redirect('/envio/lista');

@@ -10,6 +10,8 @@ use LogUCAB\Lugar;
 use LogUCAB\Office;
 use LogUCAB\Phone;
 use LogUCAB\Rol;
+use LogUCAB\Zona;
+use LogUCAB\Emp_Zon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -35,8 +37,13 @@ class WorkerController extends Controller
         from "Lugar" as Mun left join "Lugar" as L
         on L."Codigo" = Mun."FK_Lugar" 
         where Mun."Tipo" = \'Municipio\' order by Mun."Nombre" asc'));
+        $zonas = Zona::leftjoin('Oficina as of', 'of.Codigo', '=' , 'Zona.FK_Divide')
+        ->leftjoin('Lugar as lug', 'lug.Codigo','=','of.FK_Varios')
+        ->leftjoin('Lugar as estado', 'estado.Codigo','=','lug.FK_Lugar')
+        ->select(DB::raw('"Zona".*, of."Nombre" as oficina, log."Nombre" as mun, estado."Nombre" as est'))
+        ->get();
 
-        return view("persona.empleado.createworker", compact('rols', 'oficinas', 'muns'));
+        return view("persona.empleado.createworker", compact('rols', 'oficinas', 'muns', 'zonas'));
     }
 
     public function store(Request $request){
@@ -80,6 +87,11 @@ class WorkerController extends Controller
             'tipo' => 'Personal',
             'FK_Telefonia' => $request->Cedula
         ]);
+        Emp_Zon::create([
+            'Codigo' => Emp_Zon::max('Codigo')+1,
+            'FK_Asiste' => $request->Cedula,
+            'FK_Asignar' => $request->Zona
+        ]);
 
         Session::flash('message','Empleado creado correctamente.');
         return Redirect::to('/empleado/lista');
@@ -103,17 +115,23 @@ class WorkerController extends Controller
         $validated = Worker::where('Empleado.Cedula', $Cedula)
         ->first();
         $telf = Phone::where('Telefono.FK_Telefonia', $validated->Cedula)->first();
+        $zonas = Zona::leftjoin('Oficina as of', 'of.Codigo', '=' , 'Zona.FK_Divide')
+        ->leftjoin('Lugar as lug', 'lug.Codigo','=','of.FK_Varios')
+        ->leftjoin('Lugar as estado', 'estado.Codigo','=','lug.FK_Lugar')
+        ->select(DB::raw('"Zona".*, of."Nombre" as oficina, log."Nombre" as mun, estado."Nombre" as est'))
+        ->get();
 
         Session::flash('msg','Favor introducir la oficina de la que esta encargado, si la casilla esta seleccionada.');
-        return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas', 'telf'));
+        return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas', 'telf', 'zonas'));
     }
 
     public function actualizar(Request $request){
         $empleadoOG = Worker::find($request->CedulaAnt);
         $empleado = Worker::find($request->Cedula);
         $lugar = Lugar::find($request->FK_Habitacion);
-        $telefono = Phone::where('Telefono.FK_Telefonia', $request->Cedula)->first();
+        $telefono = Phone::where('Telefono.FK_Telefonia', $request->CedulaAnt)->first();
         $telfcomp = Phone::find($request->Telefono)->first();
+        $zona = Emp_Zon::where('Emp-Zon.FK_Asiste', $request->CedulaAnt)->first();
     
         if(isset($empleado) && $empleado != $empleadoOG){
             Session::flash('message','Ya existe un empleado con la cédula: "'.$request->Cedula.'".');
@@ -147,9 +165,13 @@ class WorkerController extends Controller
         $empleadoOG->FK_Habitacion = $request->FK_Habitacion;
         $empleadoOG->save();
 
-        if($telefono != $request->Telefono && is_null($telfcomp)){
+        if($telefono->Numero != $request->Telefono && is_null($telfcomp)){
             $telefono->Numero = $request->Telefono;
             $telefono->save();
+        }
+        if($zona->FK_Asignar != $request->Zona){
+            $zona->FK_Asignar = $request->Zona;
+            $zona->save();
         }
 
         Session::flash('message','Empleado modificado correctamente.');

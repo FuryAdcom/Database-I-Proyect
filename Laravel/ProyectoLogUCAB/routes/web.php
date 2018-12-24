@@ -43,6 +43,16 @@ Route::get('/oficina/edit/{Codigo}','OfficeController@edit');
 Route::post('/oficina/update','OfficeController@actualizar');
 Route::get('/oficina/delete/{Codigo}','OfficeController@delete');
 
+//Zona
+Route::get('/zona','ZonaController@inicio');
+Route::get('/zona/lista','ZonaController@lista');
+//Route::get('/zona/mostrar/{Codigo}','ZonaController@mostrar');
+Route::get('/zona/create','ZonaController@create');
+Route::post('/zona/store','ZonaController@store');
+Route::get('/zona/edit/{Codigo}','ZonaController@edit');
+Route::post('/zona/update','ZonaController@actualizar');
+Route::get('/zona/delete/{Codigo}','ZonaController@delete');
+
 //Empleado
 Route::get('/empleado','WorkerController@inicio');
 Route::get('/empleado/lista','WorkerController@lista');
