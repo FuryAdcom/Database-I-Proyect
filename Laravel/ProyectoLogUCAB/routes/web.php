@@ -113,13 +113,13 @@ Route::get('/paquete/delete/{Codigo}','PacketController@delete');
 Route::get('/envio','EnvioController@inicio');
 Route::get('/envio/lista','EnvioController@lista');
 Route::get('/envio/mostrar/{Codigo}','EnvioController@mostrar');
+Route::post('/envio/status/{Codigo}','EnvioController@status');
+Route::post('/envio/recibo/{Codigo}','EnvioController@recibo');
 Route::get('/envio/create','EnvioController@create');
 Route::post('/envio/store','EnvioController@store');
 Route::post('/envio/store2','EnvioController@store2');
 Route::post('/envio/store3','EnvioController@store3');
-Route::get('/envio/edit/{Codigo}','EnvioController@edit');
-Route::post('/envio/update','EnvioController@actualizar');
-Route::get('/envio/delete/{Codigo}','EnvioController@delete');
+Route::get('/envio/cancel/{Codigo}','EnvioController@cancelar');
 
 //Login
 Auth::routes();

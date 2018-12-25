@@ -99,6 +99,7 @@ class WorkerController extends Controller
         $empleados = Worker::leftjoin('Lugar as mun', 'mun.Codigo','=','Empleado.FK_Habitacion')
         ->leftjoin('Rol as rol', 'rol.Codigo','=','Empleado.FK_Asignado_Puesto')
         ->select(\DB::raw("\"Empleado\".*, mun.\"Nombre\" as sitio, rol.\"Tipo\" as rolt"))
+        ->orderBy('Empleado.Nombre')
         ->paginate(50);
         return view("persona.empleado.showworker", compact('empleados'));
     }

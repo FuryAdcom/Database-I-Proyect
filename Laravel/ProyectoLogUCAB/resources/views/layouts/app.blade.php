@@ -62,6 +62,7 @@
 			<!--Til here-->	
 		</div><!-- /container -->
 		<script src="{{asset('/js/classie.js')}}"></script>
+		<script src="{{asset('/js/thermo.js')}}"></script>
 		<script src="{{asset('/js/gnmenu.js')}}"></script>
 		<script src="{{asset('/js/forms.js')}}"></script>
 		<script>

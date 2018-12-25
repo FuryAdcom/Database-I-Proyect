@@ -3,7 +3,7 @@
 <div class="wrapper">
 					<div class="sidemenu">
 						<a href="/envio">Inicio</a>
-						<a href="/envio/create">Agregar</a>
+						<a href="/envio/create">Crear</a>
 						<a href="/envio/lista" style="border-bottom: 0px">Lista</a>
 					</div>
 					<div class="contenido_ppal">
@@ -35,9 +35,8 @@
 											<th> {{$envio->dest.', '.$envio->deste}} </th>
 											<th> {{$envio->ofdest}} </th>
 											<th> 
-												<a class="boton_show btn btn-info" href="/envio/mostrar/{{$envio->Codigo}}"><i class="fa fa-align-left"></i></a>
-												<a class="boton_show btn btn-secondary" href="/envio/edit/{{$envio->Codigo}}"><i class="fa fa-wrench"></i></a>
-												<a class="boton_show btn btn-danger" href="/envio/delete/{{$envio->Codigo}}"><i class="fa fa-times"></i></a> 
+												<a class="btn btn-info" href="/envio/mostrar/{{$envio->Codigo}}"><i class="fa fa-align-left"></i>Ver</a>
+												<a class="btn btn-danger" href="/envio/cancel/{{$envio->Codigo}}"><i class="fa fa-times"></i>Cancelar</a> 
 											</th>
 										</tbody>
 										@endforeach

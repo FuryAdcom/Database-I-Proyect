@@ -14,6 +14,7 @@ use LogUCAB\Veh_Rut;
 use LogUCAB\Office;
 use LogUCAB\Client;
 use LogUCAB\Ruta;
+use LogUCAB\Order;
 use LogUCAB\Status;
 use LogUCAB\Env_Sta;
 use LogUCAB\Worker;
@@ -44,7 +45,7 @@ class EnvioController extends Controller
         ->leftjoin('Lugar as destest', 'destest.Codigo','=','ldest.FK_Lugar')
         ->select(\DB::raw("\"Ruta\".*, ofiog.\"Nombre\" as ofog, ofidest.\"Nombre\" as ofdest, log.\"Nombre\" as og, ldest.\"Nombre\" as dest, ogest.\"Nombre\" as oge, destest.\"Nombre\" as deste"))
         ->get();
-        $paquetes = Packet::leftjoin('Cliente as client', 'client.Codigo','=','Paquete.FK_Entrega')
+        $paquetes = Packet::leftjoin('Cliente as client', 'client.Cedula','=','Paquete.FK_Entrega')
         ->select(\DB::raw("\"Paquete\".*, client.\"Nombre\" as nombre, client.\"Apellido\" as apellido"))
         ->get();
 
@@ -166,10 +167,36 @@ class EnvioController extends Controller
     }
     
     public function lista(){
-        //Esto cambiara debido a registros
+        //Esto cambiara debido a reportes
         $envios = Envio::paginate(50);
 
         return view("envio.showenvio", compact('envios'));
+    }
+
+    //Mostrar el envio con un goal thermomether
+    public function mostrar($Codigo){
+        $envio = Envio::paginate(50);
+
+        return view("envio.mostrarenvio", compact('envio'));
+    }
+
+    //Para un boton que ira cambiando el termometro goal en la view "mostrar"
+    public function status($Codigo){
+        
+        $envios = Envio::paginate(50);
+
+        return view("envio.mostrarenvio", compact('envios'));
+    }
+
+    public function recibo($Codigo){
+        //Esto cambiara debido a registros
+        $envios = Envio::paginate(50);
+
+        //Para el PDF recibo de envio, $order tiene que tener los datos necesarios
+        //$order = new Envio;
+        //
+        //return $order->getPdf('download'); // Returns the PDF as download
+        return $order->getPdf(); // Returns stream default
     }
 
     public function cancelar($Codigo){
@@ -178,3 +205,5 @@ class EnvioController extends Controller
         return redirect('/envio/lista');
     }
 }
+
+

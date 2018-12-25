@@ -19,4 +19,16 @@ class Envio extends Model
     protected $guarded =[
         'Codigo'
     ];
+
+    public function getPdf($type = 'stream'){
+        $pdf = app('dompdf.wrapper')->loadView('/envio/order-pdf', ['order' => $this]);
+    
+        if ($type == 'stream') {
+            return $pdf->stream('invoice.pdf');
+        }
+    
+        if ($type == 'download') {
+            return $pdf->download('invoice.pdf');
+        }
+    }
 }
