@@ -78,7 +78,7 @@
 			</div>
 			<div class="form-group" style="width:49%; float: right;">
 						<label for="inputTelefono" style="color: whitesmoke">Telefono</label>
-						<input type="tel" pattern="[0-9]{4}-[0-9]{7}" name="Telefono" @if(isset($telf)) value="{{$telf->Numero}}" @else value="{{old('Telefono')}}" @endif class="form-control" placeholder="Introduzca el telefono (Formato: 0XXX-XXXXXXX)" required>
+						<input type="text" name="Telefono" @if(isset($validated->telf)) value="{{$validated->telf}}" @else value="{{old('Telefono')}}" @endif class="form-control" placeholder="Introduzca el telefono (Formato: XXXXXXXXXX)" required>
 					</div>
 				<div class="form-group" style="width:49%; float: left;">
 						<label for="inputNum_hijos" style="color: whitesmoke">Numero de hijos</label>
@@ -108,7 +108,7 @@
 				</div>
 				<div class="form-group" style="width:100%; float: left;" id="inputZona">
 							<label for="inputZona" style="color: whitesmoke">Zona donde desea trabajar (Por Oficina):</label>
-							<input class="form-control" name="Zona" value="{{old('Zona')}}" list="zonas" placeholder="Seleccione la zona (revise las cercanas)" required>
+							<input class="form-control" name="Zona" value="{{old('Zona', $validated->zona)}}" list="zonas" placeholder="Seleccione la zona (revise las cercanas)" required>
 							<datalist id="zonas">
 								@foreach ($zonas as $zona)
 									<option value="{{ $zona->Codigo }}">{{ '"'.$zona->Nombre.'". Ubicada en: '.$zona->mun.', '.$zona->est }}</option>

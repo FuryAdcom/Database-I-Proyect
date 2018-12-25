@@ -144,8 +144,8 @@ class EnvioController extends Controller
         ]);
 
         $oficina = Office::find($ruta->FK_Ofi_Origen)->first();
-        $worker = Worker::join('Zona', 'Zona.FK_Divide', '=', $oficina->Codigo)
-        ->join('Emp-Zon', 'Emp-Zon.FK_Asignar', '=', 'Zona.Codigo')
+        $worker = Worker::join('Zona as z', 'z.FK_Divide', '=', $oficina->Codigo)
+        ->join('Emp-Zon as ez', 'ez.FK_Asignar', '=', 'z.Codigo')
         ->where('Empleado.Cedula', 'ez.FK_Asiste')
         ->inRandomOrder()
         ->first();

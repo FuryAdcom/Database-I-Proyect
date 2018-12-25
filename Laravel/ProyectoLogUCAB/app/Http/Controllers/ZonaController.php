@@ -87,8 +87,8 @@ class ZonaController extends Controller
         }
     
         public function actualizar(Request $request){
-            $zona = Zona::find($request->Codigo)->first();
-            $oficina = Office::find($request->FK_Divide)->first();
+            $zona = Zona::find($request->Codigo);
+            $oficina = Office::find($request->FK_Divide);
             $samename = Zona::select(DB::raw('COUNT(Zona.Codigo) as cuenta'))
             ->where('Zona.Nombre', $request->Nombre)
             ->where('Zona.FK_Divide', $request->FK_Divide);

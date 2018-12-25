@@ -88,16 +88,16 @@ class OfficeController extends Controller
 
         $validated = \LogUCAB\Office::where('Oficina.Codigo', $Codigo)
         ->leftjoin('Lugar', 'Lugar.Codigo','=','Oficina.FK_Varios')
-        ->select(\DB::raw("\"Oficina\".*, \"Lugar\".\"Nombre\" as lugar"))
+        ->leftjoin('Telefono as tlf', 'tlf.FK_Telefonia','=','Oficina.Codigo')
+        ->select(\DB::raw("\"Oficina\".*, \"Lugar\".\"Nombre\" as lugar, tlf.\"Numero\" as telf"))
         ->first();
         $lug = DB::table('Lugar')
         ->where('Lugar.Codigo', $validated->FK_Varios)
         ->first();
         $validated->est = \LogUCAB\Lugar::where('Lugar.Codigo', $lug->FK_Lugar)
         ->value('Nombre');
-        $telf = Phone::where('Telefono.FK_Telefonia', $validated->Codigo)->first();
                      
-        return view("oficina.editoffice", compact('validated', 'telf'));
+        return view("oficina.editoffice", compact('validated'));
     }
 
     public function actualizar(Request $request){

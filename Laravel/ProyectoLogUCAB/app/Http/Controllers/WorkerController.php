@@ -111,15 +111,18 @@ class WorkerController extends Controller
         on L."Codigo" = Mun."FK_Lugar" 
         where Mun."Tipo" = \'Municipio\' order by Mun."Nombre" asc'));
         $validated = Worker::where('Empleado.Cedula', $Cedula)
+        ->leftjoin('Telefono as tlf', 'tlf.FK_Posee','=','Empleado.Cedula')
+        ->leftjoin('Emp-Zon as ez', 'ez.FK_Asignar','=','Empleado.Cedula')
+        ->leftjoin('Zona as z', 'z.Codigo','=','ez.FK_Asiste')
+        ->select(DB::raw('"Empleado".*, tlf."Numero" as telf, z."Codigo" as zona'))
         ->first();
-        $telf = Phone::where('Telefono.FK_Posee', $validated->Cedula)->first();
         $zonas = Zona::leftjoin('Oficina as of', 'of.Codigo', '=' , 'Zona.FK_Divide')
         ->leftjoin('Lugar as lug', 'lug.Codigo','=','of.FK_Varios')
         ->leftjoin('Lugar as estado', 'estado.Codigo','=','lug.FK_Lugar')
         ->select(DB::raw('"Zona".*, of."Nombre" as oficina, lug."Nombre" as mun, estado."Nombre" as est'))
         ->get();
 
-        return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas', 'telf', 'zonas'));
+        return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas', 'zonas'));
     }
 
     public function actualizar(Request $request){
