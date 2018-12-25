@@ -55,7 +55,7 @@ class OfficeController extends Controller
             Phone::create([
                 'Numero' => $request->Telefono,
                 'tipo' => 'Oficina',
-                'FK_Posee' => Office::max('Codigo')
+                'FK_Telefonia' => Office::max('Codigo')
             ]);
 
         }elseif(isset($lugar->Nombre) && $lugar->FK_Lugar!=$edo->Codigo){
@@ -95,7 +95,7 @@ class OfficeController extends Controller
         ->first();
         $validated->est = \LogUCAB\Lugar::where('Lugar.Codigo', $lug->FK_Lugar)
         ->value('Nombre');
-        $telf = Phone::where('Telefono.FK_Posee', $validated->Codigo)->first();
+        $telf = Phone::where('Telefono.FK_Telefonia', $validated->Codigo)->first();
                      
         return view("oficina.editoffice", compact('validated', 'telf'));
     }
@@ -108,7 +108,7 @@ class OfficeController extends Controller
         $edo = Lugar::where('Lugar.Nombre', $request->est)
         ->where('Lugar.Tipo', 'Estado')
         ->first();
-        $telefono = Phone::where('Telefono.FK_Posee', $request->Codigo)->first();
+        $telefono = Phone::where('Telefono.FK_Telefonia', $request->Codigo)->first();
         $telfcomp = Phone::find($request->Telefono)->first();
     
         if(isset($lugar) && $lugar->FK_Lugar==$edo->Codigo){
@@ -118,7 +118,13 @@ class OfficeController extends Controller
             $oficina->FK_Varios = $lugar->Codigo;
             $oficina->save();
 
-            if($telefono != $request->Telefono && is_null($telfcomp)){
+            if(is_null($telefono)){
+                Phone::create([
+                    'Numero' => $request->Telefono,
+                    'tipo' => 'Oficina',
+                    'FK_Telefonia' => Office::max('Codigo')
+                ]);    
+            }elseif($telefono != $request->Telefono && is_null($telfcomp)){
                 $telefono->Numero = $request->Telefono;
                 $telefono->save();
             }

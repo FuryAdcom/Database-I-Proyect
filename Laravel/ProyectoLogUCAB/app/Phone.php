@@ -17,8 +17,8 @@ class Phone extends Model
         'tipo',
         'FK_Dispositivo',  //Taller
         'FK_Comunicado',  //Persona-Contacto
-        'FK_Telefonia',  //Empleado
-        'FK_Posee'  //Oficina
+        'FK_Telefonia',  //Oficina
+        'FK_Posee'  //Empleado
     ];
 
     protected $guarded =[

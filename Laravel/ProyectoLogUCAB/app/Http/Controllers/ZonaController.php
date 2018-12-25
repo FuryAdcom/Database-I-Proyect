@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use LogUCAB\Http\Requests;
 use LogUCAB\Zona;
 use LogUCAB\Lugar;
+use LogUCAB\Office;
 use LogUCAB\Worker;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -20,7 +21,7 @@ class ZonaController extends Controller
     public function __construct(){}
 
         public function inicio(){
-            return view("zona.zona");
+            return view("oficina.zona.zona");
         }
     
         public function create(){
@@ -29,7 +30,7 @@ class ZonaController extends Controller
             ->select(DB::raw('"Oficina".*, lug."Nombre" as mun, estado."Nombre" as est'))
             ->orderBy('Oficina.Nombre', 'asc')->get();
 
-            return view("zona.createzona", compact('oficinas'));
+            return view("oficina.zona.createzona", compact('oficinas'));
         }
     
         public function store(Request $request){
@@ -66,7 +67,7 @@ class ZonaController extends Controller
             ->orderBy('FK_Divide')
             ->paginate(50);
     
-            return view("zona.showzona", compact('zonas'));
+            return view("oficina.zona.showzona", compact('zonas'));
         }
     
         public function mostrar($Codigo){
@@ -82,7 +83,7 @@ class ZonaController extends Controller
             ->select(DB::raw('"Oficina".*, lug."Nombre" as mun, estado."Nombre" as est'))
             ->orderBy('Oficina.Nombre', 'asc')->get();
                          
-            return view("zona.editzona", compact('validated', 'oficinas'));
+            return view("oficina.zona.editzona", compact('validated', 'oficinas'));
         }
     
         public function actualizar(Request $request){

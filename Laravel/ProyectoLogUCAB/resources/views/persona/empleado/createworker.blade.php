@@ -70,22 +70,6 @@
 									</select>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
-								<label for="inputNum_hijos" style="color: whitesmoke">Número de hijos</label>
-								<input class="form-control" name="Num_Hijos"value="{{ old('Num_Hijos') }}" type="number" id="inputNum_hijos"placeholder="Introduzca cantidad">
-							</div>
-							<div class="form-group" style="width:49%; float: right;margin-bottom:0px">
-									<label for="inputCharge" style="color: whitesmoke; padding-right: 5px">Encargado de oficina:</label>
-									<input class="form-check-input" name="Charge" type="checkbox" value="true" @if ( old('Charge') ) checked @endif id="inputCharge">
-							</div>
-							<div class="form-group" style="width:49%; float: right; @if ( is_null(old('Charge') )) display: none @else display: block @endif" id="inputEncargado">
-								<input class="form-control" name="Empleado_Cargo" list="oficinas" placeholder="Nombre de oficina">
-								<datalist id="oficinas">
-									@foreach ($oficinas as $oficina)
-										<option value="{{ $oficina->Codigo }}"> {{ $oficina->Nombre }} </option>
-									@endforeach
-								</datalist>
-							</div>
-							<div class="form-group" style="width:49%; float: left;">
 									<label for="inputProfesion" style="color: whitesmoke">Profesión</label>
 									<input class="form-control" name="Profesion"value="{{ old('Profesion') }}" type="text" id="inputProfesion"placeholder="Introduzca su profesión">
 							</div>
@@ -93,6 +77,22 @@
 									<label for="inputTelefono" style="color: whitesmoke">Telefono</label>
 									<input type="tel"pattern="[0-9]{4}-[0-9]{7}" name="Telefono" value="{{old('Telefono')}}" class="form-control" placeholder="Introduzca el telefono (Formato: 0XXX-XXXXXXX)" required>
 								</div>
+							<div class="form-group" style="width:49%; float: left;">
+								<label for="inputNum_hijos" style="color: whitesmoke">Número de hijos</label>
+								<input class="form-control" name="Num_Hijos"value="{{ old('Num_Hijos') }}" type="number" id="inputNum_hijos"placeholder="Introduzca cantidad">
+							</div>
+							<div class="form-group" style="width:49%; float: right; @if( is_null(old('Charge')) ) margin-bottom:49px @else margin-bottom:0px @endif">
+									<label for="inputCharge" style="color: whitesmoke; padding-right: 5px">Encargado de oficina:</label>
+									<input class="form-check-input" name="Charge" type="checkbox" value="true" @if ( old('Charge') ) checked @endif id="inputCharge">
+							</div>
+							<div class="form-group" style="width:49%; float: right; @if ( is_null(old('Charge') )) display: none @else display: block @endif" id="inputEncargado">
+								<input class="form-control" name="Empleado_Cargo" value="{{old('Empleado_Cargo')}}" list="oficinas" placeholder="Nombre de oficina">
+								<datalist id="oficinas">
+									@foreach ($oficinas as $oficina)
+										<option value="{{ $oficina->Codigo }}"> {{ $oficina->Nombre }} </option>
+									@endforeach
+								</datalist>
+							</div>
 							<div class="form-group" style="width:100%; float: left;" id="inputFK_Habitacion">
 									<label for="inputFK_Habitacion" style="color: whitesmoke">Lugar de residencia:</label>
 									<input class="form-control" name="FK_Habitacion" value="{{old('FK_Habitacion')}}" list="muns" placeholder="Municipio de residencia" required>

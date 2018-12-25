@@ -144,9 +144,8 @@ class EnvioController extends Controller
         ]);
 
         $oficina = Office::find($ruta->FK_Ofi_Origen)->first();
-        $zona = Zona::where('FK_Divide', $oficina->Codigo)->first();
-        $worker = Worker::from('Emp-Zon as ez, Empleado')
-        ->where('ez.FK_Asignar', $zona->Codigo)
+        $worker = Worker::join('Zona', 'Zona.FK_Divide', '=', $oficina->Codigo)
+        ->join('Emp-Zon', 'Emp-Zon.FK_Asignar', '=', 'Zona.Codigo')
         ->where('Empleado.Cedula', 'ez.FK_Asiste')
         ->inRandomOrder()
         ->first();
@@ -156,8 +155,13 @@ class EnvioController extends Controller
             'Descripcion' => 'Recibido en '.$oficina->Nombre,
             'FK_Revision' => $worker->Cedula
         ]);
+        Emp_Sta::create([
+            'Codigo' => Emp_Sta::max('Codigo')+1,
+            'FK_Encuentra_Sta' => Status::max('Codigo'),
+            'FK_Revisa_Sta' => Envio::max('Codigo')
+        ]);
 
-        Session::flash('message','Envio creado correctamente.');
+        Session::flash('message','Envio planificado correctamente.');
         return redirect('/envio/lista');
     }
     

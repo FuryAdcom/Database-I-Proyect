@@ -22,9 +22,7 @@ use Carbon\Carbon;
 
 class WorkerController extends Controller
 {
-    public function __construct(){
-
-    }
+    public function __construct(){}
 
     public function inicio(){
         return view("persona.empleado.worker");
@@ -40,7 +38,7 @@ class WorkerController extends Controller
         $zonas = Zona::leftjoin('Oficina as of', 'of.Codigo', '=' , 'Zona.FK_Divide')
         ->leftjoin('Lugar as lug', 'lug.Codigo','=','of.FK_Varios')
         ->leftjoin('Lugar as estado', 'estado.Codigo','=','lug.FK_Lugar')
-        ->select(DB::raw('"Zona".*, of."Nombre" as oficina, log."Nombre" as mun, estado."Nombre" as est'))
+        ->select(DB::raw('"Zona".*, of."Nombre" as oficina, lug."Nombre" as mun, estado."Nombre" as est'))
         ->get();
 
         return view("persona.empleado.createworker", compact('rols', 'oficinas', 'muns', 'zonas'));
@@ -84,13 +82,13 @@ class WorkerController extends Controller
         ]);
         Phone::create([
             'Numero' => $request->Telefono,
-            'tipo' => 'Personal',
-            'FK_Telefonia' => $request->Cedula
+            'tipo' => 'Móvil',
+            'FK_Posee' => $request->Cedula
         ]);
         Emp_Zon::create([
             'Codigo' => Emp_Zon::max('Codigo')+1,
-            'FK_Asiste' => $request->Cedula,
-            'FK_Asignar' => $request->Zona
+            'FK_Asiste' => $request->Zona,
+            'FK_Asignar' => $request->Cedula
         ]);
 
         Session::flash('message','Empleado creado correctamente.');
@@ -114,14 +112,13 @@ class WorkerController extends Controller
         where Mun."Tipo" = \'Municipio\' order by Mun."Nombre" asc'));
         $validated = Worker::where('Empleado.Cedula', $Cedula)
         ->first();
-        $telf = Phone::where('Telefono.FK_Telefonia', $validated->Cedula)->first();
+        $telf = Phone::where('Telefono.FK_Posee', $validated->Cedula)->first();
         $zonas = Zona::leftjoin('Oficina as of', 'of.Codigo', '=' , 'Zona.FK_Divide')
         ->leftjoin('Lugar as lug', 'lug.Codigo','=','of.FK_Varios')
         ->leftjoin('Lugar as estado', 'estado.Codigo','=','lug.FK_Lugar')
-        ->select(DB::raw('"Zona".*, of."Nombre" as oficina, log."Nombre" as mun, estado."Nombre" as est'))
+        ->select(DB::raw('"Zona".*, of."Nombre" as oficina, lug."Nombre" as mun, estado."Nombre" as est'))
         ->get();
 
-        Session::flash('msg','Favor introducir la oficina de la que esta encargado, si la casilla esta seleccionada.');
         return view("persona.empleado.editworker", compact('rols', 'validated', 'muns', 'oficinas', 'telf', 'zonas'));
     }
 
@@ -129,8 +126,8 @@ class WorkerController extends Controller
         $empleadoOG = Worker::find($request->CedulaAnt);
         $empleado = Worker::find($request->Cedula);
         $lugar = Lugar::find($request->FK_Habitacion);
-        $telefono = Phone::where('Telefono.FK_Telefonia', $request->CedulaAnt)->first();
-        $telfcomp = Phone::find($request->Telefono)->first();
+        $telefono = Phone::where('Telefono.FK_Posee', $request->CedulaAnt)->first();
+        $telfcomp = Phone::find($request->Telefono);
         $zona = Emp_Zon::where('Emp-Zon.FK_Asiste', $request->CedulaAnt)->first();
     
         if(isset($empleado) && $empleado != $empleadoOG){
@@ -152,7 +149,7 @@ class WorkerController extends Controller
             }
         }
 
-        $empleadoOG->Nombre = $request->Cedula;
+        $empleadoOG->Cedula = $request->Cedula;
         $empleadoOG->Nombre = $request->Nombre;
         $empleadoOG->Apellido = $request->Apellido;
         $empleadoOG->Correo_Personal = $request->Correo_Personal;
@@ -164,12 +161,24 @@ class WorkerController extends Controller
         $empleadoOG->FK_Asignado_Puesto = $request->FK_Asignado_Puesto;
         $empleadoOG->FK_Habitacion = $request->FK_Habitacion;
         $empleadoOG->save();
-
-        if($telefono->Numero != $request->Telefono && is_null($telfcomp)){
+        
+        if(is_null($telefono)){
+            Phone::create([
+                'Numero' => $request->Telefono,
+                'tipo' => 'Móvil',
+                'FK_Posee' => $request->Cedula
+            ]);
+        }elseif($telefono->Numero != $request->Telefono && is_null($telfcomp)){
             $telefono->Numero = $request->Telefono;
             $telefono->save();
         }
-        if($zona->FK_Asignar != $request->Zona){
+        if(is_null($zona)){
+            Emp_Zon::create([
+                'Codigo' => Emp_Zon::max('Codigo')+1,
+                'FK_Asiste' => $request->Zona,
+                'FK_Asignar' => $request->Cedula
+            ]);
+        }elseif($zona->FK_Asignar != $request->Zona){
             $zona->FK_Asignar = $request->Zona;
             $zona->save();
         }

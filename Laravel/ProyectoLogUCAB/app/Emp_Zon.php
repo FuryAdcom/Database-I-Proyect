@@ -14,8 +14,8 @@ class Emp_Zon extends Model
 
     protected $fillable =[
         'Codigo',
-        'FK_Asiste',  //Empleado
-        'FK_Asignar'  //Zona
+        'FK_Asiste',  //Zona
+        'FK_Asignar'  //Empleado
     ];
 
     protected $guarded =[

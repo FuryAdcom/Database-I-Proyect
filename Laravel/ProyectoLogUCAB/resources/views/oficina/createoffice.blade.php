@@ -33,7 +33,7 @@
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 									<label for="inputTelefono" style="color: whitesmoke">Telefono</label>
-									<input type="tel"pattern="[0-9]{4}-[0-9]{7}" name="Telefono" value="{{old('Telefono')}}" class="form-control" placeholder="Introduzca el telefono (Formato: 0XXX-XXXXXXX)" required>
+									<input type="tel" pattern="[0-9]{11}" name="Telefono" value="{{old('Telefono')}}" class="form-control" placeholder="Introduzca el telefono (Formato: 0XXXXXXXXXX)" required>
 								</div>
 
 							<div style="width:100%; height: 40px; float: left;">
