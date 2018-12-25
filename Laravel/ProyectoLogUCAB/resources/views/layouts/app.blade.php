@@ -41,8 +41,13 @@
 								</li>
 								<li><a href="/paquete"><i class="fa fa-box" id="inside_opt"></i>Paquetes</a></li>
 								<li><a href="/envio"><i class="fa fa-truck-loading" id="inside_opt"></i>Envios</a></li>
-								<li><a href="/oficina"><i class="fa fa-building" id="inside_opt"></i>Oficina</a></li>
-								<li><a href="/transporte"><i class="fa fa-car" id="inside_opt"></i>Transporte</a></li>
+								<li>
+									<a href="/oficina"><i class="fa fa-building" id="inside_opt"></i>Oficina</a>
+									<ul class="gn-submenu">
+											<a href="/zona"><li class="sub_option"><i class="fa fa-warehouse" id="inside_opt"></i>Zona</li></a>
+									</ul>
+								</li>
+								<li><a href="/transporte"><i class="fa fa-truck" id="inside_opt"></i>Transporte</a></li>
 								<li><a href="/ruta"><i class="fa fa-route" id="inside_opt"></i>Ruta</a></li>
 							</ul>
 						</div><!-- /gn-scroller -->

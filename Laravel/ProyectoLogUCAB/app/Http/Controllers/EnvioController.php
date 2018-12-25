@@ -144,15 +144,17 @@ class EnvioController extends Controller
         ]);
 
         $oficina = Office::find($ruta->FK_Ofi_Origen)->first();
-        $lugar = Lugar::find($oficina->FK_Varios)->first();
-        //Hay que crear Zona
-       // $worker = Worker::where();
+        $zona = Zona::where('FK_Divide', $oficina->Codigo)->first();
+        $worker = Worker::from('Emp-Zon as ez, Empleado')
+        ->where('ez.FK_Asignar', $zona->Codigo)
+        ->where('Empleado.Cedula', 'ez.FK_Asiste')
+        ->inRandomOrder()
+        ->first();
 
-        //::inRandomOrder()->get();
         Status::create([
             'Codigo' => Status::max('Codigo')+1,
             'Descripcion' => 'Recibido en '.$oficina->Nombre,
-            //'FK_Revision' => 
+            'FK_Revision' => $worker->Cedula
         ]);
 
         Session::flash('message','Envio creado correctamente.');
