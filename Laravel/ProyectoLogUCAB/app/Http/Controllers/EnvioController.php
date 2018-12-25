@@ -166,14 +166,8 @@ class EnvioController extends Controller
     }
     
     public function lista(){
-        $envios = Envio::leftjoin('Oficina as ofiog', 'ofiog.Codigo','=','Ruta.FK_Ofi_Origen')
-        ->leftjoin('Oficina as ofidest', 'ofidest.Codigo','=','Ruta.FK_Ofi_Destino')
-        ->leftjoin('Lugar as log', 'log.Codigo','=','ofiog.FK_Varios')
-        ->leftjoin('Lugar as ogest', 'ogest.Codigo','=','log.FK_Lugar')
-        ->leftjoin('Lugar as ldest', 'ldest.Codigo','=','ofidest.FK_Varios')
-        ->leftjoin('Lugar as destest', 'destest.Codigo','=','ldest.FK_Lugar')
-        ->select(\DB::raw("\"Ruta\".*, ofiog.\"Nombre\" as ofog, ofidest.\"Nombre\" as ofdest, log.\"Nombre\" as og, ldest.\"Nombre\" as dest, ogest.\"Nombre\" as oge, destest.\"Nombre\" as deste"))
-        ->paginate(50);
+        //Esto cambiara debido a registros
+        $envios = Envio::paginate(50);
 
         return view("envio.showenvio", compact('envios'));
     }
