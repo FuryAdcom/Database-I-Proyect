@@ -42,7 +42,7 @@ function thermometer(goalAmount, progressAmount, animate) {
     //$goal.find(".amount").text( "$" + formatCurrency( goalAmount ) );
     //$progress.find(".amount").text( "$" + formatCurrency( progressAmount ) );
     //show currency without decimnal places
-    $goal.find(".amount").text( "$" + ( goalAmount ) );
+    $goal.find(".amount").text("Entregado" );
     $progress.find(".amount").text( "$" + ( progressAmount ) );
     //show not as curency
     //$goal.find(".amount").text( goalAmount  );

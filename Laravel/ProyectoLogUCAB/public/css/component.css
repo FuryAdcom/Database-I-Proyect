@@ -457,9 +457,10 @@ input.gn-search:focus {
 }
 
 /*Termometro*/
-#content {
-    width:300px;
-    margin:30px auto;
+#conterm {
+    width:75%;
+	margin:30px auto;
+	float: right;
 }
 
 #thermometer {
@@ -484,7 +485,7 @@ input.gn-search:focus {
 #thermometer .track {
     height:280px;
     top:10px;
-    width:20px;
+    width:30px;
     border: 1px solid #aaa;
     position: relative;
     margin:0 auto;
@@ -502,36 +503,42 @@ input.gn-search:focus {
 #thermometer .progress {
     height:0%;
     width:100%;
-    background: rgb(20,100,20);
-    background: rgba(20,100,20,0.6);
+    background: rgb(193, 33, 87);
+    background: rgba(235, 63, 121, 0.6);
     position: absolute;
-    bottom:0;
+    bottom:-20px;
     left:0;
 }
 
 #thermometer .goal {
     position:absolute;
-    top:0;
+	top:0;
+	width: 400px;
 }
 
 #thermometer .stop1 {
     position:absolute;
-    top:100%;
+	top:100%;
+	width: 800px;
 }
 
 #thermometer .stop2 {
     position:absolute;
-    top:75%;
+	top:75%;
+	width: 400px;
+	
 }
 
 #thermometer .stop3 {
     position:absolute;
-    top:50%;
+	top:50%;
+	width: 400px;	
 }
 
 #thermometer .stop4 {
     position:absolute;
-    top:25%;
+	top:25%;
+	width: 400px;	
 }
 
 #thermometer .amount {
@@ -540,7 +547,7 @@ input.gn-search:focus {
     border-top:1px solid black;
     font-family: Trebuchet MS;
     font-weight: bold;
-    color:#333;
+	color:#333;
 }
 
 #thermometer .progress .amount {

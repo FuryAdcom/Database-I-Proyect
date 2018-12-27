@@ -14,10 +14,11 @@ use LogUCAB\Veh_Rut;
 use LogUCAB\Office;
 use LogUCAB\Client;
 use LogUCAB\Ruta;
-use LogUCAB\Order;
 use LogUCAB\Status;
 use LogUCAB\Env_Sta;
 use LogUCAB\Worker;
+use LogUCAB\Zona;
+use LogUCAB\Emp_Zon;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Input;
@@ -54,9 +55,9 @@ class EnvioController extends Controller
 
     public function store(Request $request){
 
-        $paquete = Packet::find($request->Paquete)->first();
+        $paquete = Packet::find($request->Paquete)->orderBy('Numero_guia');
 
-        $ruta = Ruta::find($request->Ruta)->first();
+        $ruta = Ruta::find($request->Ruta);
 
         $vehiculos = Veh_Rut::where('FK_Coche', $ruta->Codigo)->get();
 
@@ -64,73 +65,139 @@ class EnvioController extends Controller
     }
     public function store2(Request $request){
 
-        $paquete = Packet::find($request->paquete)->first();
-        $vehiculo = Veh_Rut::find($request->Vehiculo)->first();
-        $ruta = Ruta::find($vehiculo->FK_Coche)->first();
-        $ofiog = Office::find($ruta->FK_Ofi_Origen)->first();
-        $ofidest = Office::find($ruta->FK_Ofi_Destino)->first();
-        $dest = Lugar::find($ofidest->FK_Varios)->first();
-        $destino = $dest->Codigo;
+        $paquete = Packet::find($request->paquete);
+        $cliente = Client::find($paquete->FK_Entrega);
+        $vr = Veh_Rut::find($request->Vehiculo);
+        $ruta = Ruta::find($vr->FK_Coche);
+        $ofiog = Office::find($ruta->FK_Ofi_Origen);
+        $ofidest = Office::find($ruta->FK_Ofi_Destino);
+        $dest = Lugar::find($ofidest->FK_Varios);
         $route = $ruta->Codigo;
 
-
         //Para los VIP hay que poner 10% descuento
+        if($cliente->L_Vip){
+            if($paquete->Peso < 10){
+                if($paquete->Clasificacion == 'Linea blanca'){
+                $costo = (250 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Alimento'){
+                $costo = (12 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Electrónica'){
+                $costo = (60 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Vestimenta'){
+                $costo = (80 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Juguete'){
+                $costo = (20 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Automovil'){
+                $costo = (500 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Medicamento'){
+                $costo = (4 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Otro'){
+                $costo = (130 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }else{
+                $costo = (100 + $vr->Costo) * $paquete->Peso;
+                $costo = ($costo*90)/100;
+            }
+        }else{
+
+                if($paquete->Clasificacion == 'Linea blanca'){
+                $costo = (250 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Alimento'){
+                $costo = (12 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Electrónica'){
+                $costo = (60 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Vestimenta'){
+                $costo = (80 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Juguete'){
+                $costo = (20 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Automovil'){
+                $costo = (500 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Medicamento'){
+                $costo = (4 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }elseif($paquete->Clasificacion == 'Otro'){
+                $costo = (130 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+            }else{
+                $costo = (100 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+                $costo = ($costo*90)/100;
+                }
+            }
+        }else{
         if($paquete->Peso < 10){
 
             if($paquete->Clasificacion == 'Linea blanca'){
-                $costo = (250 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (250 + $vr->Costo) * $paquete->Peso;
             }elseif($paquete->Clasificacion == 'Alimento'){
-                $costo = (12 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (12 + $vr->Costo) * $paquete->Peso;
             }elseif($paquete->Clasificacion == 'Electrónica'){
-                $costo = (60 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (60 + $vr->Costo) * $paquete->Peso;
             }elseif($paquete->Clasificacion == 'Vestimenta'){
-                $costo = (80 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (80 + $vr->Costo) * $paquete->Peso;
             }elseif($paquete->Clasificacion == 'Juguete'){
-                $costo = (20 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (20 + $vr->Costo) * $paquete->Peso;
             }elseif($paquete->Clasificacion == 'Automovil'){
-                $costo = (500 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (500 + $vr->Costo) * $paquete->Peso;
             }elseif($paquete->Clasificacion == 'Medicamento'){
-                $costo = (4 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (4 + $vr->Costo) * $paquete->Peso;
             }elseif($paquete->Clasificacion == 'Otro'){
-                $costo = (130 + $vehiculo->Costo) * $paquete->Peso;
+                $costo = (130 + $vr->Costo) * $paquete->Peso;
+            }else{
+                $costo = (100 + $vr->Costo) * $paquete->Peso;
             }
         }else{
 
             if($paquete->Clasificacion == 'Linea blanca'){
-                $costo = (250 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (250 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }elseif($paquete->Clasificacion == 'Alimento'){
-                $costo = (12 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (12 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }elseif($paquete->Clasificacion == 'Electrónica'){
-                $costo = (60 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (60 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }elseif($paquete->Clasificacion == 'Vestimenta'){
-                $costo = (80 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (80 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }elseif($paquete->Clasificacion == 'Juguete'){
-                $costo = (20 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (20 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }elseif($paquete->Clasificacion == 'Automovil'){
-                $costo = (500 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (500 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }elseif($paquete->Clasificacion == 'Medicamento'){
-                $costo = (4 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (4 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }elseif($paquete->Clasificacion == 'Otro'){
-                $costo = (130 + $vehiculo->Costo) * (($paquete->Ancho/100) * ($paquete->Largo/100) * ($paquete->Profundidad/100));
+                $costo = (130 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
+            }else{
+                $costo = (100 + $vr->Costo) * (($paquete->Ancho) * ($paquete->Largo) * ($paquete->Profundidad));
             }
         }
+    }
         //
+            $est = Carbon::now()->addMinutes($vr->Duracion)->addHours(5)->format('d/m/Y - h:i:s A');
 
-        $est = Carbon::now()->addMinutes($vehiculo->Duracion)->addHours(5)->format('l jS \\of F Y h:i:s A');
 
         Session::flash('message','Ruta creada correctamente.');
-        return view('envio.createenvio3', compact('costo', 'paquete', 'est', 'request', 'ofiog', 'ofidest', 'destino', 'route'));
+        return view('envio.createenvio3', compact('costo', 'paquete', 'est', 'request', 'ofiog', 'ofidest', 'dest', 'route'));
     }
     public function store3(Request $request){
 
         $ruta = Ruta::find($request->ruta)->first();
-        $paquete = Packet::find($request->paquete)->first();
+        $paquete = Packet::find($request->paquete); 
 
         //Primero se crea el envio
         Envio::create([
             'Codigo' => Envio::max('Codigo')+1,
             'Monto' => $request->costo,
-            'FK_Destino' => $request->destino
+            'FK_Destino' => $request->destino,
         ]);
 
         //Al Paquete se le llena la foranea relacionada con Envio
@@ -145,62 +212,167 @@ class EnvioController extends Controller
         ]);
 
         $oficina = Office::find($ruta->FK_Ofi_Origen)->first();
-        $worker = Worker::join('Zona as z', 'z.FK_Divide', '=', $oficina->Codigo)
-        ->join('Emp-Zon as ez', 'ez.FK_Asignar', '=', 'z.Codigo')
-        ->where('Empleado.Cedula', 'ez.FK_Asiste')
+        $zona = Zona::where('FK_Divide',$oficina->Codigo)->first();
+        $Empzon = Emp_Zon::where('FK_Asiste',$zona->Codigo)->first();
+        $worker = Worker::where('Empleado.Cedula','=',$Empzon->FK_Asignar)
         ->inRandomOrder()
         ->first();
 
         Status::create([
             'Codigo' => Status::max('Codigo')+1,
-            'Descripcion' => 'Recibido en '.$oficina->Nombre,
+            'Descripcion' => 'Recibido en origen',
             'FK_Revision' => $worker->Cedula
         ]);
-        Emp_Sta::create([
-            'Codigo' => Emp_Sta::max('Codigo')+1,
+        Env_Sta::create([
+            'Codigo' => Env_Sta::max('Codigo')+1,
             'FK_Encuentra_Sta' => Status::max('Codigo'),
             'FK_Revisa_Sta' => Envio::max('Codigo')
         ]);
 
         Session::flash('message','Envio planificado correctamente.');
-        return redirect('/envio/lista');
+        return redirect('/envio/mostrar/'.Envio::max('Codigo'));
     }
     
     public function lista(){
         //Esto cambiara debido a reportes
-        $envios = Envio::paginate(50);
+        $envios = Envio::leftjoin('Oficina as o','o.Codigo','=','Envio.FK_Destino')
+        ->leftjoin('Paquete as p','p.FK_Transporta','=','Envio.Codigo')
+        ->leftjoin('Cliente as c','c.Cedula','=','p.FK_Entrega')
+        ->select(DB::raw("\"Envio\".*, o.\"Nombre\" as of, p.\"Numero_guia\" as paq, p.\"Destinatario\" as dest, c.\"Cedula\" as cli"))
+        ->orderBy('Envio.Codigo')
+        ->paginate(50);
 
         return view("envio.showenvio", compact('envios'));
     }
 
     //Mostrar el envio con un goal thermomether
     public function mostrar($Codigo){
-        $envio = Envio::paginate(50);
+        $envio = Envio::find($Codigo);
+        $er = Env_Rut::where('FK_Recorre',$envio->Codigo)->first();
+        $ruta = Ruta::find($er->FK_Adquiere_Pa);
+        $vr = Veh_Rut::where('FK_Coche',$ruta->Codigo)->first();
+        $oo = Office::find($ruta->FK_Ofi_Origen);
+        $od = Office::find($ruta->FK_Ofi_Destino);
+        $es = Env_Sta::where('FK_Revisa_Sta',$envio->Codigo)->first();
+        $status = Status::find($es->FK_Encuentra_Sta);
+        $packet = Packet::where('FK_Transporta',$envio->Codigo)->first();
+        $cliente = Client::find($packet->FK_Entrega);
+        $destino = Lugar::where('Lugar.Codigo',$envio->FK_Destino)
+        ->leftjoin('Lugar as l','l.Codigo','=','Lugar.FK_Lugar')
+        ->select(DB::raw("\"Lugar\".*, l.\"Nombre\" as est"))->first();
+        
+        $est =$envio->created_at->addMinutes($vr->Duracion)->addHours(5)->diffForHumans(Carbon::now());
+        
+        //Fechas
+        if($status->Descripcion == 'Recibido en origen'){
+            $amount = 0;
+        }elseif($status->Descripcion == 'Trasladando'){
+            $amount = 25;
+            $fecha = $status->updated_at;
+        }elseif($status->Descripcion == 'Transportando a destino'){
+            $amount = 50;
+            $fecha = $status->updated_at;
+        }elseif($status->Descripcion == 'En espera de retiro'){
+            $amount = 75;
+            $fecha = $status->updated_at;
+        }elseif($status->Descripcion == 'Entregado'){
+            $amount = 100;
+            $fecha = $status->updated_at;
+        }
 
-        return view("envio.mostrarenvio", compact('envio'));
+        return view("envio.mostrarenvio", compact('envio','es','status','packet','cliente','destino','amount','oo','od','est','recibido','fecha'));
     }
 
     //Para un boton que ira cambiando el termometro goal en la view "mostrar"
     public function status($Codigo){
-        
-        $envios = Envio::paginate(50);
+        $envio = Envio::find($Codigo);
+        $er = Env_Rut::where('FK_Recorre',$envio->Codigo)->first();
+        $ruta = Ruta::find($er->FK_Adquiere_Pa);
+        $vr = Veh_Rut::where('FK_Coche',$ruta->Codigo)->first();
+        $oo = Office::find($ruta->FK_Ofi_Origen);
+        $od = Office::find($ruta->FK_Ofi_Destino);
+        $es = Env_Sta::where('FK_Revisa_Sta',$envio->Codigo)->first();
+        $status = Status::find($es->FK_Encuentra_Sta);
+        $packet = Packet::where('FK_Transporta',$envio->Codigo)->first();
+        $cliente = Client::find($packet->FK_Entrega);
+        $destino = Lugar::where('Lugar.Codigo',$envio->FK_Destino)
+        ->leftjoin('Lugar as l','l.Codigo','=','Lugar.FK_Lugar')
+        ->select(DB::raw("\"Lugar\".*, l.\"Nombre\" as est"))->first();
 
-        return view("envio.mostrarenvio", compact('envios'));
+        $est =$envio->created_at->addMinutes($vr->Duracion)->addHours(5)->diffForHumans(Carbon::now());
+        
+        //Fechas
+        if($status->Descripcion == 'Recibido en origen'){
+            $status->Descripcion = 'Trasladando';
+            $status->save();
+            $amount = 25;
+            $fecha = $status->updated_at;
+        }elseif($status->Descripcion == 'Trasladando'){
+            $status->Descripcion = 'Transportando a destino';
+            $status->save();
+            $amount = 50;
+            $fecha = $status->updated_at;
+        }elseif($status->Descripcion == 'Transportando a destino'){
+            $status->Descripcion = 'En espera de retiro';
+            $status->save();
+            $amount = 75;
+            $fecha = $status->updated_at;
+        }elseif($status->Descripcion == 'En espera de retiro'){
+
+            //Pago
+
+            $status->Descripcion = 'Entregado';
+            $status->save();
+            $amount = 100;
+            $fecha = $status->updated_at;
+        }
+
+        return view("envio.mostrarenvio", compact('envio','es','status','packet','cliente','destino','amount','oo','od','est','recibido','fecha'));
     }
 
     public function recibo($Codigo){
-        //Esto cambiara debido a registros
-        $envios = Envio::paginate(50);
 
+        $envio = Envio::where('Envio.Codigo',$Codigo)
+        ->leftjoin('Paquete as p','p.FK_Transporta','=','Envio.Codigo')
+        ->leftjoin('Cliente as c','c.Cedula','=','p.FK_Entrega')
+        ->select(DB::raw("\"Envio\".*, p.\"Numero_guia\" as pnum,p.\"Destinatario\" as dest,p.\"Telefono_Contacto\" as cont,p.\"Clasificacion\" as class,p.\"Ancho\" as ancho,p.\"Largo\" as largo,p.\"Profundidad\" as prof,p.\"Peso\" as peso,c.\"Nombre\" as cnom, c.\"Apellido\" as cape, c.\"Cedula\" as cced, c.\"Empresa\" as cemp"))
+        ->first();
+
+        $er = Env_Rut::where('FK_Recorre',$envio->Codigo)->first();
+        $ruta = Ruta::find($er->FK_Adquiere_Pa);
+        $vr = Veh_Rut::where('FK_Coche',$ruta->Codigo)->first();
+        if(isset($vr->FK_Camino)){
+            $envio->via = 'Aerea';
+            $envio->vplaca = $vr->FK_Camino;
+        }elseif(isset($vr->FK_Camino2)){
+            $envio->via = 'Marina';
+            $envio->vplaca = $vr->FK_Camino2;
+        }elseif(isset($vr->FK_Camino3)){
+            $envio->via = 'Terrestre';
+            $envio->vplaca = $vr->FK_Camino3;
+        }
+
+        $oo = Office::find($ruta->FK_Ofi_Origen);
+        $od = Office::find($ruta->FK_Ofi_Destino);
+        $es = Env_Sta::where('FK_Revisa_Sta',$envio->Codigo)->first();
+        $status = Status::find($es->FK_Encuentra_Sta);
+        $destino = Lugar::where('Lugar.Codigo',$envio->FK_Destino)
+        ->leftjoin('Lugar as l','l.Codigo','=','Lugar.FK_Lugar')
+        ->select(DB::raw("\"Lugar\".*, l.\"Nombre\" as est"))->first();
+
+        $envio->ofnom = $oo->Nombre;
+        $envio->ofnomd = $od->Nombre;
+        $envio->mund = $destino->Nombre;
+        $envio->estd = $destino->est;
+        
         //Para el PDF recibo de envio, $order tiene que tener los datos necesarios
-        //$order = new Envio;
         //
         //return $order->getPdf('download'); // Returns the PDF as download
-        return $order->getPdf(); // Returns stream default
+        return $envio->getPdf(); // Returns stream default
     }
 
     public function cancelar($Codigo){
-        DB::table('Envio')->where('Cedula', $Codigo)->delete();
+        DB::table('Envio')->where('Codigo', $Codigo)->delete();
         Session::flash('messagedel','Envio cancelado correctamente.');
         return redirect('/envio/lista');
     }

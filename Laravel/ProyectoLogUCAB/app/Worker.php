@@ -23,8 +23,8 @@ class Worker extends Model
         'Profesion',
         'Num_Hijos',
         'Empleado_Cargo',
-        'FK_Asignado_Puesto',
-        'FK_Habitacion'
+        'FK_Asignado_Puesto',  //Rol
+        'FK_Habitacion'  //Lugar
     ];
 
     protected $guarded =[

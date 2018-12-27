@@ -37,19 +37,19 @@
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputPeso" style="color: whitesmoke">Peso</label>
-								<input type="number" name="Peso"value="{{ old('Peso') }}" class="form-control" id="inputPeso" placeholder="Introduzca peso del paquete" required>
+								<input type="number" name="Peso"value="{{ old('Peso') }}" class="form-control" id="inputPeso" placeholder="Introduzca peso del paquete en Kg" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputAncho" style="color: whitesmoke">Ancho</label>
-								<input type="number" name="Ancho"value="{{ old('Ancho') }}" class="form-control" id="inputAncho"placeholder="Introduzca ancho" required>
+								<input type="number" name="Ancho"value="{{ old('Ancho') }}" class="form-control" id="inputAncho"placeholder="Introduzca ancho en m" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">
 								<label for="inputLargo" style="color: whitesmoke">Largo</label>
-								<input type="number" name="Largo"value="{{ old('Largo') }}" class="form-control" id="inputLargo" placeholder="Introduzca largo" required>
+								<input type="number" name="Largo"value="{{ old('Largo') }}" class="form-control" id="inputLargo" placeholder="Introduzca largo en m" required>
 							</div>
 							<div class="form-group" style="width:49%; float: right;">
 								<label for="inputProfundidad" style="color: whitesmoke">Profundidad</label>
-								<input type="number" name="Profundidad"value="{{ old('Profundidad') }}" class="form-control" id="inputProfundidad"placeholder="Introduzca profundidad" required>
+								<input type="number" name="Profundidad"value="{{ old('Profundidad') }}" class="form-control" id="inputProfundidad"placeholder="Introduzca profundidad en m" required>
 							</div>
 							<div class="form-group" style="width:49%; float: left;" id="inputFK_Entrega">
 								<label for="inputFK_Entrega" style="color: whitesmoke">Cliente del paquete</label>

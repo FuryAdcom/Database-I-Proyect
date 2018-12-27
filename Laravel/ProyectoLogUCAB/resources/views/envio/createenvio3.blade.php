@@ -15,7 +15,7 @@
 							<input class="form-control" name="paquete" type="number" value="{{$request->paquete}}" hidden>
 							<input class="form-control" name="veh_rut" type="number" value="{{$request->Vehiculo}}" hidden>
 							<input class="form-control" name="costo" type="number" value="{{$costo}}" hidden>
-							<input class="form-control" name="destino" type="number" value="{{$destino}}" hidden>
+							<input class="form-control" name="destino" type="number" value="{{$dest->Codigo}}" hidden>
 							<input class="form-control" name="ruta" type="number" value="{{$route}}" hidden>
 							<div class="form-group" style="width:100%; float: left;margin-bottom:0px">
 								<label for="inputPaquete" style="color: whitesmoke;">Paquete a enviar: {{$paquete->Numero_guia}}</label><br>
@@ -26,7 +26,7 @@
 								<h1 for="inputCosto" style="color: whitesmoke;">Costo del envio: {{$costo}}</h1><br>
 								<h1 for="inputEstimado" style="color: whitesmoke;">Fecha estimada: {{$est}}</h1><br>
                             </div>
-                            <h1 style="color: whitesmoke">Si esta seguro de estos datos, presione Enviar.</h1>
+                            <h4 style="color: whitesmoke">Si esta seguro de estos datos, presione Enviar.</h4>
 
 							<div style="width:100%; height: 40px; float: left;">
 								<button type="submit" class="btn btn-primary">Enviar</button>

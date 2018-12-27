@@ -25,7 +25,7 @@
 											<th>Destinatario</th>
 											<th>Clasificacion</th>
 											<th>Peso (Kg)</th>
-											<th>Medidas (AxLxP cm)</th>
+											<th>Medidas (AxLxP m)</th>
 											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($paquetes as $paquete)

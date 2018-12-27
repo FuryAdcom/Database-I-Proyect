@@ -35,11 +35,10 @@ class ZonaController extends Controller
     
         public function store(Request $request){
             $oficina = Office::find($request->FK_Divide)->first();
-            $samename = Zona::select(DB::raw('COUNT(Zona.Codigo) as cuenta'))
-            ->where('Zona.Nombre', $request->Nombre)
-            ->where('Zona.FK_Divide', $request->FK_Divide);
+            $samename = Zona::where('Zona.Nombre', $request->Nombre)
+            ->where('Zona.FK_Divide', $request->FK_Divide)->first();
             
-            if($samename == 0){
+            if(is_null($samename)){
     
                 Zona::create([
                     'Codigo' => (Zona::max('Codigo')) + 1,

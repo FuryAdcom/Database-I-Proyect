@@ -21,14 +21,14 @@ class Envio extends Model
     ];
 
     public function getPdf($type = 'stream'){
-        $pdf = app('dompdf.wrapper')->loadView('/envio/order-pdf', ['order' => $this]);
+        $pdf = app('dompdf.wrapper')->loadView('/envio/order-pdf', ['envio' => $this]);
     
         if ($type == 'stream') {
-            return $pdf->stream('invoice.pdf');
+            return $pdf->stream('recibo.pdf');
         }
     
         if ($type == 'download') {
-            return $pdf->download('invoice.pdf');
+            return $pdf->download('recibo.pdf');
         }
     }
 }

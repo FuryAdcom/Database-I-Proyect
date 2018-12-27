@@ -12,7 +12,7 @@
 						<form action="/envio/store2" method="POST">
 							@csrf
 
-							<input class="form-check-input" name="paquete" type="number" value="{{$paquete}}" hidden>
+							<input class="form-control" name="paquete" type="number" value="{{$paquete->Numero_guia}}" hidden>
 							<div class="form-group" style="width:100%; float: left" id="inputVehiculo">
 								<label for="inputVehiculo" style="color: whitesmoke; padding-right: 5px">Metodo de envio:</label>
                                     <input class="form-control" name="Vehiculo" list="vehiculos" placeholder="Seleccione metodo de envio">
@@ -22,7 +22,7 @@
                                         @endforeach
                                     </datalist>
                             </div>
-                            <h1 style="text-align: left; color: whitesmoke">NOTA: El costo del envio variara segun el metodo, por via aerea el costo es mayor y por via maritima sera menor.<br> La duracion del envio se vera afectado tambien por esto, inversamente propocional al costo, es decir, a mayor costo, menor tiempo de espera y viceversa.</h1>
+                            <h4 style="text-align: left; color: whitesmoke">NOTA: El costo del envio variara segun el metodo, por via aerea el costo es mayor y por via maritima sera menor.<br> La duracion del envio se vera afectado tambien por esto, inversamente propocional al costo, es decir, a mayor costo, menor tiempo de espera y viceversa.</h4>
 
 							<div style="width:100%; height: 40px; float: left;">
 								<button type="submit" class="btn btn-primary">Siguiente</button>

@@ -113,14 +113,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 1000,
+                        'Costo' => 250,
                         'Duracion' => $request->Duracion,
                         'FK_Camino3' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 1000,
+                        'Costo' => 250,
                         'Duracion' => $request->Duracion,
                         'FK_Camino3' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -133,14 +133,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 3500,
+                        'Costo' => 760,
                         'Duracion' => 105,
                         'FK_Camino' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 3500,
+                        'Costo' => 760,
                         'Duracion' => 105,
                         'FK_Camino' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -152,14 +152,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 600,
+                        'Costo' => 110,
                         'Duracion' => 1080,
                         'FK_Camino2' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 600,
+                        'Costo' => 110,
                         'Duracion' => 1080,
                         'FK_Camino2' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -225,14 +225,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 1000,
+                        'Costo' => 250,
                         'Duracion' => $request->Duracion,
                         'FK_Camino3' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 1000,
+                        'Costo' => 250,
                         'Duracion' => $request->Duracion,
                         'FK_Camino3' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -245,14 +245,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 3500,
+                        'Costo' => 760,
                         'Duracion' => 105,
                         'FK_Camino' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 3500,
+                        'Costo' => 760,
                         'Duracion' => 105,
                         'FK_Camino' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -264,14 +264,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 600,
+                        'Costo' => 110,
                         'Duracion' => 1080,
                         'FK_Camino2' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 600,
+                        'Costo' => 110,
                         'Duracion' => 1080,
                         'FK_Camino2' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -392,14 +392,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 1000,
+                        'Costo' => 250,
                         'Duracion' => $request->Duracion,
                         'FK_Camino3' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 1000,
+                        'Costo' => 250,
                         'Duracion' => $request->Duracion,
                         'FK_Camino3' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -412,14 +412,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 3500,
+                        'Costo' => 760,
                         'Duracion' => 105,
                         'FK_Camino' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 3500,
+                        'Costo' => 760,
                         'Duracion' => 105,
                         'FK_Camino' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -431,14 +431,14 @@ class RutaController extends Controller
                 foreach($vehiculos as $veh){
                     Ofi_Rut::create([
                         'Codigo' => Ofi_Rut::max('Codigo')+1,
-                        'Costo' => 600,
+                        'Costo' => 110,
                         'Duracion' => 1080,
                         'FK_Camino2' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
                         ]);
                     Veh_Rut::create([
                         'Codigo' => Veh_Rut::max('Codigo')+1,
-                        'Costo' => 600,
+                        'Costo' => 110,
                         'Duracion' => 1080,
                         'FK_Camino2' => $veh->Placa,
                         'FK_Coche' => Ruta::max('Codigo')
@@ -503,14 +503,14 @@ class RutaController extends Controller
                     foreach($vehiculos as $veh){
                         Ofi_Rut::create([
                             'Codigo' => Ofi_Rut::max('Codigo')+1,
-                            'Costo' => 1000,
+                            'Costo' => 250,
                             'Duracion' => $request->Duracion,
                             'FK_Camino3' => $veh->Placa,
                             'FK_Coche' => Ruta::max('Codigo')
                             ]);
                         Veh_Rut::create([
                             'Codigo' => Veh_Rut::max('Codigo')+1,
-                            'Costo' => 1000,
+                            'Costo' => 250,
                             'Duracion' => $request->Duracion,
                             'FK_Camino3' => $veh->Placa,
                             'FK_Coche' => Ruta::max('Codigo')
@@ -523,14 +523,14 @@ class RutaController extends Controller
                     foreach($vehiculos as $veh){
                         Ofi_Rut::create([
                             'Codigo' => Ofi_Rut::max('Codigo')+1,
-                            'Costo' => 3500,
+                            'Costo' => 760,
                             'Duracion' => 105,
                             'FK_Camino' => $veh->Placa,
                             'FK_Coche' => Ruta::max('Codigo')
                             ]);
                         Veh_Rut::create([
                             'Codigo' => Veh_Rut::max('Codigo')+1,
-                            'Costo' => 3500,
+                            'Costo' => 760,
                             'Duracion' => 105,
                             'FK_Camino' => $veh->Placa,
                             'FK_Coche' => Ruta::max('Codigo')
@@ -542,14 +542,14 @@ class RutaController extends Controller
                     foreach($vehiculos as $veh){
                         Ofi_Rut::create([
                             'Codigo' => Ofi_Rut::max('Codigo')+1,
-                            'Costo' => 600,
+                            'Costo' => 110,
                             'Duracion' => 1080,
                             'FK_Camino2' => $veh->Placa,
                             'FK_Coche' => Ruta::max('Codigo')
                             ]);
                         Veh_Rut::create([
                             'Codigo' => Veh_Rut::max('Codigo')+1,
-                            'Costo' => 600,
+                            'Costo' => 110,
                             'Duracion' => 1080,
                             'FK_Camino2' => $veh->Placa,
                             'FK_Coche' => Ruta::max('Codigo')

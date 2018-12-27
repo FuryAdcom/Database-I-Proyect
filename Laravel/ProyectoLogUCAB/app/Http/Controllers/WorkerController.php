@@ -12,6 +12,8 @@ use LogUCAB\Phone;
 use LogUCAB\Rol;
 use LogUCAB\Zona;
 use LogUCAB\Emp_Zon;
+use LogUCAB\Horario;
+use LogUCAB\Emp_Hor;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -102,6 +104,40 @@ class WorkerController extends Controller
         ->orderBy('Empleado.Nombre')
         ->paginate(50);
         return view("persona.empleado.showworker", compact('empleados'));
+    }
+
+    public function mostrar($Cedula){
+        $empleado = Worker::find($Cedula); 
+        $telf = Phone::where('FK_Posee', $empleado->Cedula)->first();
+
+        $hor = Horario::where('FK_cada-uno', $empleado->Cedula)->orderBy('Dia','desc')->paginate(50);
+
+        if(isset($hor)){
+            $horarios = $hor;
+        }
+
+        return view("persona.empleado.mostrarworker", compact('empleado','telf','horarios'));
+    }
+
+    public function assist(Request $request){
+        $empleado = Worker::find($request->Cedula); 
+
+        Horario::create([
+            'Codigo' => Horario::max('Codigo')+1,
+            'Dia' => Carbon::now()->format('Y-m-d'),
+            'Descripcion' => 'Horario regular',
+            'Hora_Inicio' => $request->I,
+            'Hora_Fin' => $request->F,
+        ]);
+        Emp_Hor::create([
+            'Codigo' => Emp_Hor::max('Codigo')+1,
+            'Fecha' => Carbon::now()->format('Y-m-d'),
+            'FK_Asistencia' => $request->Cedula,
+            'FK_Recibe_Emp' => Horario::max('Codigo')
+        ]);
+        $horarios = Horario::where('FK_cada-uno', $request->Cedula)->orderBy('Dia','desc')->paginate(50);
+
+        return view("persona.empleado.mostrarworker", compact('empleado','telf','horarios'));
     }
 
     public function edit($Cedula){

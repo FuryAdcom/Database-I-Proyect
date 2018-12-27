@@ -56,12 +56,13 @@ Route::get('/zona/delete/{Codigo}','ZonaController@delete');
 //Empleado
 Route::get('/empleado','WorkerController@inicio');
 Route::get('/empleado/lista','WorkerController@lista');
-Route::get('/empleado/mostrar/{Codigo}','WorkerController@mostrar');
+Route::get('/empleado/mostrar/{Cedula}','WorkerController@mostrar');
+Route::post('/empleado/assist','WorkerController@assist');
 Route::get('/empleado/create','WorkerController@create');
 Route::post('/empleado/store','WorkerController@store');
-Route::get('/empleado/edit/{Codigo}','WorkerController@edit');
+Route::get('/empleado/edit/{Cedula}','WorkerController@edit');
 Route::post('/empleado/update','WorkerController@actualizar');
-Route::get('/empleado/delete/{Codigo}','WorkerController@delete');
+Route::get('/empleado/delete/{Cedula}','WorkerController@delete');
 
 //Usuario
 Route::get('/user','UsuarioController@inicio');
@@ -113,8 +114,8 @@ Route::get('/paquete/delete/{Codigo}','PacketController@delete');
 Route::get('/envio','EnvioController@inicio');
 Route::get('/envio/lista','EnvioController@lista');
 Route::get('/envio/mostrar/{Codigo}','EnvioController@mostrar');
-Route::post('/envio/status/{Codigo}','EnvioController@status');
-Route::post('/envio/recibo/{Codigo}','EnvioController@recibo');
+Route::get('/envio/status/{Codigo}','EnvioController@status');
+Route::get('/envio/recibo/{Codigo}','EnvioController@recibo');
 Route::get('/envio/create','EnvioController@create');
 Route::post('/envio/store','EnvioController@store');
 Route::post('/envio/store2','EnvioController@store2');

@@ -20,20 +20,22 @@
 								<div class="table-responsive">
 									<table class="table table-striped table-bordered table-condensed table-hover">
 										<thead class="thead-dark">
-											<th>Descripcion</th>
-											<th>Lugar Origen</th>
-											<th>Oficina Origen</th>
-											<th>Lugar Destino</th>
+											<th style="width:10px">Codigo</th>
+											<th style="width:10px">Guia paquete</th>
+											<th>Cedula cliente</th>
+											<th>Destinatario</th>
 											<th>Oficina Destino</th>
-											<th style="width: 94px;">Opciones</th>
+											<th style="width:10px">Monto</th>
+											<th style="width:166px">Opciones</th>
 										</thead>
 										@foreach ($envios as $envio)
 										<tbody>	
-											<th> {{$envio->Descripcion}} </th>
-											<th> {{$envio->og.', '.$envio->oge}} </th>
-											<th> {{$envio->ofog}} </th>
-											<th> {{$envio->dest.', '.$envio->deste}} </th>
-											<th> {{$envio->ofdest}} </th>
+											<th style="text-align:center"> {{$envio->Codigo}} </th>
+											<th style="text-align:center"> {{$envio->paq}} </th>
+											<th style="text-align:center"> {{$envio->cli}} </th>
+											<th> {{$envio->dest}} </th>
+											<th> {{$envio->of}} </th>
+											<th style="text-align:center"> {{$envio->Monto}} </th>
 											<th> 
 												<a class="btn btn-info" href="/envio/mostrar/{{$envio->Codigo}}"><i class="fa fa-align-left"></i>Ver</a>
 												<a class="btn btn-danger" href="/envio/cancel/{{$envio->Codigo}}"><i class="fa fa-times"></i>Cancelar</a> 

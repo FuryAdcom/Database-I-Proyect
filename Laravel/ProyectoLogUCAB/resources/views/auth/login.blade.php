@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.app')
 
 @section('contenido')
 <div class="container">
@@ -25,11 +25,6 @@
                       <div></div>
                     </div>
                     
-                    <div class="social">
-                      <a href="javascript:void(0)" class="facebook"></a>
-                      <a href="javascript:void(0)" class="twitter"></a>
-                      <a href="javascript:void(0)" class="googleplus"></a>
-                    </div>
                   </div>
                   
                   <span class="resp-info"></span>
