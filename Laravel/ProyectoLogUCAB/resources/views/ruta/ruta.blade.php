@@ -3,7 +3,9 @@
 <div class="wrapper">
 	<div class="sidemenu">
 		<a href="/ruta">Inicio</a>
-		<a href="/ruta/create">Agregar</a>
+		@if(Auth::user()->rol >= 4 && Auth::user()->rol < 7)
+			<a href="/ruta/create">Agregar</a>
+		@endif
 		<a href="/ruta/lista" style="border-bottom: 0px">Lista</a>
 	</div>
 	<div class="contenido_ppal">

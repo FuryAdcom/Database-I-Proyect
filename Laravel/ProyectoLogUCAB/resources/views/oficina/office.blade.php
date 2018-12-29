@@ -12,4 +12,4 @@
 		<span>Still working on it</span>
 	</div>
 </div>	
-@stop
+@endsection

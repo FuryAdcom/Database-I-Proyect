@@ -3,7 +3,9 @@
 <div class="wrapper">
 					<div class="sidemenu">
 						<a href="/ruta">Inicio</a>
-						<a href="/ruta/create">Agregar</a>
+						@if(Auth::user()->rol >= 4 && Auth::user()->rol < 7)
+							<a href="/ruta/create">Agregar</a>
+						@endif
 						<a href="/ruta/lista" style="border-bottom: 0px">Lista</a>
 					</div>
 					<div class="contenido_ppal">
@@ -25,7 +27,9 @@
 											<th>Oficina Origen</th>
 											<th>Lugar Destino</th>
 											<th>Oficina Destino</th>
+											@if(Auth::user()->rol >= 4 && Auth::user()->rol < 7)
 											<th style="width: 94px;">Opciones</th>
+											@endif
 										</thead>
 										@foreach ($rutas as $ruta)
 										<tbody>	
@@ -34,11 +38,13 @@
 											<th> {{$ruta->ofog}} </th>
 											<th> {{$ruta->dest.', '.$ruta->deste}} </th>
 											<th> {{$ruta->ofdest}} </th>
+											@if(Auth::user()->rol >= 4 && Auth::user()->rol < 7)
 											<th> 
 												<a class="boton_show btn btn-info" href="/ruta/mostrar/{{$ruta->Codigo}}"><i class="fa fa-align-left"></i></a>
 												<a class="boton_show btn btn-secondary" href="/ruta/edit/{{$ruta->Codigo}}"><i class="fa fa-wrench"></i></a>
 												<a class="boton_show btn btn-danger" href="/ruta/delete/{{$ruta->Codigo}}"><i class="fa fa-times"></i></a> 
 											</th>
+											@endif
 										</tbody>
 										@endforeach
 									</table>

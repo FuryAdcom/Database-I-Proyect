@@ -25,6 +25,8 @@
 								<label for="inputDEST" style="color: whitesmoke;">Oficina destino: {{$ofidest->Nombre.'. Codigo: '.$ofidest->Codigo}}</label><br>
 								<h1 for="inputCosto" style="color: whitesmoke;">Costo del envio: {{$costo}}</h1><br>
 								<h1 for="inputEstimado" style="color: whitesmoke;">Fecha estimada: {{$est}}</h1><br>
+								<input class="form-control" name="pagoDest" type="checkbox" value="true">
+								<label for="inputEstimado" style="color: whitesmoke;padding-left:20px">Pagar en destino</h1><br>
                             </div>
                             <h4 style="color: whitesmoke">Si esta seguro de estos datos, presione Enviar.</h4>
 

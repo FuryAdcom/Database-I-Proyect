@@ -78,7 +78,6 @@ Route::get('/cliente','ClientController@inicio');
 Route::get('/cliente/lista','ClientController@lista');
 Route::get('/cliente/mostrar/{Codigo}','ClientController@mostrar');
 Route::get('/cliente/create','ClientController@create');
-Route::post('/cliente/store','ClientController@store');
 Route::get('/cliente/edit/{Codigo}','ClientController@edit');
 Route::post('/cliente/update','ClientController@actualizar');
 Route::get('/cliente/delete/{Codigo}','ClientController@delete');
@@ -126,3 +125,4 @@ Route::get('/envio/cancel/{Codigo}','EnvioController@cancelar');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/logout', 'Auth\LoginController@logout')->name('logout');

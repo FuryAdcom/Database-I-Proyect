@@ -7,8 +7,11 @@ use LogUCAB\Packet;
 use LogUCAB\Lugar;
 use LogUCAB\Tipo;
 use LogUCAB\Client;
+use LogUCAB\Rol;
+use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Session;
 
@@ -16,7 +19,7 @@ use DB;
 
 class PacketController extends Controller
 {
-    public function __construct(){}
+    public function __construct(){$this->middleware('auth');}
 
         public function inicio(){
             return view("paquete.paquete");

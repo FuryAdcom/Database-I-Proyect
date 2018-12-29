@@ -3,7 +3,9 @@
 namespace LogUCAB\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use LogUCAB\Rol;
+use LogUCAB\Priv_Rol;
 use LogUCAB\Http\Requests;
 use LogUCAB\Packet;
 use LogUCAB\Tipo;
@@ -28,7 +30,7 @@ use DB;
 
 class EnvioController extends Controller
 {
-    public function __construct(){
+    public function __construct(){$this->middleware('auth');
     }
 
     public function inicio(){
@@ -54,14 +56,22 @@ class EnvioController extends Controller
     }
 
     public function store(Request $request){
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',1)
+        ->first();
 
-        $paquete = Packet::find($request->Paquete)->orderBy('Numero_guia');
+        if(isset($priv)){
+            $paquete = Packet::find($request->Paquete)->orderBy('Numero_guia');
 
-        $ruta = Ruta::find($request->Ruta);
+            $ruta = Ruta::find($request->Ruta);
 
-        $vehiculos = Veh_Rut::where('FK_Coche', $ruta->Codigo)->get();
+            $vehiculos = Veh_Rut::where('FK_Coche', $ruta->Codigo)->get();
 
-        return view('envio.createenvio2', compact('vehiculos', 'paquete'));
+            return view('envio.createenvio2', compact('vehiculos', 'paquete'));
+        }else{
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
+            return Redirect::back()->withInput(Input::all());
+        }
     }
     public function store2(Request $request){
 
@@ -263,7 +273,7 @@ class EnvioController extends Controller
         
         $est =$envio->created_at->addMinutes($vr->Duracion)->addHours(5)->diffForHumans(Carbon::now());
         
-        //Fechas
+        //Fechas cambiar
         if($status->Descripcion == 'Recibido en origen'){
             $amount = 0;
         }elseif($status->Descripcion == 'Trasladando'){
@@ -301,30 +311,62 @@ class EnvioController extends Controller
 
         $est =$envio->created_at->addMinutes($vr->Duracion)->addHours(5)->diffForHumans(Carbon::now());
         
-        //Fechas
+        //Fechas cambiar
         if($status->Descripcion == 'Recibido en origen'){
-            $status->Descripcion = 'Trasladando';
-            $status->save();
+            $status = Status::create([
+                'Codigo' => Status::max('Codigo')+1,
+                'Descripcion' => 'Trasladando',
+                'FK_Revision' => $worker->Cedula
+            ]);
+            Env_Sta::create([
+                'Codigo' => Env_Sta::max('Codigo')+1,
+                'FK_Encuentra_Sta' => Status::max('Codigo'),
+                'FK_Revisa_Sta' => $envio->Codigo
+            ]);
             $amount = 25;
-            $fecha = $status->updated_at;
+            $fecha = $status->created_at;
         }elseif($status->Descripcion == 'Trasladando'){
-            $status->Descripcion = 'Transportando a destino';
-            $status->save();
+            $status = Status::create([
+                'Codigo' => Status::max('Codigo')+1,
+                'Descripcion' => 'Transportando a destino',
+                'FK_Revision' => $worker->Cedula
+            ]);
+            Env_Sta::create([
+                'Codigo' => Env_Sta::max('Codigo')+1,
+                'FK_Encuentra_Sta' => Status::max('Codigo'),
+                'FK_Revisa_Sta' => $envio->Codigo
+            ]);
             $amount = 50;
-            $fecha = $status->updated_at;
+            $fecha = $status->created_at;
         }elseif($status->Descripcion == 'Transportando a destino'){
-            $status->Descripcion = 'En espera de retiro';
-            $status->save();
+            $status = Status::create([
+                'Codigo' => Status::max('Codigo')+1,
+                'Descripcion' => 'En espera de retiro',
+                'FK_Revision' => $worker->Cedula
+            ]);
+            Env_Sta::create([
+                'Codigo' => Env_Sta::max('Codigo')+1,
+                'FK_Encuentra_Sta' => Status::max('Codigo'),
+                'FK_Revisa_Sta' => $envio->Codigo
+            ]);
             $amount = 75;
-            $fecha = $status->updated_at;
+            $fecha = $status->created_at;
         }elseif($status->Descripcion == 'En espera de retiro'){
 
             //Pago
 
-            $status->Descripcion = 'Entregado';
-            $status->save();
+            Status::create([
+                'Codigo' => Status::max('Codigo')+1,
+                'Descripcion' => 'Entregado',
+                'FK_Revision' => $worker->Cedula
+            ]);
+            Env_Sta::create([
+                'Codigo' => Env_Sta::max('Codigo')+1,
+                'FK_Encuentra_Sta' => Status::max('Codigo'),
+                'FK_Revisa_Sta' => $envio->Codigo
+            ]);
             $amount = 100;
-            $fecha = $status->updated_at;
+            $fecha = $status->created_at;
         }
 
         return view("envio.mostrarenvio", compact('envio','es','status','packet','cliente','destino','amount','oo','od','est','recibido','fecha'));

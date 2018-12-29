@@ -23,7 +23,7 @@ class Client extends Model
         'Empresa',
         'L_Vip',
         'Frecuente',
-        'FK_Asignado_Tipo'
+        'FK_Asignado_Tipo'  //Rol
     ];
 
     protected $guarded =[

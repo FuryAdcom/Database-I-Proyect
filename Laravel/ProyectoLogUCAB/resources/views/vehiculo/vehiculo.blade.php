@@ -11,7 +11,7 @@
 	<div class="contenido_ppal" style="min-height: 500px">
 		<h3 style="text-align: center; color: whitesmoke">Transportes</h3>
 		<span>Still working on it</span><br>
-		
+		{{  Auth::user()->name  }}
 	</div>
 </div>	
 @stop

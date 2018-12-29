@@ -9,6 +9,7 @@ use LogUCAB\Rol;
 use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 use DB;
@@ -16,22 +17,32 @@ use DB;
 
 class RolController extends Controller
 {
-    public function __construct(){
+    public function __construct(){$this->middleware('auth');
     }
 
     public function store(Request $request){
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',7)
+        ->first();
 
-        $request->validate([
-            'Tipo' => 'required'
-        ]);
+        if(isset($priv)){
 
-        Rol::create([
-            'Codigo' =>  Rol::max('Codigo')+1,
-            'Tipo' => $request->Tipo
-        ]);
+            $request->validate([
+                'Tipo' => 'required'
+            ]);
 
-        Session::flash('message','Rol creado correctamente.');
-        return Redirect::to('rol');
+            Rol::create([
+                'Codigo' =>  Rol::max('Codigo')+1,
+                'Tipo' => $request->Tipo
+            ]);
+
+            Session::flash('message','Rol creado correctamente.');
+            return Redirect::to('rol');
+
+        }else{
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
+            return Redirect::back()->withInput(Input::all());
+        }
     }
     
     public function lista(){
@@ -41,99 +52,59 @@ class RolController extends Controller
 
     public function edit($Codigo){
 
-        $validated = Rol::where('Codigo', $Codigo)->first();
-        $crear = Priv_Rol::where('FK_Accede_Sis',$validated->Codigo)
-        ->where('FK_Opcion', 1)
-        ->first();
-        $modificar = Priv_Rol::where('FK_Accede_Sis',$validated->Codigo)
-        ->where('FK_Opcion', 2)
-        ->first();
-        $eliminar = Priv_Rol::where('FK_Accede_Sis',$validated->Codigo)
-        ->where('FK_Opcion', 3)
-        ->first();
-        $insertar = Priv_Rol::where('FK_Accede_Sis',$validated->Codigo)
-        ->where('FK_Opcion', 4)
-        ->first();
-        $consultar = Priv_Rol::where('FK_Accede_Sis',$validated->Codigo)
-        ->where('FK_Opcion', 5)
-        ->first();
-        return view("rol.editrol", compact('validated','crear','modificar','eliminar','insertar','consultar'));
+            $validated = Rol::where('Codigo', $Codigo)->first();
+            $privs = DB::table('Privilegio')->orderBy('Codigo')->get();
+            $pr = Priv_Rol::where('FK_Accede_Sis', $Codigo)->get();
+            return view("rol.editrol", compact('validated','privs','pr'));
+
     }
 
     public function actualizar(Request $request){
-        $rol = Rol::find($request->Codigo);
-        $crear = Priv_Rol::where('FK_Accede_Sis',$request->Codigo)
-        ->where('FK_Opcion', 1)
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',7)
         ->first();
-        $modificar = Priv_Rol::where('FK_Accede_Sis',$request->Codigo)
-        ->where('FK_Opcion', 2)
-        ->first();
-        $eliminar = Priv_Rol::where('FK_Accede_Sis',$request->Codigo)
-        ->where('FK_Opcion', 3)
-        ->first();
-        $insertar = Priv_Rol::where('FK_Accede_Sis',$request->Codigo)
-        ->where('FK_Opcion', 4)
-        ->first();
-        $consultar = Priv_Rol::where('FK_Accede_Sis',$request->Codigo)
-        ->where('FK_Opcion', 5)
-        ->first();
-    
-        $rol->Tipo = $request->Tipo;
-        $rol->save();
 
-        if(isset($crear) && $request->Crear == false){
-            $crear->delete();
-        }elseif(is_null($crear) && $request->Crear == true){
-            Priv_Rol::create([
-                'Codigo' =>  Priv_Rol::max('Codigo')+1,
-                'FK_Opcion' => 1,
-                'FK_Accede_Sis' => $request->Codigo
-            ]);
-        }
-        if(isset($modificar) && $request->Modificar == false){
-            $modificar->delete();
-        }elseif(is_null($modificar) && $request->Modificar == true){
-            Priv_Rol::create([
-                'Codigo' =>  Priv_Rol::max('Codigo')+1,
-                'FK_Opcion' => 2,
-                'FK_Accede_Sis' => $request->Codigo
-            ]);
-        }
-        if(isset($eliminar) && $request->Eliminar == false){
-            $eliminar->delete();
-        }elseif(is_null($eliminar) && $request->Eliminar == true){
-            Priv_Rol::create([
-                'Codigo' =>  Priv_Rol::max('Codigo')+1,
-                'FK_Opcion' => 3,
-                'FK_Accede_Sis' => $request->Codigo
-            ]);
-        }
-        if(isset($insertar) && $request->Insertar == false){
-            $insertar->delete();
-        }elseif(is_null($insertar) && $request->Insertar == true){
-            Priv_Rol::create([
-                'Codigo' =>  Priv_Rol::max('Codigo')+1,
-                'FK_Opcion' => 4,
-                'FK_Accede_Sis' => $request->Codigo
-            ]);
-        }
-        if(isset($consultar) && $request->Consultar == false){
-            $consultar->delete();
-        }elseif(is_null($consultar) && $request->Consultar == true){
-            Priv_Rol::create([
-                'Codigo' =>  Priv_Rol::max('Codigo')+1,
-                'FK_Opcion' => 5,
-                'FK_Accede_Sis' => $request->Codigo
-            ]);
-        }
+        if(isset($priv)){
 
-        Session::flash('message','Rol modificado correctamente.');
-        return Redirect::to('/rol');
+            $rol = Rol::find($request->Codigo);
+            $privs = DB::table('Privilegio')->orderBy('Codigo')->get();
+            Priv_Rol::where('FK_Accede_Sis', $request->Codigo)->delete();
+        
+            $rol->Tipo = $request->Tipo;
+            $rol->save();
+
+            foreach($privs as $priv){
+                if($request->{$priv->tipo}){
+                    Priv_Rol::create([
+                        'Codigo' => Priv_Rol::max('Codigo')+1,
+                        'FK_Opcion' => $priv->Codigo,
+                        'FK_Accede_Sis' => $rol->Codigo
+                    ]);
+                }
+            }
+
+            Session::flash('message','Rol modificado correctamente.');
+            return Redirect::to('/rol');
+        }else{
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
+            return Redirect::back()->withInput(Input::all());
+        }
     }
 
     public function delete($Codigo){
-        Rol::find($Codigo)->delete();
-        Session::flash('messagedel','Rol eliminado correctamente.');
-        return redirect('/rol');
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',7)
+        ->first();
+
+        if(isset($priv)){
+
+            Priv_Rol::where('FK_Accede_Sis', $Codigo)->delete();
+            Rol::find($Codigo)->delete();
+            Session::flash('messagedel','Rol eliminado correctamente.');
+            return redirect('/rol');
+        }else{
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
+            return Redirect::back()->withInput(Input::all());
+        }
     }
 }

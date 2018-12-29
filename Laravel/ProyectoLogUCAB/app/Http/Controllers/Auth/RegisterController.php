@@ -3,6 +3,9 @@
 namespace LogUCAB\Http\Controllers\Auth;
 
 use LogUCAB\User;
+use LogUCAB\Usuario;
+use LogUCAB\Client;
+use LogUCAB\Worker;
 use LogUCAB\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +40,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+
     }
 
     /**
@@ -63,10 +66,108 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $c = Client::where('Correo_Personal', $data['email'])->first();
+        $e = Worker::where('Correo_Personal', $data['email'])->first();
+        $us = Usuario::where('Usuario.Nombre', $data['name'])->first();
+        if(isset($us)){
+            return Redirect::back()->withInput(Input::all());
+        }else{
+            $us = Usuario::where('Usuario.Correo', $data['email'])->first();
+            if(isset($us)){
+                return Redirect::back()->withInput(Input::all());
+            }
+        }
+
+        if(is_null($data['rol'])){
+        if(isset($c)){
+            Usuario::create([
+                "Codigo" => Usuario::max('Codigo')+1,
+                "Nombre" => $data['name'],
+                "Correo" => $data['email'],
+                "Contraseña" => Hash::make($data['password']),
+                "FK_Sele_Concede" => $c->FK_Asignado_Tipo
+            ]);
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'rol' => $c->FK_Asignado_Tipo
+            ]);
+        }elseif(isset($e)){
+            Usuario::create([
+                "Codigo" => Usuario::max('Codigo')+1,
+                "Nombre" => $data['name'],
+                "Correo" => $data['email'],
+                "Contraseña" => Hash::make($data['password']),
+                "FK_Sele_Concede" => $e->FK_Asignado_Puesto
+            ]);
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'rol' => $e->FK_Asignado_Puesto
+            ]);
+        }else{
+            Usuario::create([
+                "Codigo" => Usuario::max('Codigo')+1,
+                "Nombre" => $data['name'],
+                "Correo" => $data['email'],
+                "Contraseña" => Hash::make($data['password']),
+                "FK_Sele_Concede" => 7
+            ]);
+            User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'rol' => 7
+            ]);
+            return redirect('/cliente/create');
+        }
+    }else{
+        if(isset($c)){
+            Usuario::create([
+                "Codigo" => Usuario::max('Codigo')+1,
+                "Nombre" => $data['name'],
+                "Correo" => $data['email'],
+                "Contraseña" => Hash::make($data['password']),
+                "FK_Sele_Concede" => $data['rol']
+            ]);
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'rol' => $data['rol']
+            ]);
+        }elseif(isset($e)){
+            Usuario::create([
+                "Codigo" => Usuario::max('Codigo')+1,
+                "Nombre" => $data['name'],
+                "Correo" => $data['email'],
+                "Contraseña" => Hash::make($data['password']),
+                "FK_Sele_Concede" => $data['rol']
+            ]);
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'rol' => $data['rol']
+            ]);
+        }else{
+            Usuario::create([
+                "Codigo" => Usuario::max('Codigo')+1,
+                "Nombre" => $data['name'],
+                "Correo" => $data['email'],
+                "Contraseña" => Hash::make($data['password']),
+                "FK_Sele_Concede" => $data['rol']
+            ]);
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'rol' => $data['rol']
+            ]);
+    }
+
+    }
     }
 }

@@ -8,8 +8,11 @@ use LogUCAB\Http\Requests;
 use LogUCAB\Office;
 use LogUCAB\Lugar;
 use LogUCAB\Phone;
+use LogUCAB\Rol;
+use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Session;
 
@@ -18,7 +21,7 @@ use DB;
 
 class OfficeController extends Controller
 {
-    public function __construct(){}
+    public function __construct(){$this->middleware('auth');}
 
     public function inicio(){
         return view("oficina.office");
@@ -29,45 +32,55 @@ class OfficeController extends Controller
     }
 
     public function store(Request $request){
-        $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
-        ->where('Lugar.Tipo', 'Municipio')
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',3)
         ->first();
-        $edo = Lugar::where('Lugar.Nombre', $request->est)
-        ->where('Lugar.Tipo', 'Estado')
-        ->first();
-        
-        if(isset($lugar->Nombre) && $lugar->FK_Lugar==$edo->Codigo){
-            $request->lugar = $lugar->Codigo;
 
-            $request->validate([
-                'Nombre' => 'required',
-                'Deposito' => 'required',
-                'lugar' => 'required',
-                'est' => 'required'
-            ]);
+        if(isset($priv)){
+            $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
+            ->where('Lugar.Tipo', 'Municipio')
+            ->first();
+            $edo = Lugar::where('Lugar.Nombre', $request->est)
+            ->where('Lugar.Tipo', 'Estado')
+            ->first();
+            
+            if(isset($lugar->Nombre) && $lugar->FK_Lugar==$edo->Codigo){
+                $request->lugar = $lugar->Codigo;
 
-            Office::create([
-                'Codigo' => (Office::max('Codigo')) + 1,
-                'Nombre' => $request->Nombre,
-                'Tamaño_Deposito' => $request->Deposito,
-                'FK_Varios' => $request->lugar
-            ]);
-            Phone::create([
-                'Numero' => $request->Telefono,
-                'tipo' => 'Oficina',
-                'FK_Telefonia' => Office::max('Codigo')
-            ]);
+                $request->validate([
+                    'Nombre' => 'required',
+                    'Deposito' => 'required',
+                    'lugar' => 'required',
+                    'est' => 'required'
+                ]);
 
-        }elseif(isset($lugar->Nombre) && $lugar->FK_Lugar!=$edo->Codigo){
-            Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
-            return Redirect::back()->withInput(Input::all());
+                Office::create([
+                    'Codigo' => (Office::max('Codigo')) + 1,
+                    'Nombre' => $request->Nombre,
+                    'Tamaño_Deposito' => $request->Deposito,
+                    'FK_Varios' => $request->lugar
+                ]);
+                Phone::create([
+                    'Numero' => $request->Telefono,
+                    'tipo' => 'Oficina',
+                    'FK_Telefonia' => Office::max('Codigo')
+                ]);
+
+            }elseif(isset($lugar->Nombre) && $lugar->FK_Lugar!=$edo->Codigo){
+                Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
+                return Redirect::back()->withInput(Input::all());
+            }else{
+                Session::flash('message','El municipio '.$request->lugar.' no existe.');
+                return Redirect::back()->withInput(Input::all());
+            }
+
+            Session::flash('message','Oficina creada correctamente.');
+            return Redirect::to('/oficina/lista');
+
         }else{
-            Session::flash('message','El municipio '.$request->lugar.' no existe.');
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
             return Redirect::back()->withInput(Input::all());
         }
-
-        Session::flash('message','Oficina creada correctamente.');
-        return Redirect::to('/oficina/lista');
     }
     
     public function lista(){
@@ -101,49 +114,69 @@ class OfficeController extends Controller
     }
 
     public function actualizar(Request $request){
-        $oficina = Office::find($request->Codigo)->first();
-        $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
-        ->where('Lugar.Tipo', 'Municipio')
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',3)
         ->first();
-        $edo = Lugar::where('Lugar.Nombre', $request->est)
-        ->where('Lugar.Tipo', 'Estado')
-        ->first();
-        $telefono = Phone::where('Telefono.FK_Telefonia', $request->Codigo)->first();
-        $telfcomp = Phone::find($request->Telefono)->first();
-    
-        if(isset($lugar) && $lugar->FK_Lugar==$edo->Codigo){
 
-            $oficina->Nombre = $request->Nombre;
-            $oficina->Tamaño_Deposito = $request->Tamaño_Deposito;
-            $oficina->FK_Varios = $lugar->Codigo;
-            $oficina->save();
+        if(isset($priv)){
+            $oficina = Office::find($request->Codigo)->first();
+            $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
+            ->where('Lugar.Tipo', 'Municipio')
+            ->first();
+            $edo = Lugar::where('Lugar.Nombre', $request->est)
+            ->where('Lugar.Tipo', 'Estado')
+            ->first();
+            $telefono = Phone::where('Telefono.FK_Telefonia', $request->Codigo)->first();
+            $telfcomp = Phone::find($request->Telefono)->first();
+        
+            if(isset($lugar) && $lugar->FK_Lugar==$edo->Codigo){
 
-            if(is_null($telefono)){
-                Phone::create([
-                    'Numero' => $request->Telefono,
-                    'tipo' => 'Oficina',
-                    'FK_Telefonia' => Office::max('Codigo')
-                ]);    
-            }elseif($telefono != $request->Telefono && is_null($telfcomp)){
-                $telefono->Numero = $request->Telefono;
-                $telefono->save();
+                $oficina->Nombre = $request->Nombre;
+                $oficina->Tamaño_Deposito = $request->Tamaño_Deposito;
+                $oficina->FK_Varios = $lugar->Codigo;
+                $oficina->save();
+
+                if(is_null($telefono)){
+                    Phone::create([
+                        'Numero' => $request->Telefono,
+                        'tipo' => 'Oficina',
+                        'FK_Telefonia' => Office::max('Codigo')
+                    ]);    
+                }elseif($telefono != $request->Telefono && is_null($telfcomp)){
+                    $telefono->Numero = $request->Telefono;
+                    $telefono->save();
+                }
+
+            }elseif(isset($lugar) && $lugar->FK_Lugar!=$edo->Codigo){
+                Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
+                return Redirect::back()->withInput(Input::all());
+            }else{
+                Session::flash('message','El municipio '.$request->lugar.' no existe.');
+                return Redirect::back()->withInput(Input::all());
             }
 
-        }elseif(isset($lugar) && $lugar->FK_Lugar!=$edo->Codigo){
-            Session::flash('message','El municipio '.$lugar->Nombre.' no existe en el estado '.$edo->Nombre.'.');
-            return Redirect::back()->withInput(Input::all());
+            Session::flash('message','Oficina modificada correctamente.');
+            return Redirect::to('/oficina/lista');
+
         }else{
-            Session::flash('message','El municipio '.$request->lugar.' no existe.');
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
             return Redirect::back()->withInput(Input::all());
         }
-
-        Session::flash('message','Oficina modificada correctamente.');
-        return Redirect::to('/oficina/lista');
     }
 
     public function delete($Codigo){
-        DB::table('Oficina')->where('Codigo', $Codigo)->delete();
-        Session::flash('messagedel','Oficina eliminada correctamente.');
-        return redirect('/oficina/lista');
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',3)
+        ->first();
+
+        if(isset($priv)){
+            DB::table('Oficina')->where('Codigo', $Codigo)->delete();
+            Session::flash('messagedel','Oficina eliminada correctamente.');
+            return redirect('/oficina/lista');
+
+        }else{
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
+            return Redirect::back()->withInput(Input::all());
+        }
     }
 }

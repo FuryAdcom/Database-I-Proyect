@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 
 use LogUCAB\Http\Requests;
 use LogUCAB\Usuario;
+use LogUCAB\User;
 use LogUCAB\Rol;
+use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 use DB;
@@ -18,7 +21,7 @@ use DB;
 class UsuarioController extends Controller
 {
     public function __construct(){
-
+        $this->middleware('auth');
     }
 
     public function inicio(){
@@ -28,40 +31,6 @@ class UsuarioController extends Controller
     public function create(){
         $rols = Rol::select()->orderBy('Codigo', 'asc')->get();
         return view("persona.usuario.createuser", compact('rols'));
-    }
-
-    public function store(Request $request){
-
-        $us = Usuario::where('Usuario.Nombre', $request->Nombre)->first();
-        $rols = Rol::select()->orderBy('Codigo', 'asc')->get();
-        if(isset($us)){
-            
-            Session::flash('message','El nombre de usuario '.$request->Nombre.' ya existe.');
-            return Redirect::back()->withInput(Input::all())->with('rols', $rols);
-        }else{
-            $us = Usuario::where('Usuario.Correo', $request->Correo)->first();
-            if(isset($us)){
-                Session::flash('message','El correo '.$request->Correo.' ya existe.');
-                return Redirect::back()->withInput(Input::all())->with('rols', $rols);
-            }
-        }
-        $request->validate([
-            'Nombre' => 'required',
-            'Correo' => 'required',
-            'Contraseña' => 'required',
-            'FK_Sele_Concede' => 'required'
-        ]);
-        
-        Usuario::create([
-            "Codigo" => Usuario::max('Codigo')+1,
-            "Nombre" => $request->Nombre,
-            "Correo" => $request->Correo,
-            "Contraseña" => $request->Contraseña,
-            "FK_Sele_Concede" => $request->FK_Sele_Concede
-        ]);
-
-        Session::flash('message','Usuario creado correctamente.');
-        return Redirect::to('/user/lista');
     }
     
     public function lista(){
@@ -99,18 +68,39 @@ class UsuarioController extends Controller
                 return Redirect::back()->withInput(Input::all())->with('rols', $rols);
             }
         }
+        $us = User::where('email', $request->Correo)->first();
         $usuario->Nombre = $request->Nombre;
         $usuario->Correo = $request->Correo;
-        $usuario->Contraseña = $request->Contraseña;
         $usuario->save();
+        if(is_null($us)){
+        User::create([
+            "name" => $request->Nombre,
+            "email" => $request->Correo,
+            "rol" => $request->FK_Sele_Concede
+        ]);
+        }else{
+            $us->name = $request->Nombre;
+            $us->email = $request->Correo;
+            $us->rol = $request->FK_Sele_Concede;
+            $us->save();
+        }
 
         Session::flash('message','Usuario modificado correctamente.');
         return Redirect::to('/user/lista');
     }
 
     public function delete($Codigo){
-        DB::table('usuario')->where('Codigo', $Codigo)->delete();
-        Session::flash('messagedel','Usuario eliminado correctamente.');
-        return redirect('/user/lista');
+        $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+        ->where('FK_Opcion',13)
+        ->first();
+
+        if(isset($priv)){
+            DB::table('usuario')->where('Codigo', $Codigo)->delete();
+            Session::flash('messagedel','Usuario eliminado correctamente.');
+            return redirect('/user/lista');
+        }else{
+            Session::flash('message','Usted no tiene permisos para realizar esta accion.');
+            return Redirect::back()->withInput(Input::all());
+        }
     }
 }

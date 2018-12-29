@@ -9,16 +9,19 @@ use LogUCAB\Zona;
 use LogUCAB\Lugar;
 use LogUCAB\Office;
 use LogUCAB\Worker;
+use LogUCAB\Rol;
+use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 use Session;
 
 use DB;
 
 class ZonaController extends Controller
 {
-    public function __construct(){}
+    public function __construct(){$this->middleware('auth');}
 
         public function inicio(){
             return view("oficina.zona.zona");
@@ -34,27 +37,36 @@ class ZonaController extends Controller
         }
     
         public function store(Request $request){
-            $oficina = Office::find($request->FK_Divide)->first();
-            $samename = Zona::where('Zona.Nombre', $request->Nombre)
-            ->where('Zona.FK_Divide', $request->FK_Divide)->first();
-            
-            if(is_null($samename)){
+            $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+            ->where('FK_Opcion',3)
+            ->first();
     
-                Zona::create([
-                    'Codigo' => (Zona::max('Codigo')) + 1,
-                    'Nombre' => $request->Nombre,
-                    'Descripcion' => $request->Descripcion,
-                    'Division_area' => $request->Division_area,
-                    'FK_Divide' => $request->FK_Divide
-                ]);
+            if(isset($priv)){
+                $oficina = Office::find($request->FK_Divide)->first();
+                $samename = Zona::where('Zona.Nombre', $request->Nombre)
+                ->where('Zona.FK_Divide', $request->FK_Divide)->first();
+                
+                if(is_null($samename)){
+        
+                    Zona::create([
+                        'Codigo' => (Zona::max('Codigo')) + 1,
+                        'Nombre' => $request->Nombre,
+                        'Descripcion' => $request->Descripcion,
+                        'Division_area' => $request->Division_area,
+                        'FK_Divide' => $request->FK_Divide
+                    ]);
 
+                }else{
+                    Session::flash('message','El nombre de la zona: '.$request->Nombre.' ya existe en la oficina'.$oficina->Nombre.'.');
+                    return Redirect::back()->withInput(Input::all());
+                }
+        
+                Session::flash('message','Zona creada correctamente.');
+                return Redirect::to('/zona/lista');
             }else{
-                Session::flash('message','El nombre de la zona: '.$request->Nombre.' ya existe en la oficina'.$oficina->Nombre.'.');
+                Session::flash('message','Usted no tiene permisos para realizar esta accion.');
                 return Redirect::back()->withInput(Input::all());
             }
-    
-            Session::flash('message','Zona creada correctamente.');
-            return Redirect::to('/zona/lista');
         }
         
         public function lista(){
@@ -86,32 +98,50 @@ class ZonaController extends Controller
         }
     
         public function actualizar(Request $request){
-            $zona = Zona::find($request->Codigo);
-            $oficina = Office::find($request->FK_Divide);
-            $samename = Zona::select(DB::raw('COUNT(Zona.Codigo) as cuenta'))
-            ->where('Zona.Nombre', $request->Nombre)
-            ->where('Zona.FK_Divide', $request->FK_Divide);
-            
-            if($samename == 0){
+            $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+            ->where('FK_Opcion',3)
+            ->first();
     
-                $zona->Nombre = $request->Nombre;
-                $zona->Descripcion = $request->Descripcion;
-                $zona->Division_area = $request->Division_area;
-                $zona->FK_Divide = $request->FK_Divide;
-                $zona->save();
-    
+            if(isset($priv)){
+                $zona = Zona::find($request->Codigo);
+                $oficina = Office::find($request->FK_Divide);
+                $samename = Zona::select(DB::raw('COUNT(Zona.Codigo) as cuenta'))
+                ->where('Zona.Nombre', $request->Nombre)
+                ->where('Zona.FK_Divide', $request->FK_Divide);
+                
+                if($samename == 0){
+        
+                    $zona->Nombre = $request->Nombre;
+                    $zona->Descripcion = $request->Descripcion;
+                    $zona->Division_area = $request->Division_area;
+                    $zona->FK_Divide = $request->FK_Divide;
+                    $zona->save();
+        
+                }else{
+                    Session::flash('message','El nombre de la zona: '.$request->Nombre.' ya existe en la oficina'.$oficina->Nombre.'.');
+                    return Redirect::back()->withInput(Input::all());
+                }
+        
+                Session::flash('message','Zona modificada correctamente.');
+                return Redirect::to('/zona/lista');
             }else{
-                Session::flash('message','El nombre de la zona: '.$request->Nombre.' ya existe en la oficina'.$oficina->Nombre.'.');
+                Session::flash('message','Usted no tiene permisos para realizar esta accion.');
                 return Redirect::back()->withInput(Input::all());
             }
-    
-            Session::flash('message','Zona modificada correctamente.');
-            return Redirect::to('/zona/lista');
         }
     
         public function delete($Codigo){
-            DB::table('Zona')->where('Codigo', $Codigo)->delete();
-            Session::flash('messagedel','Zona eliminada correctamente.');
-            return redirect('/zona/lista');
+            $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
+            ->where('FK_Opcion',3)
+            ->first();
+    
+            if(isset($priv)){
+                DB::table('Zona')->where('Codigo', $Codigo)->delete();
+                Session::flash('messagedel','Zona eliminada correctamente.');
+                return redirect('/zona/lista');
+            }else{
+                Session::flash('message','Usted no tiene permisos para realizar esta accion.');
+                return Redirect::back()->withInput(Input::all());
+            }
         }
 }
