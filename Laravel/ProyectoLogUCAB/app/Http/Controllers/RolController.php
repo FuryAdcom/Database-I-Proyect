@@ -10,6 +10,7 @@ use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
+use Yajra\Datatables\Datatables;
 use Session;
 
 use DB;
@@ -46,7 +47,8 @@ class RolController extends Controller
     }
     
     public function lista(){
-        $roles = Rol::orderBy('Codigo')->paginate(50);
+
+        $roles = Rol::select()->orderBy('Codigo')->paginate(50);
         return view("rol.showrol", compact('roles'));
     }
 

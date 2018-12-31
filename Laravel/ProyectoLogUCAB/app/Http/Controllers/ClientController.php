@@ -150,6 +150,16 @@ class ClientController extends Controller
     }
     }
 
+    public function carnet($Codigo){
+
+        $cliente = Client::where('Cedula',$Codigo)->first();
+        
+        //Para el PDF recibo de envio, $order tiene que tener los datos necesarios
+        //
+        //return $order->getPdf('download'); // Returns the PDF as download
+        return $cliente->getPdf(); // Returns stream default
+    }
+
     public function delete($Codigo){
         $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
         ->where('FK_Opcion',8)

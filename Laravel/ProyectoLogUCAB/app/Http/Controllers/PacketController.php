@@ -14,6 +14,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Session;
+use Carbon\Carbon;
 
 use DB;
 
@@ -77,10 +78,18 @@ class PacketController extends Controller
         public function lista(){
             
             $paquetes = Packet::leftjoin('Cliente as client', 'client.Cedula','=','Paquete.FK_Entrega')
-            ->select(\DB::raw("\"Paquete\".*, client.\"Nombre\" as nombre, client.\"Apellido\" as apellido"))
+            ->leftjoin('Ofi-Paq as op', 'op.FK_Llega','=','Paquete.Numero_guia')
+            ->select(\DB::raw("\"Paquete\".*, client.\"Nombre\" as nombre, client.\"Apellido\" as apellido, op.created_at as creado"))
+            ->orderBy('Paquete.Numero_guia')
             ->paginate(50);
+
+            $actual = Carbon::now();
+            foreach($paquetes as $p){
+                if(isset($p->creado))
+                    $p->creado = Carbon::parse($p->creado)->addHours(24);
+            }
     
-            return view("paquete.showpaquete", compact('paquetes'));
+            return view("paquete.showpaquete", compact('paquetes','actual'));
         }
     
         public function mostrar($Codigo){

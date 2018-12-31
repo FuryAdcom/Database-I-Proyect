@@ -37,7 +37,7 @@
 											<th> {{$cliente->Correo_Personal}} </th>
 											<th style="text-align:center"> {{ date('d-m-Y', strtotime($cliente->Fecha_Nacimiento)) }} </th>
 											@if($cliente->FK_Asignado_Tipo == 1)
-												<th> Sí </th>
+												<th> Sí <a class="boton_show btn btn-primary" href="/cliente/carnet/{{$cliente->Cedula}}"><i class="fa fa-address-card"></i></a></th>
 											@else
 												<th> No </th>
 											@endif

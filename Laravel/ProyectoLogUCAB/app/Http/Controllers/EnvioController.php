@@ -367,6 +367,8 @@ class EnvioController extends Controller
             ]);
             $amount = 100;
             $fecha = $status->created_at;
+
+            //Ofi-Paq con el de entrega
         }
 
         return view("envio.mostrarenvio", compact('envio','es','status','packet','cliente','destino','amount','oo','od','est','recibido','fecha'));

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="es" class="no-js">
 	<head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
@@ -14,8 +14,8 @@
 					<link rel="dns-prefetch" href="https://fonts.gstatic.com">
 					<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 				
-					<!-- Styles -->
-					<link href="{{ asset('css/app.css') }}" rel="stylesheet">
+		<!-- Styles -->
+		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 	
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css" integrity="sha384-PmY9l28YgO4JwMKbTvgaS7XNZJ30MK9FAZjjzXtlqyZCqBY6X6bXIkM++IkyinN+" crossorigin="anonymous">
@@ -27,9 +27,7 @@
 		<link rel="stylesheet" type="text/css" href="{{asset('/css/demo.css')}}" />
 		<link rel="stylesheet" type="text/css" href="{{asset('/css/component.css')}}" />
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-		<script src="{{asset('/js/modernizr.custom.js')}}"></script>
-			<!-- Scripts -->
-			<script src="{{ asset('js/app.js') }}" defer></script>
+
 	</head>
 	<body style="background: #34495e; overflow-y: scroll">
 		<ul id="gn-menu" class="gn-menu-main">
@@ -44,7 +42,7 @@
 									<a class="gn-icon gn-icon-search"><span>Buscar</span></a>
 								</li>
 								<li>
-									<a href="/user"><i class="fa fa-address-card" id="inside_opt"></i>Usuario</a>
+									<a href="/user"><i class="fa fa-user" id="inside_opt"></i>Usuario</a>
 									<ul class="gn-submenu">
 											<a href="/empleado"><li class="sub_option"><i class="fa fa-user-tie" id="inside_opt"></i>Empleado</li></a>
 											<a href="/cliente"><li class="sub_option"><i class="fa fa-users" id="inside_opt"></i>Cliente</li></a>
@@ -86,6 +84,7 @@
 			@yield('contenido')
 			<!--Til here-->	
 		</div><!-- /container -->
+		<!-- Scripts -->
 		<script type="text/javascript" src="{{asset('/js/jquery-3.3.1.min.js')}}"></script>
 		<script type="text/javascript" src="{{asset('/js/jquery.dataTables.min.js')}}"></script>
 		<script type="text/javascript" src="{{asset('/js/dataTables.bootstrap.min.js')}}"></script>
@@ -93,11 +92,13 @@
 		<script src="{{asset('/js/thermo.js')}}"></script>
 		<script src="{{asset('/js/gnmenu.js')}}"></script>
 		<script src="{{asset('/js/forms.js')}}"></script>
-		<script>
-				$(document).ready( function () {
-					$('#latabla').DataTable();
-				} );
-			</script>
+		<script src="{{asset('/js/modernizr.custom.js')}}"></script>
+		<script src="{{ asset('js/app.js') }}" defer></script>
+		<script src="https://datatables.yajrabox.com/js/jquery.min.js"></script>
+		<script src="https://datatables.yajrabox.com/js/bootstrap.min.js"></script>
+		<script src="https://datatables.yajrabox.com/js/jquery.dataTables.min.js"></script>
+		<script src="https://datatables.yajrabox.com/js/datatables.bootstrap.js"></script>
+		<script src="https://datatables.yajrabox.com/js/handlebars.js"></script>
 		<script>
 			new gnMenu( document.getElementById( 'gn-menu' ) );
 		</script>

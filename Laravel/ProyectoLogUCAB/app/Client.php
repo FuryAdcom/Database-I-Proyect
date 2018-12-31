@@ -30,4 +30,16 @@ class Client extends Model
         'Cedula',
         'Correo_Personal'
     ];
+
+    public function getPdf($type = 'stream'){
+        $pdf = app('dompdf.wrapper')->loadView('/persona/cliente/carnetclient', ['cliente' => $this]);
+    
+        if ($type == 'stream') {
+            return $pdf->stream('carnet.pdf');
+        }
+    
+        if ($type == 'download') {
+            return $pdf->download('carnet.pdf');
+        }
+    }
 }

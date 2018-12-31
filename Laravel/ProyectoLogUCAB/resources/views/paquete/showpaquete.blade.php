@@ -14,6 +14,7 @@
 						@elseif(Session::has('messagedel'))
 							<div class="alert alert-danger"> {{Session::get('messagedel')}} </div>
 						@endif
+						<h1 style="color:darkred">AVISO: Si el texto del paquete es rojo, su paquete lleva mas de 24 horas en la oficina.</h1>
 						<!-- Busqueda -->
 						<div class="row">
 							<div class="col-lg-12">
@@ -29,7 +30,7 @@
 											<th style="width: 94px;">Opciones</th>
 										</thead>
 										@foreach ($paquetes as $paquete)
-										<tbody>	
+										<tbody @if($paquete->creado < $actual) style="color:indianred" @endif>	
 											<th style="text-align:center"> {{$paquete->Numero_guia}} </th>
 											<th> {{$paquete->nombre.' '.$paquete->apellido}} </th>
 											<th> {{$paquete->Destinatario}} </th>

@@ -10,6 +10,8 @@ use LogUCAB\Lugar;
 use LogUCAB\Phone;
 use LogUCAB\Rol;
 use LogUCAB\Priv_Rol;
+use LogUCAB\Env_Rut;
+use LogUCAB\Ruta;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +19,6 @@ use Illuminate\Support\Facades\Input;
 use Session;
 
 use DB;
-
 
 class OfficeController extends Controller
 {
@@ -84,13 +85,23 @@ class OfficeController extends Controller
     }
     
     public function lista(){
-        
         $oficinas = Office::leftjoin('Lugar as mun', 'mun.Codigo','=','Oficina.FK_Varios')
         ->leftjoin('Lugar as est', 'est.Codigo','=','mun.FK_Lugar')
         ->select(\DB::raw("\"Oficina\".*, mun.\"Nombre\" as sitio, est.\"Nombre\" as estado"))
         ->paginate(50);
+        $os = Office::get();
+        $masenv=0;
+        foreach($os as $o){
+            $comp = Env_Rut::selectRaw('count("Env-Rut".*) as cuenta')
+            ->leftjoin('Ruta as r','r.Codigo','=','Env-Rut.FK_Adquiere_Pa') 
+            ->where('r.FK_Ofi_Origen',$o->Codigo)
+            ->get();
+            if($comp->cuenta > $masenv){
+                $masenv = $o;
+            }
+        }            dd($masenv);
 
-        return view("oficina.showoffice", compact('oficinas'));
+        return view("oficina.showoffice", compact('oficinas','masenv','masrec'));
     }
 
     public function mostrar($Codigo){
