@@ -48,9 +48,9 @@
 									<select class="form-control" style="height: 34px" name="Estado_Civil" required>
 										<option value="">Seleccione una...</option>
 										<option value="soltero" @if(old('Estado_Civil')=='soltero') selected @endif>Soltero</option>
-										<option value="casado"@if(old('Estado_Civil')=='casado') selected @endif>Casado</option>
-										<option value="viudo"@if(old('Estado_Civil')=='viudo') selected @endif>Viudo</option>
-										<option value="divorciado"@if(old('Estado_Civil')=='divorciado') selected @endif>Divorciado</option>
+										<option value="casado" @if(old('Estado_Civil')=='casado') selected @endif>Casado</option>
+										<option value="viudo" @if(old('Estado_Civil')=='viudo') selected @endif>Viudo</option>
+										<option value="divorciado" @if(old('Estado_Civil')=='divorciado') selected @endif>Divorciado</option>
 									</select>
 							</div>
 							<div class="form-group" style="width:49%; float: left;">

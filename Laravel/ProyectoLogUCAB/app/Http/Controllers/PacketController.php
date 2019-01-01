@@ -76,7 +76,12 @@ class PacketController extends Controller
         }
         
         public function lista(){
-            
+
+            $avgpeso = DB::select(DB::Raw("SELECT o.\"Codigo\" as Codigo, avg(paq.\"Peso\") as avgpeso
+            from \"Paquete\" as paq, \"Env-Rut\" as er, \"Envio\" as e, \"Ruta\" as r, \"Oficina\" as o
+            where paq.\"FK_Transporta\" = e.\"Codigo\" and e.\"Codigo\" = er.\"FK_Recorre\" and er.\"FK_Adquiere_Pa\" = r.\"Codigo\" and r.\"FK_Ofi_Origen\" = o.\"Codigo\"
+            group by o.\"Codigo\""));
+
             $paquetes = Packet::leftjoin('Cliente as client', 'client.Cedula','=','Paquete.FK_Entrega')
             ->leftjoin('Ofi-Paq as op', 'op.FK_Llega','=','Paquete.Numero_guia')
             ->select(\DB::raw("\"Paquete\".*, client.\"Nombre\" as nombre, client.\"Apellido\" as apellido, op.created_at as creado"))
@@ -89,7 +94,7 @@ class PacketController extends Controller
                     $p->creado = Carbon::parse($p->creado)->addHours(24);
             }
     
-            return view("paquete.showpaquete", compact('paquetes','actual'));
+            return view("paquete.showpaquete", compact('paquetes','actual','avgpeso'));
         }
     
         public function mostrar($Codigo){

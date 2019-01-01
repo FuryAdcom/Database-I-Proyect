@@ -77,6 +77,7 @@ Route::get('/user/delete/{Codigo}','UsuarioController@delete');
 Route::get('/cliente','ClientController@inicio');
 Route::get('/cliente/lista','ClientController@lista');
 Route::get('/cliente/mostrar/{Codigo}','ClientController@mostrar');
+Route::post('/cliente/store','ClientController@store');
 Route::get('/cliente/carnet/{Codigo}','ClientController@carnet');
 Route::get('/cliente/create','ClientController@create');
 Route::get('/cliente/edit/{Codigo}','ClientController@edit');

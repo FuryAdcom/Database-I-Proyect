@@ -42,22 +42,22 @@ class ClientController extends Controller
             $request->FK_Asignado_Tipo = 3;
         }
         $cliente = Client::find($request->Cedula);
-        if($cliente->FK_Asignado_Tipo == 2 && $request->FK_Asignado_Tipo != 1){
+        if(isset($cliente) && $cliente->FK_Asignado_Tipo == 2 && $request->FK_Asignado_Tipo != 1){
             $request->FK_Asignado_Tipo = 2;
         }
-
+        
         if(isset($cliente)){
             Session::flash('message','Ya existe un cliente con la cédula: "'.$request->Cedula.'".');
             return Redirect::back()->withInput(Input::all());
         }else{
-            $cliente = Client::where('Correo_Personal', $request->Correo_Personal);
+            $cliente = Client::where('Correo', $request->Correo_Personal);
             
             if(isset($cliente->Correo_Personal)){
                 Session::flash('message','Ya existe un cliente con el correo: "'.$request->Correo_Personal.'".');
                 return Redirect::back()->withInput(Input::all());
             }
         }
-        
+
         Client::create([
         'Cedula' => $request->Cedula,
         'Nombre' => $request->Nombre,
@@ -98,10 +98,10 @@ class ClientController extends Controller
         $priv = Priv_Rol::where('FK_Accede_Sis',Auth::user()->rol)
         ->where('FK_Opcion',12)
         ->first();
-
-    if(isset($priv)){
         $clienteOG = Client::find($request->CedulaAnt);
         $cliente = Client::find($request->Cedula);
+
+    if(isset($priv) || Auth::user()->email == $clienteOG->Correo_Personal){
         if($request->L_Vip){
             $request->FK_Asignado_Tipo = 1;
         }else{
@@ -137,8 +137,8 @@ class ClientController extends Controller
         if(isset($user)){
             $user->rol = $request->FK_Asignado_Tipo;
             $user->save();
-            $user = Usuario::where('Correo_Personal', $request->Correo_Personal)->first();
-            $user->rol = $request->FK_Asignado_Tipo;
+            $user = Usuario::where('Correo', $request->Correo_Personal)->first();
+            $user->FK_Sele_Concede = $request->FK_Asignado_Tipo;
             $user->save();
         }
 

@@ -90,17 +90,35 @@ class OfficeController extends Controller
         ->select(\DB::raw("\"Oficina\".*, mun.\"Nombre\" as sitio, est.\"Nombre\" as estado"))
         ->paginate(50);
         $os = Office::get();
-        $masenv=0;
+        $masenv = 0;
+        $masrec = 0;
+        $ofi = NULL;
         foreach($os as $o){
-            $comp = Env_Rut::selectRaw('count("Env-Rut".*) as cuenta')
-            ->leftjoin('Ruta as r','r.Codigo','=','Env-Rut.FK_Adquiere_Pa') 
-            ->where('r.FK_Ofi_Origen',$o->Codigo)
-            ->get();
-            if($comp->cuenta > $masenv){
-                $masenv = $o;
-            }
-        }            dd($masenv);
 
+            $comp = Env_Rut::leftjoin('Ruta as r','r.Codigo','=','Env-Rut.FK_Adquiere_Pa')
+            ->where('r.FK_Ofi_Origen',$o->Codigo)
+            ->count();
+
+            if(isset($comp) && $comp > $masenv){
+                $masenv = $comp;
+                $ofi = $o;
+            }
+        }
+        $masenv = $ofi;
+        //dd($masenv);
+        foreach($os as $o){
+
+            $comp = Env_Rut::leftjoin('Ruta as r','r.Codigo','=','Env-Rut.FK_Adquiere_Pa')
+            ->where('r.FK_Ofi_Destino',$o->Codigo)
+            ->count();
+
+            if(isset($comp) && $comp > $masrec){
+                $masrec = $comp;
+                $ofi = $o;
+            }
+        }
+        $masrec = $ofi;
+    //    return $ofi; //Return para debug
         return view("oficina.showoffice", compact('oficinas','masenv','masrec'));
     }
 
@@ -130,7 +148,7 @@ class OfficeController extends Controller
         ->first();
 
         if(isset($priv)){
-            $oficina = Office::find($request->Codigo)->first();
+            $oficina = Office::find($request->Codigo);
             $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
             ->where('Lugar.Tipo', 'Municipio')
             ->first();
@@ -138,7 +156,7 @@ class OfficeController extends Controller
             ->where('Lugar.Tipo', 'Estado')
             ->first();
             $telefono = Phone::where('Telefono.FK_Telefonia', $request->Codigo)->first();
-            $telfcomp = Phone::find($request->Telefono)->first();
+            $telfcomp = Phone::find($request->Telefono);
         
             if(isset($lugar) && $lugar->FK_Lugar==$edo->Codigo){
 

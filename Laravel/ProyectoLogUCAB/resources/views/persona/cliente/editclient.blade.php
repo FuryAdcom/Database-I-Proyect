@@ -45,10 +45,10 @@
 						<label for="inputEstado_civil" style="color: whitesmoke">Estado civil</label>
 						<select class="form-control" style="height: 34px" id="inputEstado_civil"  name="Estado_Civil" required>
 							<option value="">Seleccione una...</option>
-							<option value="soltero"@if($validated->Estado_Civil='soltero') selected @endif>Soltero</option>
-							<option value="casado"@if($validated->Estado_Civil='casado') selected @endif>Casado</option>
-							<option value="viudo"@if($validated->Estado_Civil='viudo') selected @endif>Viudo</option>
-							<option value="divorciado"@if($validated->Estado_Civil='divorciado') selected @endif>Divorciado</option>
+							<option value="soltero" @if($validated->Estado_Civil=='soltero') selected @endif>Soltero</option>
+							<option value="casado" @if($validated->Estado_Civil=='casado') selected @endif>Casado</option>
+							<option value="viudo" @if($validated->Estado_Civil=='viudo') selected @endif>Viudo</option>
+							<option value="divorciado" @if($validated->Estado_Civil=='divorciado') selected @endif>Divorciado</option>
 						</select>
 				</div>
 				<div class="form-group" style="width:49%; float: left;">

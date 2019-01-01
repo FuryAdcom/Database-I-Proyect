@@ -78,7 +78,7 @@ class RegisterController extends Controller
             }
         }
 
-        if(is_null($data['rol'])){
+        if(!isset($data['rol'])){
         if(isset($c)){
             Usuario::create([
                 "Codigo" => Usuario::max('Codigo')+1,
@@ -158,13 +158,13 @@ class RegisterController extends Controller
                 "Nombre" => $data['name'],
                 "Correo" => $data['email'],
                 "Contraseña" => Hash::make($data['password']),
-                "FK_Sele_Concede" => $data['rol']
+                "FK_Sele_Concede" => 7
             ]);
             return User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
-                'rol' => $data['rol']
+                'rol' => 7
             ]);
     }
 
