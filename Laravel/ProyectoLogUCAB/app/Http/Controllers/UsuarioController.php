@@ -8,6 +8,7 @@ use LogUCAB\Http\Requests;
 use LogUCAB\Usuario;
 use LogUCAB\User;
 use LogUCAB\Rol;
+use LogUCAB\Audi;
 use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
@@ -85,6 +86,14 @@ class UsuarioController extends Controller
             $us->save();
         }
 
+        $user = Usuario::where('Correo', Auth::user()->email)->first();
+        Audi::create([
+            'Codigo' => Audi::max('Codigo')+1,
+            'Usuario' => Auth::user()->name,
+            'Accion' => 'Actualiza Usuario',
+            'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+            'FK_Observa' => $user->Codigo
+        ]);
         Session::flash('message','Usuario modificado correctamente.');
         return Redirect::to('/user/lista');
     }
@@ -96,11 +105,28 @@ class UsuarioController extends Controller
 
         if(isset($priv)){
             DB::table('usuario')->where('Codigo', $Codigo)->delete();
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Usuario',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Usuario eliminado correctamente.');
             return redirect('/user/lista');
         }else{
             Session::flash('message','Usted no tiene permisos para realizar esta accion.');
             return Redirect::back()->withInput(Input::all());
         }
+    }
+
+    //Auditoria
+    public function alista (){
+        $audis = Audi::select()
+        ->orderBy('Fecha_Ingreso')
+        ->paginate(50);
+        return view("auditoria.lista", compact('audis'));
     }
 }

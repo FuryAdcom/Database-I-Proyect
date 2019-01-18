@@ -27,8 +27,8 @@ class VehiculoA extends Model
         'Peso_Max_Despegue',
         'Carrera_Despegue',
         'Motores',
-        'FK_Representa',
-        'FK_Cuentacon'
+        'FK_Representa',  //Modelo
+        'FK_Cuentacon'  //Oficina
     ];
 
     protected $guarded =[

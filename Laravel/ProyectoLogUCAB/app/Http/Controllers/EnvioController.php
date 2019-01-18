@@ -20,7 +20,10 @@ use LogUCAB\Status;
 use LogUCAB\Env_Sta;
 use LogUCAB\Worker;
 use LogUCAB\Zona;
+use LogUCAB\Usuario;
 use LogUCAB\Emp_Zon;
+use LogUCAB\Pago;
+use LogUCAB\Audi;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Input;
@@ -200,47 +203,75 @@ class EnvioController extends Controller
     }
     public function store3(Request $request){
 
-        $ruta = Ruta::find($request->ruta)->first();
-        $paquete = Packet::find($request->paquete); 
+        if($request->pagoDest == false){
 
-        //Primero se crea el envio
-        Envio::create([
-            'Codigo' => Envio::max('Codigo')+1,
-            'Monto' => $request->costo,
-            'FK_Destino' => $request->destino,
-        ]);
+            $ruta = Ruta::find($request->ruta);
+            $paquete = Packet::find($request->paquete); 
 
-        //Al Paquete se le llena la foranea relacionada con Envio
-        $paquete->FK_Transporta = Envio::max('Codigo');
-        $paquete->save();
+            //Primero se crea el envio
+            Envio::create([
+                'Codigo' => Envio::max('Codigo')+1,
+                'Monto' => $request->costo,
+                'FK_Destino' => $request->destino,
+            ]);
 
-        //Se crea un registro de la MaM
-        Env_Rut::create([
-            'Codigo' => Env_Rut::max('Codigo')+1,
-            'FK_Adquiere_Pa' => $ruta->Codigo,
-            'FK_Recorre' => Envio::max('Codigo')
-        ]);
+            //Al Paquete se le llena la foranea relacionada con Envio
+            $paquete->FK_Transporta = Envio::max('Codigo');
+            $paquete->save();
 
-        $oficina = Office::find($ruta->FK_Ofi_Origen)->first();
-        $zona = Zona::where('FK_Divide',$oficina->Codigo)->first();
-        $Empzon = Emp_Zon::where('FK_Asiste',$zona->Codigo)->first();
-        $worker = Worker::where('Empleado.Cedula','=',$Empzon->FK_Asignar)
-        ->inRandomOrder()
-        ->first();
+            //Se crea un registro de la MaM
+            Env_Rut::create([
+                'Codigo' => Env_Rut::max('Codigo')+1,
+                'FK_Adquiere_Pa' => $ruta->Codigo,
+                'FK_Recorre' => Envio::max('Codigo')
+            ]);
 
-        Status::create([
-            'Codigo' => Status::max('Codigo')+1,
-            'Descripcion' => 'Recibido en origen',
-            'FK_Revision' => $worker->Cedula
-        ]);
-        Env_Sta::create([
-            'Codigo' => Env_Sta::max('Codigo')+1,
-            'FK_Encuentra_Sta' => Status::max('Codigo'),
-            'FK_Revisa_Sta' => Envio::max('Codigo')
-        ]);
+            $oficina = Office::find($ruta->FK_Ofi_Origen);
+            $zona = Zona::where('FK_Divide',$oficina->Codigo)->first();
+            $Empzon = Emp_Zon::where('FK_Asiste',$zona->Codigo)->first();
+            $worker = Worker::where('Empleado.Cedula','=',$Empzon->FK_Asignar)
+            ->inRandomOrder()
+            ->first();
 
-        Session::flash('message','Envio planificado correctamente.');
-        return redirect('/envio/mostrar/'.Envio::max('Codigo'));
+            Status::create([
+                'Codigo' => Status::max('Codigo')+1,
+                'Descripcion' => 'Recibido en origen',
+                'FK_Revision' => $worker->Cedula
+            ]);
+            Env_Sta::create([
+                'Codigo' => Env_Sta::max('Codigo')+1,
+                'FK_Encuentra_Sta' => Status::max('Codigo'),
+                'FK_Revisa_Sta' => Envio::max('Codigo')
+            ]);
+
+            $c = Envio::leftjoin('Paquete as p','p.FK_Transporta','=','Envio.Codigo')
+            ->where('p.FK_Entrega',$paquete->FK_Entrega)
+            ->distinct()
+            ->count();
+
+            //Si 5 paquetes, VIP
+            if($c > 4){
+                $cli = Client::find($paquete->FK_Entrega);
+
+                if($cli->FK_FK_Asignado_Tipo != 1){
+                    $cli->FK_FK_Asignado_Tipo = 1;
+                    $cli->save();
+                }
+            }
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Crea Envio',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
+            Session::flash('message','Envio planificado correctamente.');
+            return redirect('/envio/mostrar/'.Envio::max('Codigo'));
+        }else{
+            return view('envio.pago.pago', compact('request'));
+        }
     }
     
     public function lista(){
@@ -252,7 +283,13 @@ class EnvioController extends Controller
         ->orderBy('Envio.Codigo')
         ->paginate(50);
 
-        return view("envio.showenvio", compact('envios'));
+        $cliente = Client::where('Correo_Personal', Auth::user()->email)->first();
+
+            if(is_null($cliente)){
+                return view("envio.showenvio", compact('envios'));
+            }else{
+                return view("envio.showenvio", compact('envios', 'cliente'));
+            }
     }
 
     //Mostrar el envio con un goal thermomether
@@ -263,7 +300,7 @@ class EnvioController extends Controller
         $vr = Veh_Rut::where('FK_Coche',$ruta->Codigo)->first();
         $oo = Office::find($ruta->FK_Ofi_Origen);
         $od = Office::find($ruta->FK_Ofi_Destino);
-        $es = Env_Sta::where('FK_Revisa_Sta',$envio->Codigo)->first();
+        $es = Env_Sta::where('FK_Revisa_Sta',$envio->Codigo)->orderby('Codigo','desc')->first();
         $status = Status::find($es->FK_Encuentra_Sta);
         $packet = Packet::where('FK_Transporta',$envio->Codigo)->first();
         $cliente = Client::find($packet->FK_Entrega);
@@ -301,7 +338,7 @@ class EnvioController extends Controller
         $vr = Veh_Rut::where('FK_Coche',$ruta->Codigo)->first();
         $oo = Office::find($ruta->FK_Ofi_Origen);
         $od = Office::find($ruta->FK_Ofi_Destino);
-        $es = Env_Sta::where('FK_Revisa_Sta',$envio->Codigo)->first();
+        $es = Env_Sta::where('FK_Revisa_Sta',$envio->Codigo)->orderby('Codigo','desc')->first();
         $status = Status::find($es->FK_Encuentra_Sta);
         $packet = Packet::where('FK_Transporta',$envio->Codigo)->first();
         $cliente = Client::find($packet->FK_Entrega);
@@ -316,7 +353,7 @@ class EnvioController extends Controller
             $status = Status::create([
                 'Codigo' => Status::max('Codigo')+1,
                 'Descripcion' => 'Trasladando',
-                'FK_Revision' => $worker->Cedula
+                'FK_Revision' => $status->FK_Revision
             ]);
             Env_Sta::create([
                 'Codigo' => Env_Sta::max('Codigo')+1,
@@ -329,7 +366,7 @@ class EnvioController extends Controller
             $status = Status::create([
                 'Codigo' => Status::max('Codigo')+1,
                 'Descripcion' => 'Transportando a destino',
-                'FK_Revision' => $worker->Cedula
+                'FK_Revision' => $status->FK_Revision
             ]);
             Env_Sta::create([
                 'Codigo' => Env_Sta::max('Codigo')+1,
@@ -342,7 +379,7 @@ class EnvioController extends Controller
             $status = Status::create([
                 'Codigo' => Status::max('Codigo')+1,
                 'Descripcion' => 'En espera de retiro',
-                'FK_Revision' => $worker->Cedula
+                'FK_Revision' => $status->FK_Revision
             ]);
             Env_Sta::create([
                 'Codigo' => Env_Sta::max('Codigo')+1,
@@ -352,13 +389,10 @@ class EnvioController extends Controller
             $amount = 75;
             $fecha = $status->created_at;
         }elseif($status->Descripcion == 'En espera de retiro'){
-
-            //Pago
-
             Status::create([
                 'Codigo' => Status::max('Codigo')+1,
                 'Descripcion' => 'Entregado',
-                'FK_Revision' => $worker->Cedula
+                'FK_Revision' => $status->FK_Revision
             ]);
             Env_Sta::create([
                 'Codigo' => Env_Sta::max('Codigo')+1,
@@ -369,8 +403,28 @@ class EnvioController extends Controller
             $fecha = $status->created_at;
 
             //Ofi-Paq con el de entrega
+            Ofi_Paq::create([
+                'Codigo' => Ofi_Paq::max('Codigo')+1,
+                'FK_Almacena' => $od->Codigo,
+                'FK_Llega' => $packet->Numero_guia
+            ]);
+
+            //Pago
+            $payment = Pago::where('FK_Realiza', $envio->Codigo)->first();
+            if(is_null($payment)){
+                $envio = $envio->Codigo;
+                return view('envio.pago.pago', compact('envio'));
+            }
         }
 
+        $user = Usuario::where('Correo', Auth::user()->email)->first();
+        Audi::create([
+            'Codigo' => Audi::max('Codigo')+1,
+            'Usuario' => Auth::user()->name,
+            'Accion' => 'Cambia Status de Envio',
+            'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+            'FK_Observa' => $user->Codigo
+        ]);
         return view("envio.mostrarenvio", compact('envio','es','status','packet','cliente','destino','amount','oo','od','est','recibido','fecha'));
     }
 
@@ -417,6 +471,15 @@ class EnvioController extends Controller
 
     public function cancelar($Codigo){
         DB::table('Envio')->where('Codigo', $Codigo)->delete();
+
+        $user = Usuario::where('Correo', Auth::user()->email)->first();
+        Audi::create([
+            'Codigo' => Audi::max('Codigo')+1,
+            'Usuario' => Auth::user()->name,
+            'Accion' => 'Elimina Envio',
+            'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+            'FK_Observa' => $user->Codigo
+        ]);
         Session::flash('messagedel','Envio cancelado correctamente.');
         return redirect('/envio/lista');
     }

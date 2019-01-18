@@ -29,18 +29,35 @@
 											<th style="width:166px">Opciones</th>
 										</thead>
 										@foreach ($envios as $envio)
-										<tbody>	
-											<th style="text-align:center"> {{$envio->Codigo}} </th>
-											<th style="text-align:center"> {{$envio->paq}} </th>
-											<th style="text-align:center"> {{$envio->cli}} </th>
-											<th> {{$envio->dest}} </th>
-											<th> {{$envio->of}} </th>
-											<th style="text-align:center"> {{$envio->Monto}} </th>
-											<th> 
-												<a class="btn btn-info" href="/envio/mostrar/{{$envio->Codigo}}"><i class="fa fa-align-left"></i>Ver</a>
-												<a class="btn btn-danger" href="/envio/cancel/{{$envio->Codigo}}"><i class="fa fa-times"></i>Cancelar</a> 
-											</th>
-										</tbody>
+											@if(isset($cliente))
+												@if($envio->cli == $cliente->Cedula)
+													<tbody>	
+														<th style="text-align:center"> {{$envio->Codigo}} </th>
+														<th style="text-align:center"> {{$envio->paq}} </th>
+														<th style="text-align:center"> {{$envio->cli}} </th>
+														<th> {{$envio->dest}} </th>
+														<th> {{$envio->of}} </th>
+														<th style="text-align:center"> {{$envio->Monto}} </th>
+														<th> 
+															<a class="btn btn-info" href="/envio/mostrar/{{$envio->Codigo}}"><i class="fa fa-align-left"></i>Ver</a>
+															<a class="btn btn-danger" href="/envio/cancel/{{$envio->Codigo}}"><i class="fa fa-times"></i>Cancelar</a> 
+														</th>
+													</tbody>
+												@endif
+											@else
+												<tbody>	
+													<th style="text-align:center"> {{$envio->Codigo}} </th>
+													<th style="text-align:center"> {{$envio->paq}} </th>
+													<th style="text-align:center"> {{$envio->cli}} </th>
+													<th> {{$envio->dest}} </th>
+													<th> {{$envio->of}} </th>
+													<th style="text-align:center"> {{$envio->Monto}} </th>
+													<th> 
+														<a class="btn btn-info" href="/envio/mostrar/{{$envio->Codigo}}"><i class="fa fa-align-left"></i>Ver</a>
+														<a class="btn btn-danger" href="/envio/cancel/{{$envio->Codigo}}"><i class="fa fa-times"></i>Cancelar</a> 
+													</th>
+												</tbody>
+											@endif
 										@endforeach
 									</table>
 									{{ $envios->links() }}

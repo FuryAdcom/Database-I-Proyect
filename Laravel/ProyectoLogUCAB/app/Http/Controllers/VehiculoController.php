@@ -9,6 +9,7 @@ use LogUCAB\VehiculoA;
 use LogUCAB\VehiculoM;
 use LogUCAB\VehiculoT;
 use LogUCAB\Modelo;
+use LogUCAB\Audi;
 use LogUCAB\Office;
 use LogUCAB\Marca;
 use LogUCAB\Rol;
@@ -312,6 +313,15 @@ class VehiculoController extends Controller
                     return Redirect::back()->withInput(Input::all());
                 }
             }
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Crea Vehiculo',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             //PADORU PADORU
             Session::flash('message','Vehiculo creado correctamente.');
             return Redirect::to('/transporte/lista'.$tipoVehiculo);
@@ -615,6 +625,15 @@ class VehiculoController extends Controller
                         return Redirect::back()->withInput(Input::all());
                     }
             }
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Modifica Vehiculo',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             //PADORU PADORU
             Session::flash('message','Vehiculo modificado correctamente.');
             return Redirect::to('/transporte/lista'.$tipoVehiculo);
@@ -632,6 +651,15 @@ class VehiculoController extends Controller
         if(isset($priv)){
             DB::table('Vehiculo_Aereo')->where('Placa', $Placa)->delete();
             $tipo = 'Aerea';
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Vehiculo Aereo',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Vehiculo eliminado correctamente.');
             return Redirect::to('/transporte/lista'.$tipo);
         }else{
@@ -647,6 +675,15 @@ class VehiculoController extends Controller
         if(isset($priv)){
             DB::table('Vehiculo_Maritimo')->where('Placa', $Placa)->delete();
             $tipo = 'Marina';
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Vehiculo Marino',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Oficina eliminada correctamente.');
             return Redirect::to('/transporte/lista'.$tipo);
         }else{
@@ -662,6 +699,15 @@ class VehiculoController extends Controller
         if(isset($priv)){
             DB::table('Vehiculo_Terrestre')->where('Placa', $Placa)->delete();
             $tipo = 'Terrestre';
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Vehiculo Terrestre',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Oficina eliminada correctamente.');
             return Redirect::to('/transporte/lista'.$tipo);
         }else{

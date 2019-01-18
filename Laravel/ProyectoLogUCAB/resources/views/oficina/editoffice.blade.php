@@ -26,13 +26,23 @@
 				<label for="inputDeposito" style="color: whitesmoke">Tamaño del depósito</label>
 				<input type="number" name="Tamaño_Deposito" value="{{old('Tamaño_Deposito', $validated->Tamaño_Deposito)}}" class="form-control" id="inputDeposito" placeholder="Introduzca el tamaño del depósito" required>
 			</div>
-			<div class="form-group" style="width:49%; float: left;">
-				<label for="inputLocalidad" style="color: whitesmoke">Localidad estado</label>
-				<input type="text" name="est" value="{{old('est', $validated->est)}}" class="form-control" placeholder="Introduzca el estado donde se ubica la oficina (Ej: Amazonas, Bolívar, etc.)" required>
+			<div class="form-group" style="width:49%; float: left;" id="inputFK_Entrega">
+				<label for="inputFK_Entrega" style="color: whitesmoke">Estado</label>
+				<input class="form-control" name="est"value="{{ old('est', $validated->est) }}" list="estados" placeholder="Ubicacion Estado">
+					<datalist id="estados">
+						@foreach ($estados as $e)
+							<option value="{{ $e->Nombre }}">
+						@endforeach
+					</datalist>
 			</div>
-			<div class="form-group" style="width:49%; float: right;">
-				<label for="inputLocalidad" style="color: whitesmoke">Localidad municipio</label>
-				<input type="text" name="lugar" value="{{old('lugar', $validated->lugar)}}" class="form-control" placeholder="Introduzca el municipio donde se ubica la oficina (Ej: Atabapo)" required>
+			<div class="form-group" style="width:49%; float: right;" id="inputFK_Entrega">
+				<label for="inputFK_Entrega" style="color: whitesmoke">Municipio</label>
+				<input class="form-control" name="lugar"value="{{ old('lugar', $validated->lugar) }}" list="muns" placeholder="Ubicacion Municipio">
+					<datalist id="muns">
+						@foreach ($muns as $m)
+							<option value="{{ $m->Nombre }}"> {{$m->est}} </option>
+						@endforeach
+					</datalist>
 			</div>
 			<div class="form-group" style="width:49%; float: left;">
 					<label for="inputTelefono" style="color: whitesmoke">Telefono</label>

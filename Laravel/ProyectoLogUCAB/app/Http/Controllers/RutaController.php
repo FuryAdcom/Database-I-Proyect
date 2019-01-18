@@ -14,6 +14,7 @@ use LogUCAB\VehiculoT;
 use LogUCAB\VehiculoM;
 use LogUCAB\VehiculoA;
 use LogUCAB\Rol;
+use LogUCAB\Audi;
 use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -289,6 +290,14 @@ class RutaController extends Controller
                 }
             }
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Crea Ruta',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             return view('/ruta/lista');
         }else{
             Session::flash('message','Usted no tiene permisos para realizar esta accion.');
@@ -304,9 +313,17 @@ class RutaController extends Controller
         ->leftjoin('Lugar as ldest', 'ldest.Codigo','=','ofidest.FK_Varios')
         ->leftjoin('Lugar as destest', 'destest.Codigo','=','ldest.FK_Lugar')
         ->select(\DB::raw("\"Ruta\".*, ofiog.\"Nombre\" as ofog, ofidest.\"Nombre\" as ofdest, log.\"Nombre\" as og, ldest.\"Nombre\" as dest, ogest.\"Nombre\" as oge, destest.\"Nombre\" as deste"))
+        ->orderby('Ruta.Codigo')
         ->paginate(50);
 
-        return view("ruta.showruta", compact('rutas'));
+        $usada = DB::select(DB::raw('SELECT r."Codigo", r."Descripcion", COUNT(er.*) AS num
+        FROM "Env-Rut" er, "Ruta" r
+        WHERE er."FK_Adquiere_Pa" = r."Codigo"
+        Group by r."Codigo", r."Descripcion"
+        order by num desc
+        limit 1;'));
+
+        return view("ruta.showruta", compact('rutas','usada'));
     }
 
     public function edit($Codigo){
@@ -577,6 +594,14 @@ class RutaController extends Controller
 
             }
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Modifica Ruta',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('message','Ruta modificada correctamente.');
             return redirect('/ruta/lista');
         }else{
@@ -595,6 +620,15 @@ class RutaController extends Controller
             Ofi_Rut::where('FK_Coche', $ruta)->delete();
             Veh_Rut::where('FK_Coche', $ruta)->delete();
             $ruta->delete();
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Ruta',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Ruta eliminada correctamente.');
             return redirect('/ruta/lista');
         }else{

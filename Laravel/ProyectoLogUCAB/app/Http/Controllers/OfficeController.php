@@ -12,11 +12,19 @@ use LogUCAB\Rol;
 use LogUCAB\Priv_Rol;
 use LogUCAB\Env_Rut;
 use LogUCAB\Ruta;
+use LogUCAB\Ofi_Ser;
+use LogUCAB\Servicio;
+use LogUCAB\VehiculoM;
+use LogUCAB\VehiculoT;
+use LogUCAB\Veh_Tall;
+use LogUCAB\Audi;
+use LogUCAB\Usuario;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Session;
+use Carbon\Carbon;
 
 use DB;
 
@@ -29,7 +37,13 @@ class OfficeController extends Controller
     }
 
     public function create(){
-        return view("oficina.createoffice");
+        $estados = Lugar::where('Tipo','Estado')->orderBy('Nombre')->get();
+        $muns = Lugar::leftjoin('Lugar as l','l.Codigo','=','Lugar.FK_Lugar')
+        ->where('Lugar.Tipo','Municipio')
+        ->select(DB::raw("\"Lugar\".*, l.\"Nombre\" as est"))
+        ->orderBy('Lugar.Nombre')->get();
+
+        return view("oficina.createoffice",compact('estados','muns'));
     }
 
     public function store(Request $request){
@@ -38,13 +52,14 @@ class OfficeController extends Controller
         ->first();
 
         if(isset($priv)){
-            $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
-            ->where('Lugar.Tipo', 'Municipio')
-            ->first();
             $edo = Lugar::where('Lugar.Nombre', $request->est)
             ->where('Lugar.Tipo', 'Estado')
             ->first();
-            
+            $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
+            ->where('Lugar.Tipo', 'Municipio')
+            ->where('Lugar.FK_Lugar',$edo->Codigo)
+            ->first();
+
             if(isset($lugar->Nombre) && $lugar->FK_Lugar==$edo->Codigo){
                 $request->lugar = $lugar->Codigo;
 
@@ -75,9 +90,16 @@ class OfficeController extends Controller
                 return Redirect::back()->withInput(Input::all());
             }
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Crea Oficina',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('message','Oficina creada correctamente.');
             return Redirect::to('/oficina/lista');
-
         }else{
             Session::flash('message','Usted no tiene permisos para realizar esta accion.');
             return Redirect::back()->withInput(Input::all());
@@ -88,6 +110,7 @@ class OfficeController extends Controller
         $oficinas = Office::leftjoin('Lugar as mun', 'mun.Codigo','=','Oficina.FK_Varios')
         ->leftjoin('Lugar as est', 'est.Codigo','=','mun.FK_Lugar')
         ->select(\DB::raw("\"Oficina\".*, mun.\"Nombre\" as sitio, est.\"Nombre\" as estado"))
+        ->orderby('Oficina.Codigo')
         ->paginate(50);
         $os = Office::get();
         $masenv = 0;
@@ -118,12 +141,81 @@ class OfficeController extends Controller
             }
         }
         $masrec = $ofi;
+
     //    return $ofi; //Return para debug
         return view("oficina.showoffice", compact('oficinas','masenv','masrec'));
     }
+    public function listaestado(){
+        $oficinas = Office::leftjoin('Lugar as mun', 'mun.Codigo','=','Oficina.FK_Varios')
+        ->leftjoin('Lugar as est', 'est.Codigo','=','mun.FK_Lugar')
+        ->select(\DB::raw("\"Oficina\".\"Codigo\",\"Oficina\".\"Nombre\",\"Oficina\".\"Tamaño_Deposito\", est.\"Nombre\" as estado"))
+        ->orderby('est.Nombre','asc')
+        ->orderby('Oficina.Nombre')
+        ->paginate(50);
+
+        return view("oficina.listaestado", compact('oficinas'));
+    }
 
     public function mostrar($Codigo){
-        //Ira aqui mostrar ese elemento y relacionados
+        $oficina = Office::find($Codigo) 
+        ->leftjoin('Lugar as mun', 'mun.Codigo','=','Oficina.FK_Varios')       
+        ->leftjoin('Lugar as est', 'est.Codigo','=','mun.FK_Lugar')
+        ->select(\DB::raw("\"Oficina\".*, mun.\"Nombre\" as sitio, est.\"Nombre\" as estado"));
+        $vt = VehiculoT::where('FK_Cuentacon', $oficina->Codigo)->first();
+        $vm = VehiculoM::where('FK_Cuentacon', $oficina->Codigo)->first();
+
+        if(isset($vt)){
+            $tt = Veh_Tall::where('FK_Enviar3', $vt->Placa)->first();
+        }
+        if(isset($vm)){
+            $tm = Veh_Tall::where('FK_Enviar2', $vm->Placa)->first();
+        }
+
+        $comp = false;
+        if(isset($tt)){
+            if(is_null($tt->Fecha_Salida_Real))
+                $comp = true;
+        }elseif(isset($tm)){
+            if(is_null($tm->Fecha_Salida_Real))
+                $comp = true;
+        }
+
+        return view("oficina.mostraroffice", compact('oficina','comp'));
+    }
+
+    public function servicio($Codigo){
+        $oficina = Office::find($Codigo)        
+        ->leftjoin('Lugar as mun', 'mun.Codigo','=','Oficina.FK_Varios')       
+        ->leftjoin('Lugar as est', 'est.Codigo','=','mun.FK_Lugar')
+        ->select(\DB::raw("\"Oficina\".*, mun.\"Nombre\" as sitio, est.\"Nombre\" as estado"));
+
+        return view("oficina.servicio", compact('oficina'));
+    }
+    public function servpago(Request $request){
+        $servicio = Servicio::where('Descripcion', $request->Serv)->first();
+
+        Contabilidad::create([
+            'Monto' => $request->Monto_Total,
+            'Descripcion' => 'Pago '.$request->Serv,
+            'Fecha' => Carbon::now()->format('Y-m-d'),
+            'Codigo' => Contabilidad::max('Codigo')+1
+        ]);
+        Ofi_Ser::create([
+            'FK_Gasta' => $request->of,
+            'FK_Pago' => Contabilidad::max('Codigo'),
+            'FK_Ofrece' => $servicio->Codigo,
+            'Codigo' => Ofi_Ser::max('Codigo')+1
+        ]);
+
+        $user = Usuario::where('Correo', Auth::user()->email)->first();
+        Audi::create([
+            'Codigo' => Audi::max('Codigo')+1,
+            'Usuario' => Auth::user()->name,
+            'Accion' => 'Cancela Servicio',
+            'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+            'FK_Observa' => $user->Codigo
+        ]);
+        return view("oficina.showoffice");
     }
 
     public function edit($Codigo){
@@ -138,8 +230,15 @@ class OfficeController extends Controller
         ->first();
         $validated->est = \LogUCAB\Lugar::where('Lugar.Codigo', $lug->FK_Lugar)
         ->value('Nombre');
+
+        $estados = Lugar::where('Tipo','Estado')->orderBy('Nombre')->get();
+        $muns = Lugar::leftjoin('Lugar as l','l.Codigo','=','Lugar.FK_Lugar')
+        ->where('Lugar.Tipo','Municipio')
+        ->select(DB::raw("\"Lugar\".*, l.\"Nombre\" as est"))
+        ->orderBy('Lugar.Nombre')->get();
+
                      
-        return view("oficina.editoffice", compact('validated'));
+        return view("oficina.editoffice", compact('validated','estados','muns'));
     }
 
     public function actualizar(Request $request){
@@ -149,12 +248,14 @@ class OfficeController extends Controller
 
         if(isset($priv)){
             $oficina = Office::find($request->Codigo);
-            $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
-            ->where('Lugar.Tipo', 'Municipio')
-            ->first();
             $edo = Lugar::where('Lugar.Nombre', $request->est)
             ->where('Lugar.Tipo', 'Estado')
             ->first();
+            $lugar = Lugar::where('Lugar.Nombre', $request->lugar)
+            ->where('Lugar.Tipo', 'Municipio')
+            ->where('Lugar.FK_Lugar',$edo->Codigo)
+            ->first();
+
             $telefono = Phone::where('Telefono.FK_Telefonia', $request->Codigo)->first();
             $telfcomp = Phone::find($request->Telefono);
         
@@ -184,6 +285,14 @@ class OfficeController extends Controller
                 return Redirect::back()->withInput(Input::all());
             }
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Modifica Oficina',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('message','Oficina modificada correctamente.');
             return Redirect::to('/oficina/lista');
 
@@ -200,6 +309,15 @@ class OfficeController extends Controller
 
         if(isset($priv)){
             DB::table('Oficina')->where('Codigo', $Codigo)->delete();
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Oficina',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Oficina eliminada correctamente.');
             return redirect('/oficina/lista');
 

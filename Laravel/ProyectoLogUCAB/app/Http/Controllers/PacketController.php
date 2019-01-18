@@ -9,6 +9,8 @@ use LogUCAB\Tipo;
 use LogUCAB\Client;
 use LogUCAB\Rol;
 use LogUCAB\Priv_Rol;
+use LogUCAB\Audi;
+use LogUCAB\Usuario;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -71,16 +73,19 @@ class PacketController extends Controller
                     'FK_Es_de' => $guidenum
                 ]);
     
+                $user = Usuario::where('Correo', Auth::user()->email)->first();
+                Audi::create([
+                    'Codigo' => Audi::max('Codigo')+1,
+                    'Usuario' => Auth::user()->name,
+                    'Accion' => 'Crea Paquete',
+                    'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                    'FK_Observa' => $user->Codigo
+                ]);
             Session::flash('message','Paquete creado correctamente.');
             return Redirect::to('/paquete/lista');
         }
         
         public function lista(){
-
-            $avgpeso = DB::select(DB::Raw("SELECT o.\"Codigo\" as Codigo, avg(paq.\"Peso\") as avgpeso
-            from \"Paquete\" as paq, \"Env-Rut\" as er, \"Envio\" as e, \"Ruta\" as r, \"Oficina\" as o
-            where paq.\"FK_Transporta\" = e.\"Codigo\" and e.\"Codigo\" = er.\"FK_Recorre\" and er.\"FK_Adquiere_Pa\" = r.\"Codigo\" and r.\"FK_Ofi_Origen\" = o.\"Codigo\"
-            group by o.\"Codigo\""));
 
             $paquetes = Packet::leftjoin('Cliente as client', 'client.Cedula','=','Paquete.FK_Entrega')
             ->leftjoin('Ofi-Paq as op', 'op.FK_Llega','=','Paquete.Numero_guia')
@@ -93,8 +98,23 @@ class PacketController extends Controller
                 if(isset($p->creado))
                     $p->creado = Carbon::parse($p->creado)->addHours(24);
             }
-    
-            return view("paquete.showpaquete", compact('paquetes','actual','avgpeso'));
+
+            $cliente = Client::where('Correo_Personal', Auth::user()->email)->first();
+
+            if(is_null($cliente)){
+                return view("paquete.showpaquete", compact('paquetes','actual'));
+            }else{
+                return view("paquete.showpaquete", compact('paquetes','actual', 'cliente'));
+            }
+        }
+        public function listaprom(){
+
+            $avgpeso = DB::select(DB::Raw("SELECT o.\"Codigo\" as Codigo, avg(paq.\"Peso\") as avgpeso
+            from \"Paquete\" as paq, \"Env-Rut\" as er, \"Envio\" as e, \"Ruta\" as r, \"Oficina\" as o
+            where paq.\"FK_Transporta\" = e.\"Codigo\" and e.\"Codigo\" = er.\"FK_Recorre\" and er.\"FK_Adquiere_Pa\" = r.\"Codigo\" and r.\"FK_Ofi_Origen\" = o.\"Codigo\"
+            group by o.\"Codigo\""));
+
+                return view("paquete.pesoprom", compact('avgpeso'));
         }
     
         public function mostrar($Codigo){
@@ -124,12 +144,29 @@ class PacketController extends Controller
             $paquete->FK_Transporta = $request->FK_Transporta;
             $paquete->save();
     
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Modifica Paquete',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('message','Paquete modificado correctamente.');
             return Redirect::to('/paquete/lista');
         }
     
         public function delete($Codigo){
             DB::table('Paquete')->where('Numero_guia', $Codigo)->delete();
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Paquete',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Paquete eliminado correctamente.');
             return redirect('/paquete/lista');
         }

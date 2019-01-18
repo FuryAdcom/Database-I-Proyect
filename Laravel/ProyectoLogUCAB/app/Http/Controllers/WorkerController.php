@@ -17,6 +17,7 @@ use LogUCAB\Emp_Zon;
 use LogUCAB\Horario;
 use LogUCAB\User;
 use LogUCAB\Emp_Hor;
+use LogUCAB\Audi;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -109,6 +110,14 @@ class WorkerController extends Controller
                 $user->save();
             }
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Crea Empleado',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('message','Empleado creado correctamente.');
             return Redirect::to('/empleado/lista');
         }else{
@@ -171,6 +180,14 @@ class WorkerController extends Controller
             ]);
             $horarios = Horario::where('FK_cada-uno', $request->Cedula)->orderBy('Dia','desc')->paginate(50);
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Asistencia de Empleado',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             return view("persona.empleado.mostrarworker", compact('empleado','telf','horarios'));
         }else{
             Session::flash('message','Usted no tiene permisos para realizar esta accion.');
@@ -274,6 +291,14 @@ class WorkerController extends Controller
                 $zona->save();
             }
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+                Audi::create([
+                    'Codigo' => Audi::max('Codigo')+1,
+                    'Usuario' => Auth::user()->name,
+                    'Accion' => 'Modifica Empleado',
+                    'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                    'FK_Observa' => $user->Codigo
+                ]);
             Session::flash('message','Empleado modificado correctamente.');
             return Redirect::to('/empleado/lista');
         }else{
@@ -289,6 +314,15 @@ class WorkerController extends Controller
 
         if(isset($priv)){
             Worker::find($Cedula)->delete();
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+                Audi::create([
+                    'Codigo' => Audi::max('Codigo')+1,
+                    'Usuario' => Auth::user()->name,
+                    'Accion' => 'Borra Empleado',
+                    'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                    'FK_Observa' => $user->Codigo
+                ]);
             Session::flash('messagedel','Empleado eliminado correctamente.');
             return redirect('/empleado/lista');
         }else{

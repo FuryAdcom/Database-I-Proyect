@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use LogUCAB\Http\Requests;
 use LogUCAB\Rol;
+use LogUCAB\Audi;
 use LogUCAB\Priv_Rol;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -37,6 +38,14 @@ class RolController extends Controller
                 'Tipo' => $request->Tipo
             ]);
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Crea Rol',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('message','Rol creado correctamente.');
             return Redirect::to('rol');
 
@@ -85,6 +94,14 @@ class RolController extends Controller
                 }
             }
 
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Modifica Rol',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('message','Rol modificado correctamente.');
             return Redirect::to('/rol');
         }else{
@@ -102,6 +119,15 @@ class RolController extends Controller
 
             Priv_Rol::where('FK_Accede_Sis', $Codigo)->delete();
             Rol::find($Codigo)->delete();
+
+            $user = Usuario::where('Correo', Auth::user()->email)->first();
+            Audi::create([
+                'Codigo' => Audi::max('Codigo')+1,
+                'Usuario' => Auth::user()->name,
+                'Accion' => 'Elimina Rol',
+                'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                'FK_Observa' => $user->Codigo
+            ]);
             Session::flash('messagedel','Rol eliminado correctamente.');
             return redirect('/rol');
         }else{

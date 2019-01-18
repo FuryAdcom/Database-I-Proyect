@@ -10,6 +10,7 @@ use LogUCAB\User;
 use LogUCAB\Usuario;
 use LogUCAB\Rol;
 use LogUCAB\Priv_Rol;
+use LogUCAB\Audi;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -79,6 +80,14 @@ class ClientController extends Controller
             $user->save();
         }
 
+        $user = Usuario::where('Correo', Auth::user()->email)->first();
+        Audi::create([
+            'Codigo' => Audi::max('Codigo')+1,
+            'Usuario' => Auth::user()->name,
+            'Accion' => 'Crea Cliente',
+            'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+            'FK_Observa' => $user->Codigo
+        ]);
         Session::flash('message','Cliente creado correctamente.');
         return Redirect::to('/');
     }
@@ -142,6 +151,14 @@ class ClientController extends Controller
             $user->save();
         }
 
+        $user = Usuario::where('Correo', Auth::user()->email)->first();
+        Audi::create([
+            'Codigo' => Audi::max('Codigo')+1,
+            'Usuario' => Auth::user()->name,
+            'Accion' => 'Modifica Cliente',
+            'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+            'FK_Observa' => $user->Codigo
+        ]);
         Session::flash('message','Cliente modificado correctamente.');
         return Redirect::to('/cliente/lista');
     }else{
@@ -167,6 +184,15 @@ class ClientController extends Controller
 
     if(isset($priv)){
         DB::table('Cliente')->where('Cedula', $Codigo)->delete();
+
+        $user = Usuario::where('Correo', Auth::user()->email)->first();
+        Audi::create([
+            'Codigo' => Audi::max('Codigo')+1,
+            'Usuario' => Auth::user()->name,
+            'Accion' => 'Elimina Cliente',
+            'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+            'FK_Observa' => $user->Codigo
+        ]);
         Session::flash('messagedel','Cliente eliminado correctamente.');
         return redirect('/cliente/lista');
     }else{

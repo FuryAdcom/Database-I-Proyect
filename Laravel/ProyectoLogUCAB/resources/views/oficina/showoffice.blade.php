@@ -3,7 +3,9 @@
 <div class="wrapper">
 					<div class="sidemenu">
 						<a href="/oficina">Inicio</a>
-						<a href="/oficina/create">Agregar</a>
+						@if(Auth::user()->rol >= 4 && Auth::user()->rol < 7)
+							<a href="/oficina/create">Agregar</a>
+						@endif
 						<a href="/oficina/lista" style="border-bottom: 0px">Lista</a>
 					</div>
 					<div class="contenido_ppal">
@@ -29,7 +31,9 @@
 											<th>Tamaño depósito (m­²)</th>
 											<th>Municipio</th>
 											<th>Estado</th>
-											<th style="width: 94px;">Opciones</th>
+											@if(Auth::user()->rol >= 4 && Auth::user()->rol < 7)
+												<th style="width: 94px;">Opciones</th>
+											@endif
 										</thead>
 										@foreach ($oficinas as $office)
 										<tbody>	
@@ -38,11 +42,13 @@
 											<th> {{$office->Tamaño_Deposito}} </th>
 											<th> {{$office->sitio}} </th>
 											<th> {{$office->estado}} </th>
-										    <th> 
-												<a class="boton_show btn btn-info" href="/oficina/mostrar/{{$office->Codigo}}"><i class="fa fa-align-left"></i></a>
-												<a class="boton_show btn btn-secondary" href="/oficina/edit/{{$office->Codigo}}"><i class="fa fa-wrench"></i></a>
-												<a class="boton_show btn btn-danger" href="/oficina/delete/{{$office->Codigo}}"><i class="fa fa-times"></i></a> 
-											</th>
+											@if(Auth::user()->rol >= 4 && Auth::user()->rol < 7)
+												<th> 
+													<a class="boton_show btn btn-info" href="/oficina/mostrar/{{$office->Codigo}}"><i class="fa fa-align-left"></i></a>
+													<a class="boton_show btn btn-secondary" href="/oficina/edit/{{$office->Codigo}}"><i class="fa fa-wrench"></i></a>
+													<a class="boton_show btn btn-danger" href="/oficina/delete/{{$office->Codigo}}"><i class="fa fa-times"></i></a> 
+												</th>
+											@endif
 										</tbody>
 										@endforeach
 									</table>
@@ -50,7 +56,9 @@
 								</div>
 							</div>
 						</div>
-                        <!---->
+						<!---->
+						<h4 style="text-align: center; color: whitesmoke">Consulta extra</h4>
+						<a class="btn btn-primary" href="/oficina/porestado" role="button">Oficinas por estado</a>
 					</div>
 				</div>		
 @endsection

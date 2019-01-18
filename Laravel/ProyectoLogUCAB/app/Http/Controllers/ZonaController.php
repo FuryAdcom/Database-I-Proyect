@@ -11,6 +11,8 @@ use LogUCAB\Office;
 use LogUCAB\Worker;
 use LogUCAB\Rol;
 use LogUCAB\Priv_Rol;
+use LogUCAB\Audi;
+use LogUCAB\Usuario;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Input;
@@ -60,7 +62,16 @@ class ZonaController extends Controller
                     Session::flash('message','El nombre de la zona: '.$request->Nombre.' ya existe en la oficina'.$oficina->Nombre.'.');
                     return Redirect::back()->withInput(Input::all());
                 }
-        
+
+
+                $user = Usuario::where('Correo', Auth::user()->email)->first();
+                Audi::create([
+                    'Codigo' => Audi::max('Codigo')+1,
+                    'Usuario' => Auth::user()->name,
+                    'Accion' => 'Crea Zona',
+                    'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                    'FK_Observa' => $user->Codigo
+                ]);
                 Session::flash('message','Zona creada correctamente.');
                 return Redirect::to('/zona/lista');
             }else{
@@ -121,7 +132,16 @@ class ZonaController extends Controller
                     Session::flash('message','El nombre de la zona: '.$request->Nombre.' ya existe en la oficina'.$oficina->Nombre.'.');
                     return Redirect::back()->withInput(Input::all());
                 }
-        
+
+
+                $user = Usuario::where('Correo', Auth::user()->email)->first();
+                Audi::create([
+                    'Codigo' => Audi::max('Codigo')+1,
+                    'Usuario' => Auth::user()->name,
+                    'Accion' => 'Modifica Zona',
+                    'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                    'FK_Observa' => $user->Codigo
+                ]);
                 Session::flash('message','Zona modificada correctamente.');
                 return Redirect::to('/zona/lista');
             }else{
@@ -137,6 +157,15 @@ class ZonaController extends Controller
     
             if(isset($priv)){
                 DB::table('Zona')->where('Codigo', $Codigo)->delete();
+
+                $user = Usuario::where('Correo', Auth::user()->email)->first();
+                Audi::create([
+                    'Codigo' => Audi::max('Codigo')+1,
+                    'Usuario' => Auth::user()->name,
+                    'Accion' => 'Borra Zona',
+                    'Fecha_Ingreso' => Carbon::now()->format('Y-m-d'),
+                    'FK_Observa' => $user->Codigo
+                ]);
                 Session::flash('messagedel','Zona eliminada correctamente.');
                 return redirect('/zona/lista');
             }else{

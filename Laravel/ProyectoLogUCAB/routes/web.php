@@ -36,17 +36,33 @@ Route::get('/transporte/deleteTerrestre/{Placa}','VehiculoController@deleteTerre
 //Oficina
 Route::get('/oficina','OfficeController@inicio');
 Route::get('/oficina/lista','OfficeController@lista');
+Route::get('/oficina/porestado','OfficeController@listaestado');
 Route::get('/oficina/mostrar/{Codigo}','OfficeController@mostrar');
+Route::get('/oficina/servicio/{Codigo}','OfficeController@servicio');
+Route::post('/oficina/servpago','OfficeController@servpago');
 Route::get('/oficina/create','OfficeController@create');
 Route::post('/oficina/store','OfficeController@store');
 Route::get('/oficina/edit/{Codigo}','OfficeController@edit');
 Route::post('/oficina/update','OfficeController@actualizar');
 Route::get('/oficina/delete/{Codigo}','OfficeController@delete');
 
+//Taller
+Route::get('/taller','TallerController@inicio');
+Route::get('/taller/mostrar/{Codigo}','TallerController@mostrar');
+Route::get('/taller/servicio/{Codigo}','TallerController@servicio');
+Route::post('/taller/servpago','TallerController@servpago');
+Route::get('/taller/create','TallerController@create');
+Route::post('/taller/store','TallerController@store');
+Route::get('/taller/edit/{Codigo}','TallerController@edit');
+Route::post('/taller/update','TallerController@actualizar');
+Route::get('/taller/delete/{Codigo}','TallerController@delete');
+Route::get('/taller/flota/{Codigo}','TallerController@flota');
+Route::post('/taller/envio','TallerController@envio');
+Route::get('/taller/salida/{Codigo}','TallerController@salida');
+
 //Zona
 Route::get('/zona','ZonaController@inicio');
 Route::get('/zona/lista','ZonaController@lista');
-//Route::get('/zona/mostrar/{Codigo}','ZonaController@mostrar');
 Route::get('/zona/create','ZonaController@create');
 Route::post('/zona/store','ZonaController@store');
 Route::get('/zona/edit/{Codigo}','ZonaController@edit');
@@ -104,6 +120,7 @@ Route::get('/ruta/delete/{Codigo}','RutaController@delete');
 //Paquete
 Route::get('/paquete','PacketController@inicio');
 Route::get('/paquete/lista','PacketController@lista');
+Route::get('/paquete/promedio','PacketController@listaprom');
 Route::get('/paquete/mostrar/{Codigo}','PacketController@mostrar');
 Route::get('/paquete/create','PacketController@create');
 Route::post('/paquete/store','PacketController@store');
@@ -122,6 +139,12 @@ Route::post('/envio/store','EnvioController@store');
 Route::post('/envio/store2','EnvioController@store2');
 Route::post('/envio/store3','EnvioController@store3');
 Route::get('/envio/cancel/{Codigo}','EnvioController@cancelar');
+
+//Auditoria
+Route::get('/auditoria/lista','UsuarioController@alista');
+
+//Pago
+Route::post('/pago/store','EnvioController@store');
 
 //Login
 Auth::routes();

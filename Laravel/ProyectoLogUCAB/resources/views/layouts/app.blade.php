@@ -37,10 +37,6 @@
 					<nav class="gn-menu-wrapper">
 						<div class="gn-scroller">
 							<ul class="gn-menu">
-								<li class="gn-search-item">
-									<input placeholder="Buscar" type="search" class="gn-search">
-									<a class="gn-icon gn-icon-search"><span>Buscar</span></a>
-								</li>
 								<li>
 									<a href="/user"><i class="fa fa-user" id="inside_opt"></i>Usuario</a>
 									<ul class="gn-submenu">
@@ -58,11 +54,15 @@
 										<a href="/oficina"><i class="fa fa-building" id="inside_opt"></i>Oficina</a>
 										<ul class="gn-submenu">
 												<a href="/zona"><li class="sub_option"><i class="fa fa-warehouse" id="inside_opt"></i>Zona</li></a>
+												@if(Auth::check() && Auth::user()->rol == 6)
+													<a href="/taller"><li class="sub_option"><i class="fa fa-warehouse" id="inside_opt"></i>Taller</li></a>
+												@endif
 										</ul>
 									</li>
 								@endif
 								@if(Auth::check() && Auth::user()->rol == 6 || Auth::check() && Auth::user()->rol == 4)
 									<li><a href="/transporte"><i class="fa fa-truck" id="inside_opt"></i>Transporte</a></li>
+									<li><a href="/auditoria/lista"><i class="fa fa-list" id="inside_opt"></i>Auditoria</a></li>
 								@endif
 								<li><a href="/ruta"><i class="fa fa-route" id="inside_opt"></i>Ruta</a></li>
 							</ul>

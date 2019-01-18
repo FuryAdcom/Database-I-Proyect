@@ -6,6 +6,7 @@ use LogUCAB\User;
 use LogUCAB\Usuario;
 use LogUCAB\Client;
 use LogUCAB\Worker;
+use LogUCAB\Audi;
 use LogUCAB\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
